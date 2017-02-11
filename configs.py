@@ -1,9 +1,12 @@
+import pandas as pd
+
 class CSVInfo(object):
   def __init__(self, filepath):
     self.file_path = filepath
 
   def get_path(self):
     return self.file_path
+
 
 
 
@@ -141,6 +144,62 @@ class AttributeMapper:
     return cls.ATTRIBUTE_MAP_WINNING_TEAM.keys()
 
 
+class CSVTourneySeed(CSVInfo):
+  SEASON = 'Season'
+  SEED = 'Seed'
+  TEAM = 'Team'
+  
+  def __init__(self, filepath):
+    super(CSVTourneySeed, self).__init__(filepath)
+
+  def get_season(self, csv_row):
+    return csv_row[self.SEASON]
+
+  def get_team(self, csv_row):
+    return csv_row[self.TEAM]
+
+  def get_seed(self, csv_row):
+    return csv_row[self.SEED]
+
+  def get_region_code(self, csv_row):
+    # Region code is always the first letter in the seed (W X Y or Z)
+    return self.get_seed(csv_row)[0]
+
+  def get_region_seed(self, csv_row):
+    # gets the seed for the region
+    return self.get_seed(csv_row)[1:]
+  
+class CSVSeason(CSVInfo):
+  SEASON = 'Season'
+  REGION_W = 'Regionw'
+  REGION_X = 'Regionx'
+  REGION_Y = 'Regiony'
+  REGION_Z = 'Regionz'
+  
+  def __init__(self, filepath):
+    super(CSVSeason, self).__init__(filepath)
+
+  def get_season(self, csv_row):
+    return csv_row[self.SEASON]
+
+  def get_region_attribute_from_code(self, region_code):
+    if region_code == 'W' or region_code == 'w':
+      return self.REGION_W
+    elif region_code == 'X' or region_code == 'x':
+      return self.REGION_X
+    elif region_code == 'Y' or region_code == 'y':
+      return self.REGION_Y
+    elif region_code == 'Z' or region_code == 'z':
+      return self.REGION_Z
+    else:
+      raise KeyError('no region code %s' % region_code)
+
+ # def load_data(self):
+ #   self._data = pd.read_csv(self.get_path())
+
+ # def get_attribute(self, attribute):
+ #   self._data[]
+    
 
 DATA_DIRECTORY = "/home/mark/workspace/SportsAnalytics/MarchMadness/data/"
 
@@ -150,8 +209,11 @@ CSV_TEAMS = CSVTeam(DATA_DIRECTORY + 'Teams.csv')
 CSV_REGULAR_SEASON_COMPACT  = CSVRegularSeasonCompact(DATA_DIRECTORY + 'RegularSeasonCompactResults.csv')
 CSV_REGULAR_SEASON_DETAILED = CSVRegularSeasonCompact(DATA_DIRECTORY + 'RegularSeasonDetailedResults.csv')
 
-# Tournament Results
+# Tournament Seed
+CSV_TOURNEY_SEED = CSVTourneySeed(DATA_DIRECTORY + 'TourneySeeds.csv')
 
+# Season
+CSV_SEASON = CSVSeason(DATA_DIRECTORY + 'Seasons.csv')
 
 # Magic Numbers
 SYMBOL_WIN = 1

@@ -4,7 +4,7 @@ import os
 import sys
 import pickle
 import scipy.io as scio
-from configs import AttributeMapper, DATA_DIRECTORY, CSV_TEAMS, CSV_REGULAR_SEASON_COMPACT, CSV_REGULAR_SEASON_DETAILED, SYMBOL_WIN, SYMBOL_LOSE
+from configs import AttributeMapper, DATA_DIRECTORY, CSV_TEAMS, CSV_SEASON, CSV_REGULAR_SEASON_COMPACT, CSV_REGULAR_SEASON_DETAILED, CSV_SEASON, CSV_TOURNEY_SEED, SYMBOL_WIN, SYMBOL_LOSE, CSVSeason
 
 class OneHotGenerator:
   def __init__(self, size):
@@ -31,7 +31,7 @@ def load_teams(force=False):
     # Create One-Hot-Encoding for Team IDs
     df = pd.read_csv(CSV_TEAMS.get_path())
     one_hot_generator = OneHotGenerator(len(df.index))
-    for index, row in df.iterrows():
+    for _, row in df.iterrows():
       team_id = int(CSV_TEAMS.get_team_id(row))
       if team_id not in team_to_one_hot: 
         team_to_one_hot[team_id] = one_hot_generator.next().tolist()
@@ -269,5 +269,80 @@ def load_compact():
   load_regular_season_games(detailed=False)
 
 
+
+def load_seasons():
+  # loads the Season data frame
+  # this should have a single row per season with the regions associated with each season
+  # season, regionW, regionX, regionY, regionZ, anything else as well
+  return pd.read_csv(CSV_SEASON.get_path())
+
+
+def load_team_to_region_mapping(force = False):
+  '''
+  This takes creates a dictionary that maps teamid to the region of interest that they were placed in for their last tournament.
+  DEPENDENCIES:
+    'Season.csv': season, date, and region list in W,X,Y,Z format
+    'TourneySeeds.csv': season, seed, team
+  '''
+
+  team_to_region_file = DATA_DIRECTORY + 'teams_to_region.pickle'
+
+  if force or not os.path.exists(team_to_region_file):
+    REGIONS = set(['South', 'East', 'West', 'Midwest']) # Regions of interest
+    num_teams = len(load_teams())
+    team_to_region = {}
+    season_to_region_df = load_seasons()
+
+    region_count = dict.fromkeys(REGIONS, 0)
+    # Iterate rows in dataframe keeping the most recent team region
+    #  reverse order with early termination would be nice but since
+    #  every team is not guaranteed to have played in a tournament then
+    #  it will just add extra computational burden..except now with region_count
+    #  both methods are probably the same
+    for _, row in pd.read_csv(CSV_TOURNEY_SEED.get_path()).iterrows():
+      season = CSV_TOURNEY_SEED.get_season(row)
+      region_code = CSV_TOURNEY_SEED.get_region_code(row)
+
+      region_attribute = CSV_SEASON.get_region_attribute_from_code(region_code)
+      region = season_to_region_df[(season_to_region_df[CSVSeason.SEASON] == season)][region_attribute].get_values()[0]
+
+      if region in REGIONS:
+        team = CSV_TOURNEY_SEED.get_team(row)
+        
+        if team in team_to_region: 
+          region_count[team_to_region[team]] -= 1
+      
+        region_count[region] += 1
+
+        # Only add it if it is a region of interest
+        team_to_region[team] = region
+ 
+        if len(team_to_region) == num_teams:
+          break
+
+    # Make sure don't have more teams in tournaments than actual teams
+    assert(len(team_to_region) <= num_teams)
+    print("%d teams are not in tournaments" % (num_teams - len(team_to_region)))
+
+    print(region_count)
+    # Store mapping in file      
+    with open(team_to_region_file, 'wb') as out_file:
+      pickle.dump(team_to_region, out_file, protocol=pickle.HIGHEST_PROTOCOL)
+
+    return team_to_region
+  else:
+    print('%s already exists' % team_to_region_file)
+
+    # Load data and read in as numpy array
+    with open(team_to_region_file, 'rb') as team_file:
+      team_to_region = pickle.load(team_file)
+
+    return team_to_region
+
+
+  
+  
+
 if __name__ == "__main__":
-  load_regular_season_games()
+  #load_regular_season_games()
+  load_team_to_region_mapping()
