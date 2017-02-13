@@ -6,6 +6,9 @@ import pickle
 import scipy.io as scio
 from configs import AttributeMapper, DATA_DIRECTORY, CSV_TEAMS, CSV_SEASON, CSV_REGULAR_SEASON_COMPACT, CSV_REGULAR_SEASON_DETAILED, CSV_SEASON, CSV_TOURNEY_SEED, SYMBOL_WIN, SYMBOL_LOSE, CSVSeason
 
+
+np.set_printoptions(suppress=True)
+
 class OneHotGenerator:
   def __init__(self, size):
     self.unique_elements = size
@@ -157,6 +160,9 @@ class TeamData:
     season_wins = season_data.wins
     num_games_played = np.count_nonzero(season_wins)
 
+    if num_games_played == 0:
+      num_games_played = 1
+
     attribute_list = []
     attributes = sorted(AttributeMapper.get_map(True).keys())
     for attribute in attributes:
@@ -167,8 +173,73 @@ class TeamData:
 
     return snap
 
-    
 
+
+class HistoricGames:
+  def __init__(self, horizon):
+    '''
+    horizon is the number of games to keep between matchups
+    '''
+    self._history = {}
+    self._horizon = horizon
+
+  def get_team_tuple(self, team1, team2):
+    '''
+    Store games with key as the lesser team (team1 <= team2 => team1 is key)
+    '''
+    if team1 <= team2:
+      return (team1, team2)
+    
+    else:
+       return (team2, team1)
+
+  def add_game(self, team1, team2, winning_team):
+    '''
+    winning array is stored like [winner of horizon^th most recent game, ..., winner of most recent game]
+    '''
+    team_tuple = self.get_team_tuple(team1, team2)
+
+    if team_tuple[0] not in self._history:
+      self._history[team_tuple[0]] = {}
+    
+    if team_tuple[1] not in self._history[team_tuple[0]]:
+      self._history[team_tuple[0]][team_tuple[1]] = np.zeros(self._horizon)
+
+    winning_teams = self._history[team_tuple[0]][team_tuple[1]]
+    # get last game number
+    game_number = 0
+    while game_number < self._horizon and winning_teams[game_number] != 0:
+      game_number += 1
+   
+    if game_number < self._horizon:
+      # can add new game without removing any previous
+      winning_teams[game_number] = winning_team 
+    else:
+      # Need to shift values and store only horizon most recent games
+      for i in range(1,len(winning_teams)):
+        winning_teams[i-1] = winning_teams[i]
+      winning_teams[self._horizon - 1] = winning_team 
+
+  def get_historic_win_loss(self, team1, team2):
+    '''
+    Use SYMBOL_WIN and SYMBOL_LOSE as identifiers for whether team won or lost
+    win loss is wrt team1
+    '''
+    team_tuple = self.get_team_tuple(team1, team2)
+
+    assert(team_tuple[0] in self._history)
+    assert(team_tuple[1] in self._history[team_tuple[0]])
+
+    winning_team = self._history[team_tuple[0]][team_tuple[1]].copy()
+
+    winning_team[(winning_team == team1)] = SYMBOL_WIN
+    winning_team[(winning_team == team2)] = SYMBOL_LOSE
+    return winning_team
+    
+    
+    
+  
+  
 def load_regular_season_games(detailed=False, NUM_HISTORIC_WIN_LOSS=10):
   def get_historic_win_loss(team1, team2, num_previous_games):
     '''
@@ -185,6 +256,7 @@ def load_regular_season_games(detailed=False, NUM_HISTORIC_WIN_LOSS=10):
 
   team_to_one_hot = load_teams()
   team_data = {}
+  historic_games = HistoricGames(10)
 
   LAST_SEASON=2017
 
@@ -239,10 +311,14 @@ def load_regular_season_games(detailed=False, NUM_HISTORIC_WIN_LOSS=10):
       _output[season].append(team_to_one_hot[winning_team].T)
       _output[season].append(team_to_one_hot[winning_team].T)
 
-      '''Add game data (twice from both perspectives)'''
+      # Now that training example has been created we can add it to our knowledge base
+      
+      #Add game data (twice from both perspectives)
       team_data[winning_team].add_data(CSV_GAMES, row)
       team_data[losing_team].add_data(CSV_GAMES, row)
-
+      
+      # Add to historic games
+      historic_games.add_game(winning_team, losing_team, winning_team)
 
 
     print("Starting to save examples")
@@ -344,5 +420,5 @@ def load_team_to_region_mapping(force = False):
   
 
 if __name__ == "__main__":
-  #load_regular_season_games()
-  load_team_to_region_mapping()
+  load_regular_season_games()
+  #load_team_to_region_mapping()
