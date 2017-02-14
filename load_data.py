@@ -239,28 +239,27 @@ class HistoricGames:
     return winning_team
     
     
-def load_regular_season_games(detailed=True, num_historic_win_loss = 10, seasons=range(2003, 2017)):
+def load_regular_season_games(detailed=True, num_historic_win_loss = 10, seasons=range(2003, 2017), aggregate_all_data = True):
  
-  generate_regular_season_games(detailed, num_historic_win_loss)
+  data_X, data_y = generate_regular_season_games(detailed, num_historic_win_loss)
 
-  if detailed:
-    SEASON_FILENAME = SEASON_FILENAME_DETAILED
+  if aggregate_all_data:
+    _input = list()
+    _output = list()
+    for season in seasons:  
+      # KeyError will be raised if season not in data_X.
+      
+        
+      _input.append(data_X[season])
+      _output.append(data_y[season])
+    
+    return np.array(_input), np.array(_output)
   else:
-    SEASON_FILENAME = SEASON_FILENAME_COMPACT
-
-  _input = list()
-  _output = list()
-  for season in seasons:
-    filename = '%s%s%d.mat' % (DATA_DIRECTORY, SEASON_FILENAME, season)
-    data = scio.loadmat(filename) # may fail t load based on seasons, fine, should exit program
-    _input.append(data['X'])
-    _output.append(data['y'])
-
-  return np.array(_input), np.array(_output)
+    return data_X, data_y
     
     
   
-def generate_regular_season_games(detailed=True, NUM_HISTORIC_WIN_LOSS=10):
+def generate_regular_season_games(detailed=True, NUM_HISTORIC_WIN_LOSS=10, save=False):
   def get_historic_win_loss(team1, team2, num_previous_games):
     '''
       Find the num_previous_games most recent games team1 and team2 have played against each other
@@ -345,21 +344,22 @@ def generate_regular_season_games(detailed=True, NUM_HISTORIC_WIN_LOSS=10):
       historic_games.add_game(winning_team, losing_team, winning_team)
 
 
-    print("Starting to save examples")
-    num_examples = len(_input[season])
-    feature_dimension = len(_input[season][0])
-    team_one_hot_size = list(team_to_one_hot.values())[0].shape[0]
-    for season in sorted(_input.keys()):
-      X = np.array(_input[season])
-      y = np.array(_output[season])
+    if save:
+      print("Starting to save examples")
+      num_examples = len(_input[season])
+      feature_dimension = len(_input[season][0])
+      team_one_hot_size = list(team_to_one_hot.values())[0].shape[0]
+      for season in sorted(_input.keys()):
+        X = np.array(_input[season])
+        y = np.array(_output[season])
 
-      X = np.squeeze(X)
-      y = np.squeeze(y)
+        X = np.squeeze(X)
+        y = np.squeeze(y)
 
-      # Save input and output datasets
-      filename = '%s%s%d.mat' % (DATA_DIRECTORY, SEASON_FILENAME, season)
-      print("saving %s " % filename)
-      scio.savemat(filename, mdict = {'X': X, 'y': y})
+        # Save input and output datasets
+        filename = '%s%s%d.mat' % (DATA_DIRECTORY, SEASON_FILENAME, season)
+        print("saving %s " % filename)
+        scio.savemat(filename, mdict = {'X': X, 'y': y})
 
 
     return _input, _output
