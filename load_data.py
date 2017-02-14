@@ -4,7 +4,9 @@ import os
 import sys
 import pickle
 import scipy.io as scio
-from configs import AttributeMapper, DATA_DIRECTORY, CSV_TEAMS, CSV_SEASON, CSV_REGULAR_SEASON_COMPACT, CSV_REGULAR_SEASON_DETAILED, CSV_SEASON, CSV_TOURNEY_SEED, SYMBOL_WIN, SYMBOL_LOSE, CSVSeason
+from configs import AttributeMapper,\
+DATA_DIRECTORY, SEASON_FILENAME_COMPACT, SEASON_FILENAME_DETAILED,\
+CSV_TEAMS, CSV_SEASON, CSV_REGULAR_SEASON_COMPACT, CSV_REGULAR_SEASON_DETAILED, CSV_SEASON, CSV_TOURNEY_SEED, SYMBOL_WIN, SYMBOL_LOSE, CSVSeason
 
 
 np.set_printoptions(suppress=True)
@@ -237,10 +239,28 @@ class HistoricGames:
     return winning_team
     
     
+def load_regular_season_games(detailed=True, num_historic_win_loss = 10, seasons=range(2003, 2017)):
+ 
+  generate_regular_season_games(detailed, num_historic_win_loss)
+
+  if detailed:
+    SEASON_FILENAME = SEASON_FILENAME_DETAILED
+  else:
+    SEASON_FILENAME = SEASON_FILENAME_COMPACT
+
+  _input = list()
+  _output = list()
+  for season in seasons:
+    filename = '%s%s%d.mat' % (DATA_DIRECTORY, SEASON_FILENAME, season)
+    data = scio.loadmat(filename) # may fail t load based on seasons, fine, should exit program
+    _input.append(data['X'])
+    _output.append(data['y'])
+
+  return np.array(_input), np.array(_output)
+    
     
   
-  
-def load_regular_season_games(detailed=False, NUM_HISTORIC_WIN_LOSS=10):
+def generate_regular_season_games(detailed=True, NUM_HISTORIC_WIN_LOSS=10):
   def get_historic_win_loss(team1, team2, num_previous_games):
     '''
       Find the num_previous_games most recent games team1 and team2 have played against each other
@@ -249,9 +269,11 @@ def load_regular_season_games(detailed=False, NUM_HISTORIC_WIN_LOSS=10):
     return np.zeros((num_previous_games, 1))
 
   if detailed:
-    CSV_GAMES = CSV_REGULAR_SEASON_COMPACT
-  else:
     CSV_GAMES = CSV_REGULAR_SEASON_DETAILED
+    SEASON_FILENAME = SEASON_FILENAME_DETAILED
+  else:
+    CSV_GAMES = CSV_REGULAR_SEASON_COMPACT
+    SEASON_FILENAME = SEASON_FILENAME_COMPACT
 
 
   team_to_one_hot = load_teams()
@@ -259,6 +281,8 @@ def load_regular_season_games(detailed=False, NUM_HISTORIC_WIN_LOSS=10):
   historic_games = HistoricGames(10)
 
   LAST_SEASON=2017
+
+  # TODO: check to see if cached files already exist...would need to update though to determine whether data is detailed or compact and the 'num_historic_win_loss' value used to create data
 
   # dictionaries of season->input examples
   _input = dict()
@@ -333,9 +357,12 @@ def load_regular_season_games(detailed=False, NUM_HISTORIC_WIN_LOSS=10):
       y = np.squeeze(y)
 
       # Save input and output datasets
-      filename = '/home/mark/workspace/SportsAnalytics/MarchMadness/data/season%d.mat' % season
+      filename = '%s%s%d.mat' % (DATA_DIRECTORY, SEASON_FILENAME, season)
       print("saving %s " % filename)
       scio.savemat(filename, mdict = {'X': X, 'y': y})
+
+
+    return _input, _output
 
     
 

@@ -202,6 +202,8 @@ class CSVSeason(CSVInfo):
     
 
 DATA_DIRECTORY = "/home/mark/workspace/SportsAnalytics/MarchMadness/data/"
+SEASON_FILENAME_COMPACT = 'compact_season'
+SEASON_FILENAME_DETAILED = 'detailed_season'
 
 CSV_TEAMS = CSVTeam(DATA_DIRECTORY + 'Teams.csv')
 
