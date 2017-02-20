@@ -6,7 +6,7 @@ import pickle
 import scipy.io as scio
 from configs import AttributeMapper,\
 DATA_DIRECTORY, SEASON_FILENAME_COMPACT, SEASON_FILENAME_DETAILED,\
-CSV_TEAMS, CSV_SEASON, CSV_REGULAR_SEASON_COMPACT, CSV_REGULAR_SEASON_DETAILED, CSV_SEASON, CSV_TOURNEY_SEED, SYMBOL_WIN, SYMBOL_LOSE, CSVSeason
+CSV_TEAMS, CSV_SEASON, CSV_REGULAR_SEASON_COMPACT, CSV_REGULAR_SEASON_DETAILED, CSV_SEASON, CSV_TOURNEY_GAMES_COMPACT, CSV_TOURNEY_GAMES_DETAILED, CSV_TOURNEY_SEED, SYMBOL_WIN, SYMBOL_LOSE, CSVSeason
 
 
 np.set_printoptions(suppress=True)
@@ -60,7 +60,8 @@ def load_teams(force=False):
 
 
 class SeasonData:
-  MAX_REGULAR_GAMES_PER_SEASON_PER_TEAM = 40
+  #MAX_REGULAR_GAMES_PER_SEASON_PER_TEAM = 40   # for non-tournament data
+  MAX_REGULAR_GAMES_PER_SEASON_PER_TEAM = 44    # include tournament data
   def __init__(self, season, team_id, season_attributes):
     '''
       season: year
@@ -239,17 +240,15 @@ class HistoricGames:
     return winning_team
     
     
-def load_regular_season_games(detailed=True, num_historic_win_loss = 10, seasons=range(2003, 2017), aggregate_all_data = True):
+def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10, seasons=range(2003, 2017), aggregate_all_data = True):
  
-  data_X, data_y = generate_regular_season_games(detailed, num_historic_win_loss)
+  data_X, data_y = generate_games(detailed, include_tourney, num_historic_win_loss)
 
   if aggregate_all_data:
     _input = list()
     _output = list()
     for season in seasons:  
       # KeyError will be raised if season not in data_X.
-      
-        
       _input.append(data_X[season])
       _output.append(data_y[season])
     
@@ -259,7 +258,7 @@ def load_regular_season_games(detailed=True, num_historic_win_loss = 10, seasons
     
     
   
-def generate_regular_season_games(detailed=True, NUM_HISTORIC_WIN_LOSS=10, save=False):
+def generate_games(detailed, include_tourney, NUM_HISTORIC_WIN_LOSS, save=False):
   def get_historic_win_loss(team1, team2, num_previous_games):
     '''
       Find the num_previous_games most recent games team1 and team2 have played against each other
@@ -268,10 +267,12 @@ def generate_regular_season_games(detailed=True, NUM_HISTORIC_WIN_LOSS=10, save=
     return np.zeros((num_previous_games, 1))
 
   if detailed:
-    CSV_GAMES = CSV_REGULAR_SEASON_DETAILED
+    CSV_REG_GAMES = CSV_REGULAR_SEASON_DETAILED
+    CSV_TOU_GAMES = CSV_TOURNEY_GAMES_DETAILED
     SEASON_FILENAME = SEASON_FILENAME_DETAILED
   else:
-    CSV_GAMES = CSV_REGULAR_SEASON_COMPACT
+    CSV_REG_GAMES = CSV_REGULAR_SEASON_COMPACT
+    CSV_TOU_GAMES = CSV_TOURNEY_GAMES_COMPACT
     SEASON_FILENAME = SEASON_FILENAME_COMPACT
 
 
@@ -283,94 +284,99 @@ def generate_regular_season_games(detailed=True, NUM_HISTORIC_WIN_LOSS=10, save=
 
   # TODO: check to see if cached files already exist...would need to update though to determine whether data is detailed or compact and the 'num_historic_win_loss' value used to create data
 
+
+
   # dictionaries of season->input examples
   _input = dict()
   _output = dict()
-  with open(CSV_GAMES.get_path()) as games_file:
+  df = None
+  with open(CSV_REG_GAMES.get_path(), 'r') as games_file:
     df = pd.read_csv(games_file)
-    print("data size = %d" %(len(df.index)))
-    df = df.loc[df[CSV_GAMES.SEASON] <= LAST_SEASON]
-    print("new data size = %d" %(len(df.index)))
-    iteration_count = 0
-    for _, row in df.iterrows():
-      winning_team = CSV_GAMES.get_winning_team(row)
-      losing_team = CSV_GAMES.get_losing_team(row)
+    if include_tourney:
+      # Merge regular season and tournament games together
+      with open(CSV_TOU_GAMES.get_path(), 'r') as tourney_file:
+        df = df.merge(pd.read_csv(tourney_file), how='outer')
 
-      season = CSV_GAMES.get_season(row)
-      
-      iteration_count += 1
-      if iteration_count % 3000 == 0:
-        print("iteration = %d, season=%d" % (iteration_count, season))
-        sys.stdout.flush()
+  # ensure data is chronologically sorted
+  df = df.sort_values([CSV_REG_GAMES.SEASON, CSV_REG_GAMES.DAYNUM], ascending=[True, True])
+  print("data size = %d" %(len(df.index)))
+  df = df.loc[df[CSV_REG_GAMES.SEASON] <= LAST_SEASON]
+  print("new data size = %d" %(len(df.index)))
+  iteration_count = 0
+    
+  for _, row in df.iterrows():
+    winning_team = CSV_REG_GAMES.get_winning_team(row)
+    losing_team = CSV_REG_GAMES.get_losing_team(row)
 
-
-      if winning_team not in team_data:
-        '''Create initial empty season data'''
-        team_data[winning_team] = TeamData(winning_team, team_to_one_hot[winning_team])
-
-      if losing_team not in team_data:
-        '''Create initial empty season data'''
-        team_data[losing_team] = TeamData(losing_team, team_to_one_hot[losing_team])
-
-
-      if season not in _input:
-        _input[season] = list()
-        _output[season] = list()
-
-      # Create two training examples for symmetry
-      wteam_snapshot = team_data[winning_team].snapshot(season)
-      lteam_snapshot = team_data[losing_team].snapshot(season)
-      historic_win_loss = get_historic_win_loss(winning_team, losing_team, NUM_HISTORIC_WIN_LOSS)
-
-      train = np.vstack((wteam_snapshot, lteam_snapshot, historic_win_loss.reshape(-1,1)))
-      _input[season].append(train.T)
-
-      assert(SYMBOL_WIN == 1)
-      assert(SYMBOL_LOSE == -1)
-      historic_win_loss = np.multiply(-1, historic_win_loss)
-      train = np.concatenate((lteam_snapshot, wteam_snapshot, historic_win_loss), axis=0)
-      _input[season].append(train.T)
-
-      _output[season].append(team_to_one_hot[winning_team].T)
-      _output[season].append(team_to_one_hot[winning_team].T)
-
-      # Now that training example has been created we can add it to our knowledge base
-      
-      #Add game data (twice from both perspectives)
-      team_data[winning_team].add_data(CSV_GAMES, row)
-      team_data[losing_team].add_data(CSV_GAMES, row)
-      
-      # Add to historic games
-      historic_games.add_game(winning_team, losing_team, winning_team)
+    season = CSV_REG_GAMES.get_season(row)
+    
+    iteration_count += 1
+    if iteration_count % 3000 == 0:
+      print("iteration = %d, season=%d" % (iteration_count, season))
+      sys.stdout.flush()
 
 
-    if save:
-      print("Starting to save examples")
-      num_examples = len(_input[season])
-      feature_dimension = len(_input[season][0])
-      team_one_hot_size = list(team_to_one_hot.values())[0].shape[0]
-      for season in sorted(_input.keys()):
-        X = np.array(_input[season])
-        y = np.array(_output[season])
+    if winning_team not in team_data:
+      '''Create initial empty season data'''
+      team_data[winning_team] = TeamData(winning_team, team_to_one_hot[winning_team])
 
-        X = np.squeeze(X)
-        y = np.squeeze(y)
-
-        # Save input and output datasets
-        filename = '%s%s%d.mat' % (DATA_DIRECTORY, SEASON_FILENAME, season)
-        print("saving %s " % filename)
-        scio.savemat(filename, mdict = {'X': X, 'y': y})
+    if losing_team not in team_data:
+      '''Create initial empty season data'''
+      team_data[losing_team] = TeamData(losing_team, team_to_one_hot[losing_team])
 
 
-    return _input, _output
+    if season not in _input:
+      _input[season] = list()
+      _output[season] = list()
+
+    # Create two training examples for symmetry
+    wteam_snapshot = team_data[winning_team].snapshot(season)
+    lteam_snapshot = team_data[losing_team].snapshot(season)
+    historic_win_loss = get_historic_win_loss(winning_team, losing_team, NUM_HISTORIC_WIN_LOSS)
+
+    train = np.vstack((wteam_snapshot, lteam_snapshot, historic_win_loss.reshape(-1,1)))
+    _input[season].append(train.T)
+
+    assert(SYMBOL_WIN == 1)
+    assert(SYMBOL_LOSE == -1)
+    historic_win_loss = np.multiply(-1, historic_win_loss)
+    train = np.concatenate((lteam_snapshot, wteam_snapshot, historic_win_loss), axis=0)
+    _input[season].append(train.T)
+
+    _output[season].append(team_to_one_hot[winning_team].T)
+    _output[season].append(team_to_one_hot[winning_team].T)
+
+    # Now that training example has been created we can add it to our knowledge base
+    
+    # Add game data (twice from both perspectives)
+    team_data[winning_team].add_data(CSV_REG_GAMES, row)
+    team_data[losing_team].add_data(CSV_REG_GAMES, row)
+    
+    # Add to historic games
+    historic_games.add_game(winning_team, losing_team, winning_team)
+
+
+  if save:
+    print("Starting to save examples")
+    num_examples = len(_input[season])
+    feature_dimension = len(_input[season][0])
+    team_one_hot_size = list(team_to_one_hot.values())[0].shape[0]
+    for season in sorted(_input.keys()):
+      X = np.array(_input[season])
+      y = np.array(_output[season])
+
+      X = np.squeeze(X)
+      y = np.squeeze(y)
+
+      # Save input and output datasets
+      filename = '%s%s%d.mat' % (DATA_DIRECTORY, SEASON_FILENAME, season)
+      print("saving %s " % filename)
+      scio.savemat(filename, mdict = {'X': X, 'y': y})
+
+
+  return _input, _output
 
     
-
-
-def load_compact():
-  team_to_one_hot = load_teams()
-  load_regular_season_games(detailed=False)
-
 
 
 def load_seasons():
@@ -447,5 +453,5 @@ def load_team_to_region_mapping(force = False):
   
 
 if __name__ == "__main__":
-  load_regular_season_games()
+  load_games(detailed=True, include_tourney=True)
   #load_team_to_region_mapping()

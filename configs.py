@@ -22,8 +22,8 @@ class CSVTeam(CSVInfo):
     
 
 class CSVRegularSeasonCompact(CSVInfo):
-  DAYNUM = 'Daynum'
   SEASON = 'Season'
+  DAYNUM = 'Daynum'
   WINNING_SCORE = 'Wscore'
   WINNING_TEAM = 'Wteam'
   LOSING_SCORE = 'Lscore'
@@ -87,6 +87,18 @@ class CSVRegularSeasonDetailed(CSVRegularSeasonCompact):
 
   def __init__(self, filepath):
     super(CSVRegularSeasonDetailed, self).__init__(filepath)
+
+
+class CSVTourneyGamesCompact(CSVRegularSeasonCompact):
+
+  def __init__(self, filepath):
+    super(CSVTourneyGamesCompact, self).__init__(filepath)
+
+
+class CSVTourneyGamesDetailed(CSVRegularSeasonDetailed):
+
+  def __init__(self, filepath):
+    super(CSVTourneyGamesDetailed, self).__init__(filepath)
 
 
 class AttributeMapper:
@@ -209,7 +221,11 @@ CSV_TEAMS = CSVTeam(DATA_DIRECTORY + 'Teams.csv')
 
 # Regular Season stats
 CSV_REGULAR_SEASON_COMPACT  = CSVRegularSeasonCompact(DATA_DIRECTORY + 'RegularSeasonCompactResults.csv')
-CSV_REGULAR_SEASON_DETAILED = CSVRegularSeasonCompact(DATA_DIRECTORY + 'RegularSeasonDetailedResults.csv')
+CSV_REGULAR_SEASON_DETAILED = CSVRegularSeasonDetailed(DATA_DIRECTORY + 'RegularSeasonDetailedResults.csv')
+
+# Tournament game stats
+CSV_TOURNEY_GAMES_COMPACT  = CSVTourneyGamesCompact(DATA_DIRECTORY + 'TourneyCompactResults.csv')
+CSV_TOURNEY_GAMES_DETAILED = CSVTourneyGamesDetailed(DATA_DIRECTORY + 'TourneyDetailedResults.csv')
 
 # Tournament Seed
 CSV_TOURNEY_SEED = CSVTourneySeed(DATA_DIRECTORY + 'TourneySeeds.csv')
