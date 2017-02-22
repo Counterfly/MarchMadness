@@ -240,17 +240,20 @@ class HistoricGames:
     return winning_team
     
     
-def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10, seasons=range(2003, 2017), aggregate_all_data = True):
+def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10, seasons=range(0, 2020), aggregate_all_data = True):
+  '''
+  2020 is arbitrary so that it will include all seasons to date
+  '''
  
-  data_X, data_y = generate_games(detailed, include_tourney, num_historic_win_loss)
+  data_X, data_y = generate_games(detailed, include_tourney, seasons, num_historic_win_loss)
 
   if aggregate_all_data:
     _input = list()
     _output = list()
-    for season in seasons:  
-      # KeyError will be raised if season not in data_X.
-      _input.append(data_X[season])
-      _output.append(data_y[season])
+    for season in seasons:
+      if season in data_X:
+        _input.append(data_X[season])
+        _output.append(data_y[season])
     
     return np.array(_input), np.array(_output)
   else:
@@ -258,7 +261,7 @@ def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10
     
     
   
-def generate_games(detailed, include_tourney, NUM_HISTORIC_WIN_LOSS, save=False):
+def generate_games(detailed, include_tourney, seasons, NUM_HISTORIC_WIN_LOSS, save=False):
   def get_historic_win_loss(team1, team2, num_previous_games):
     '''
       Find the num_previous_games most recent games team1 and team2 have played against each other
@@ -280,7 +283,6 @@ def generate_games(detailed, include_tourney, NUM_HISTORIC_WIN_LOSS, save=False)
   team_data = {}
   historic_games = HistoricGames(10)
 
-  LAST_SEASON=2017
 
   # TODO: check to see if cached files already exist...would need to update though to determine whether data is detailed or compact and the 'num_historic_win_loss' value used to create data
 
@@ -297,11 +299,14 @@ def generate_games(detailed, include_tourney, NUM_HISTORIC_WIN_LOSS, save=False)
       with open(CSV_TOU_GAMES.get_path(), 'r') as tourney_file:
         df = df.merge(pd.read_csv(tourney_file), how='outer')
 
+  print("data size = %d" %(len(df.index)))
+  # Keep specified seasons only
+  df = df[df[CSV_REG_GAMES.SEASON] >= seasons[0]]
+  df = df[df[CSV_REG_GAMES.SEASON] <= seasons[-1]]
+  print("new data size = %d" %(len(df.index)))
+
   # ensure data is chronologically sorted
   df = df.sort_values([CSV_REG_GAMES.SEASON, CSV_REG_GAMES.DAYNUM], ascending=[True, True])
-  print("data size = %d" %(len(df.index)))
-  df = df.loc[df[CSV_REG_GAMES.SEASON] <= LAST_SEASON]
-  print("new data size = %d" %(len(df.index)))
   iteration_count = 0
     
   for _, row in df.iterrows():
