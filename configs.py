@@ -214,6 +214,19 @@ class CSVSeason(CSVInfo):
     
 
 DATA_DIRECTORY = "/home/mark/workspace/SportsAnalytics/MarchMadness/data/"
+DATA_ALL_FILENAME = "data-"
+DATA_SEASON_FILENAME = "season"
+
+def season_data_filename(season):
+  return '%s%s' % (DATA_DIRECTORY, DATA_SEASON_FILENAME)
+
+def all_data_filename(split_num, total_splits):
+  number_decimals = total_splits % 10 + 1
+  split_num = str(split_num).zfill(number_decimals)
+  total_splits = str(total_splits).zfill(number_decimals)
+  return '%s%s%sof%s' % (DATA_DIRECTORY, DATA_ALL_FILENAME, split_num, total_splits)
+
+
 SEASON_FILENAME_COMPACT = 'compact_season'
 SEASON_FILENAME_DETAILED = 'detailed_season'
 

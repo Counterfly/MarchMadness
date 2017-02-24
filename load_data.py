@@ -4,6 +4,7 @@ import os
 import sys
 import pickle
 import scipy.io as scio
+import configs
 from configs import AttributeMapper,\
 DATA_DIRECTORY, SEASON_FILENAME_COMPACT, SEASON_FILENAME_DETAILED,\
 CSV_TEAMS, CSV_SEASON, CSV_REGULAR_SEASON_COMPACT, CSV_REGULAR_SEASON_DETAILED, CSV_SEASON, CSV_TOURNEY_GAMES_COMPACT, CSV_TOURNEY_GAMES_DETAILED, CSV_TOURNEY_SEED, SYMBOL_WIN, SYMBOL_LOSE, CSVSeason
@@ -240,7 +241,7 @@ class HistoricGames:
     return winning_team
     
     
-def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10, seasons=range(0, 2020), aggregate_all_data = True):
+def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10, seasons=range(0, 2020), aggregate_all_data = True, save=False, num_splits=-1):
   '''
   2020 is arbitrary so that it will include all seasons to date
   '''
@@ -248,16 +249,65 @@ def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10
   data_X, data_y = generate_games(detailed, include_tourney, seasons, num_historic_win_loss)
 
   if aggregate_all_data:
-    _input = list()
-    _output = list()
+    _input = None
+    _output = None
     for season in seasons:
       if season in data_X:
-        _input.append(data_X[season])
-        _output.append(data_y[season])
-    
-    return np.array(_input), np.array(_output)
+        if _input is None:
+          _input = data_X[season]
+          _output = data_y[season]
+        else:
+          _input = np.concatenate((_input, data_X[season]), axis=0)
+          _output = np.concatenate((_output, data_y[season]), axis=0)
+
+        # Free up memory
+        del data_X[season]
+        del data_y[season]
+
+    _input = np.squeeze(np.array(_input))
+    _output = np.squeeze(np.array(_output))
+    if save:
+      _input = np.split(_input, num_splits)
+      _output = np.split(_output, num_splits)
+      filenames = []
+      for split in range(0, num_splits):
+        X = np.array(_input[split])
+        y = np.array(_output[split])
+
+        X = np.squeeze(X)
+        y = np.squeeze(y)
+
+        # Save input and output datasets
+        filename = '%s.mat' % (configs.all_data_filename(split+1, num_splits))
+        print("saving %s " % filename)
+        filenames.append(filename)
+        scio.savemat(filename, mdict = {'X': X, 'y': y})
+
+      return filenames
+    else:
+      # Return aggregated data
+      return _input, _output
+   
   else:
-    return data_X, data_y
+    if save:
+      # Save data by seasons
+      print("Starting to save examples by season")
+      filenames = []
+      for season in sorted(_input.keys()):
+        X = np.array(_input[season])
+        y = np.array(_output[season])
+
+        X = np.squeeze(X)
+        y = np.squeeze(y)
+
+        # Save input and output datasets
+        filename = '%s.mat' % (configs.season_data_filename(season))
+        print("saving %s " % filename)
+        filenames.append(filename)
+        scio.savemat(filename, mdict = {'X': X, 'y': y})
+      return filenames
+    else: 
+      return data_X, data_y
     
     
   
@@ -360,23 +410,11 @@ def generate_games(detailed, include_tourney, seasons, NUM_HISTORIC_WIN_LOSS, sa
     # Add to historic games
     historic_games.add_game(winning_team, losing_team, winning_team)
 
+  for season in _input.keys():
+    # Convert lists to np.ndarrays
+    _input[season] = np.squeeze(np.array(_input[season]))
+    _output[season] = np.squeeze(np.array(_output[season]))
 
-  if save:
-    print("Starting to save examples")
-    num_examples = len(_input[season])
-    feature_dimension = len(_input[season][0])
-    team_one_hot_size = list(team_to_one_hot.values())[0].shape[0]
-    for season in sorted(_input.keys()):
-      X = np.array(_input[season])
-      y = np.array(_output[season])
-
-      X = np.squeeze(X)
-      y = np.squeeze(y)
-
-      # Save input and output datasets
-      filename = '%s%s%d.mat' % (DATA_DIRECTORY, SEASON_FILENAME, season)
-      print("saving %s " % filename)
-      scio.savemat(filename, mdict = {'X': X, 'y': y})
 
 
   return _input, _output
@@ -438,7 +476,6 @@ def load_team_to_region_mapping(force = False):
     assert(len(team_to_region) <= num_teams)
     print("%d teams are not in tournaments" % (num_teams - len(team_to_region)))
 
-    print(region_count)
     # Store mapping in file      
     with open(team_to_region_file, 'wb') as out_file:
       pickle.dump(team_to_region, out_file, protocol=pickle.HIGHEST_PROTOCOL)
@@ -454,9 +491,22 @@ def load_team_to_region_mapping(force = False):
     return team_to_region
 
 
-  
+ 
+def randomize_data(dataset, labels):
+  permutation = np.random.permutation(labels.shape[0])
+  shuffled_dataset = dataset[permutation,:]
+  shuffled_labels = labels[permutation, :]
+  return shuffled_dataset, shuffled_labels
+
+def read_file(filename):
+    if DATA_DIRECTORY in filename:
+      filepath = filename
+    else:
+      filepath = '%s%s' % (DATA_DIRECTORY, filename)
+    data = scio.loadmat(filepath)
+    return data['X'], data['y']
   
 
 if __name__ == "__main__":
-  load_games(detailed=True, include_tourney=True)
+  load_games(detailed=True, include_tourney=True, aggregate_all_data=True, save=True, num_splits=10)
   #load_team_to_region_mapping()
