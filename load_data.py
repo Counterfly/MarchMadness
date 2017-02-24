@@ -245,6 +245,9 @@ def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10
   '''
   2020 is arbitrary so that it will include all seasons to date
   '''
+
+  if save:
+    assert(num_splits >= 1, "Cannot save data into %d number of files" % num_splits)
  
   data_X, data_y = generate_games(detailed, include_tourney, seasons, num_historic_win_loss)
 
