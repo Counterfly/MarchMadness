@@ -241,7 +241,7 @@ class HistoricGames:
     return winning_team
     
     
-def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10, seasons=range(0, 2020), aggregate_all_data = True, save=False, num_splits=-1):
+def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10, seasons=range(0, 2020), aggregate_all_data = True, normalize=True, save=False, num_splits=-1):
   '''
   2020 is arbitrary so that it will include all seasons to date
   '''
@@ -249,7 +249,7 @@ def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10
   if save:
     assert(num_splits >= 1, "Cannot save data into %d number of files" % num_splits)
  
-  data_X, data_y = generate_games(detailed, include_tourney, seasons, num_historic_win_loss)
+  data_X, data_y = generate_games(detailed, include_tourney, seasons, num_historic_win_loss, normalize)
 
   if aggregate_all_data:
     _input = None
@@ -269,6 +269,14 @@ def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10
 
     _input = np.squeeze(np.array(_input))
     _output = np.squeeze(np.array(_output))
+
+    if normalize:
+      # Normalize all data together
+      _input = _input.astype(np.float32)
+      mu = np.tile(np.mean(_input, axis=0), (_input.shape[0], 1))
+      _input = (_input - mu) / (np.max(_input, axis=0) - np.min(_input, axis=0))
+      _input = np.nan_to_num(_input)  # Convert NaNs to 0
+
     if save:
       _input = np.split(_input, num_splits)
       _output = np.split(_output, num_splits)
@@ -292,6 +300,9 @@ def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10
       return _input, _output
    
   else:
+    if normalize:
+      print("TODO: NOT IMPLEMENTED, normalize over season-split data")
+
     if save:
       # Save data by seasons
       print("Starting to save examples by season")
@@ -314,7 +325,7 @@ def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10
     
     
   
-def generate_games(detailed, include_tourney, seasons, NUM_HISTORIC_WIN_LOSS, save=False):
+def generate_games(detailed, include_tourney, seasons, NUM_HISTORIC_WIN_LOSS, normalize):
   def get_historic_win_loss(team1, team2, num_previous_games):
     '''
       Find the num_previous_games most recent games team1 and team2 have played against each other
