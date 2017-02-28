@@ -1,0 +1,45 @@
+\usepackage{url} 
+
+
+@Article{svhn,
+author = {Yuval Netzer and Tao Wang and Adam Coates and Alessandro Bissacco and Bo Wu and Andrew Y Ng},
+title = {Reading Digits in Natural Images with Unsupervised Feature Learning},
+journal = {NIPS Workshop on Deep Learning and Unsupervised Feature Learning},
+year = {2011},
+OPTkey = {•},
+OPTvolume = {•},
+OPTnumber = {•},
+OPTpages = {•},
+OPTmonth = {•},
+OPTnote = {•},
+OPTannote = {•}
+}
+
+@Article{lecun2012, 
+author = {Pierre Sermanet and Soumith Chintala and Yann LeCun},
+title = {Convolutional Neural Networks Applied to House Numbers Digit Classification},
+journal = {Computer Vision and Pattern Recognition},
+year = {2012}
+}
+
+
+@misc{googletensorflow,
+  title = {TensorFlow},
+  howpublished = {\url{https://www.tensorflow.org/versions/master/tutorials/index.html}},
+  note = {Accessed: 2015-12-15}
+}
+
+@Article{pooling,
+author = {Dominik Sherer and Andreas Mueller and Sven Behnke},
+title = {Evaluation of Pooling Operations in Convolutional Architectures for Object Recognition},
+journal = {International Conference on Artificial Neural Networks},
+year = {2010}
+}
+
+@Article{handwrittendigits,
+author = {Berend-Jan van der Zwaag},
+title = {Handwritten digit recognition: A neural network demo},
+journal = {Computational Intelligence},
+year = {2001},
+OPTpages = {762-771}
+}
