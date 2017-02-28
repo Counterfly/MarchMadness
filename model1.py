@@ -18,13 +18,21 @@ FLAGS.learning_rate = 1e-4
 FLAGS.summaries_dir = './logs'
 
 
-
 #dataset, labels = load_data.load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10, aggregate_all_data = True)
 
 #print("datasets memory = %d" % dataset.nbytes)
+
+
+
 data_partition_fractions = [0.8, 0.1, 0.1]  # Train, Valid, Test
 
-filenames= load_data.load_games(detailed=True, include_tourney=True, num_historic_win_loss=10, aggregate_all_data=True, normalize=True, save=True, num_splits=10)
+# the input/output model to use
+model = load_data.MODEL_WINNING_TEAM_ID
+
+# the data model to use
+data_model = load_data.DATA_MODEL_COMPACT
+
+filenames = load_data.load_games(model, data_model, num_historic_win_loss=10, aggregate_all_data=True, normalize=True, save=True, num_splits=10)
 datasets = DataSetsFiles(filenames, data_partition_fractions, load_data.read_file)
 
 
@@ -175,7 +183,7 @@ if __name__ == "__main__":
   valid_writer.add_summary(summary_valid, num_steps)
   print("Final validation accuracy: %.3f" % acc_valid)#accuracy.eval(feed_dict={ X_: datasets.valid.data, y_: datasets.valid.labels, keep_prob: 1.0 }))
   
-  summary_test, acc_test = session.run([merged, accuracy], feed_dict={ X_: datasets.valid.data, y_: datasets.valid.labels, keep_prob: 1.0 })
+  summary_test, acc_test = session.run([merged, accuracy], feed_dict={ X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 })
   test_writer.add_summary(summary_test, num_steps)
   print("Test accuracy: %.3f" % acc_test)#accuracy.eval(feed_dict={ X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 }))
 
