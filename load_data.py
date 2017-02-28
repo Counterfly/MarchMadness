@@ -10,6 +10,64 @@ DATA_DIRECTORY, SEASON_FILENAME_COMPACT, SEASON_FILENAME_DETAILED,\
 CSV_TEAMS, CSV_SEASON, CSV_REGULAR_SEASON_COMPACT, CSV_REGULAR_SEASON_DETAILED, CSV_SEASON, CSV_TOURNEY_GAMES_COMPACT, CSV_TOURNEY_GAMES_DETAILED, CSV_TOURNEY_SEED, SYMBOL_WIN, SYMBOL_LOSE, CSVSeason
 
 
+class Model:
+  def __init__(self, desc, hot_streak, rival_streak):
+    self._description = desc
+    self._hot_streak = hot_streak
+    self._rival_streak = rival_streak
+
+  @property
+  def description(self):
+    return self._description
+
+  @property
+  def hot_streak(self):
+    return self._hot_streak
+
+  @property
+  def rival_streak(self):
+    return self._rival_streak
+
+  def __eq__(self, other):
+    return \
+      self._description == other.description and\
+      self._hot_streak == other.hot_streak and\
+      self._rival_streak == other.rival_streak
+
+class DataModel:
+    def __init__(self, detailed, include_tourney):
+      self._detailed = detailed
+      self._include_tourney = include_tourney
+
+    @property
+    def detailed(self):
+      return self._detailed
+
+    @property
+    def include_tourney(self):
+      return self._include_tourney
+
+    def __eq__(self, other):
+      return self._detailed == other.detailed and self._include_tourney == other.include_tourney
+
+
+MODEL_WINNING_TEAM_ID = Model(
+  'Target is the Winning Team ID',
+  True,
+  True)
+MODEL_SYMMETRICAL = Model(
+  'Output is two nodes where the target is the first or second half team (based on input is symmetrical)',
+  True,
+  True)
+MODEL_PROBABILITY = Model(
+  'Target is the probability of the first team winning',
+  True,
+  True)
+
+DATA_MODEL_DETAILED = DataModel(True, True)
+DATA_MODEL_COMPACT = DataModel(False, True)
+
+
 np.set_printoptions(suppress=True)
 
 class OneHotGenerator:
@@ -63,16 +121,17 @@ def load_teams(force=False):
 class SeasonData:
   #MAX_REGULAR_GAMES_PER_SEASON_PER_TEAM = 40   # for non-tournament data
   MAX_REGULAR_GAMES_PER_SEASON_PER_TEAM = 44    # include tournament data
-  def __init__(self, season, team_id, season_attributes):
+  def __init__(self, season, team_id, data_model):
     '''
       season: year
       team_id: integer
-      season_attributes: list of what to keep track of. 
+      data_model: used to determine the AttributeMapper to determine what to keep track of.
     '''
     self._season = season
     self._team_id = team_id
+    self._data_model = data_model
     self._attributes = {}
-    for attribute in season_attributes:
+    for attribute in AttributeMapper.get_attributes(data_model.detailed):
       self._attributes[attribute] = np.zeros((self.MAX_REGULAR_GAMES_PER_SEASON_PER_TEAM, 1))
  
     # wins will be tracked separatly to allow for proper averaging   
@@ -123,30 +182,34 @@ class SeasonData:
     return self._scores
 
   def get_attribute(self, attribute):
-    '''Retruns the data for the specified attribute or raises KeyError if attribute DNE'''
+    '''Returns the data for the specified attribute or raises KeyError if attribute DNE'''
     return self._attributes[attribute]
 
 
 class TeamData:
-  def __init__(self, teamid, team_one_hot_encoding):
-    self.team_id = teamid
-    self.team_one_hot = team_one_hot_encoding
-    self.seasons = dict()
+  def __init__(self, teamid, team_one_hot_encoding, data_model):
+    self._team_id = teamid
+    self._team_one_hot = team_one_hot_encoding
+    self._seasons = dict()
+    self._data_model = data_model
 
 
   def add_data(self, csvinfo, data_frame):
     '''Add data ..which attributes?''' 
     # Create Training data for this game
-    is_winner = csvinfo.get_winning_team(data_frame) == self.team_id
-    assert(is_winner or csvinfo.get_losing_team(data_frame) == self.team_id)
+    is_winner = csvinfo.get_winning_team(data_frame) == self._team_id
+    assert(is_winner or csvinfo.get_losing_team(data_frame) == self._team_id)
 
     season = csvinfo.get_season(data_frame)
     season_data = self.get_or_create_season_data(season)
 
-    attribute_mapper = AttributeMapper.get_map(is_winner)
+    attribute_mapper = AttributeMapper.get_map(self._data_model.detailed, is_winner)
     season_data.add_data(csvinfo, data_frame, attribute_mapper)
 
-     
+  @property
+  def team_one_hot(self):
+    return self._team_one_hot
+
   def get_season_win_list(self, csvinfo, data_frame):
     season = csvinfo.get_season(data_frame)
     season_data = self.get_or_create_season_data(season)
@@ -154,26 +217,31 @@ class TeamData:
     return season_data.get_wins()
 
   def get_or_create_season_data(self, season):
-    if season not in self.seasons:
-      self.seasons[season] = SeasonData(season, self.team_id, AttributeMapper.get_attributes()) 
-    return self.seasons[season]
+    if season not in self._seasons:
+      self._seasons[season] = SeasonData(season, self._team_id, self._data_model)
+    return self._seasons[season]
 
-  def snapshot(self, season):
+  def snapshot(self, season, include_hot_streak):
     '''Create input example as a column vector'''
     season_data = self.get_or_create_season_data(season)
-    season_wins = season_data.wins
+
+    if include_hot_streak:
+      season_wins = season_data.wins  # hot streak
+    else:
+      season_wins = np.empty(0)
+
     num_games_played = np.count_nonzero(season_wins)
 
     if num_games_played == 0:
       num_games_played = 1
 
     attribute_list = []
-    attributes = sorted(AttributeMapper.get_map(True).keys())
+    attributes = sorted(AttributeMapper.get_map(self._data_model.detailed, True).keys())
     for attribute in attributes:
       attribute_list.append(np.sum(season_data.get_attribute(attribute)) / num_games_played)
 
     attribute_column = np.array(attribute_list).reshape(len(attribute_list), 1)
-    snap = np.concatenate((self.team_one_hot.reshape(-1,1), season_wins.reshape(-1,1), attribute_column), axis=0)
+    snap = np.concatenate((season_wins.reshape(-1,1), attribute_column), axis=0)
 
     return snap
 
@@ -241,7 +309,7 @@ class HistoricGames:
     return winning_team
     
     
-def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10, seasons=range(0, 2020), aggregate_all_data = True, normalize=True, save=False, num_splits=-1):
+def load_games(model, data_model, num_historic_win_loss = 10, seasons=range(0, 2020), aggregate_all_data = True, normalize=True, save=False, num_splits=-1):
   '''
   2020 is arbitrary so that it will include all seasons to date
   '''
@@ -249,7 +317,7 @@ def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10
   if save:
     assert(num_splits >= 1, "Cannot save data into %d number of files" % num_splits)
  
-  data_X, data_y = generate_games(detailed, include_tourney, seasons, num_historic_win_loss, normalize)
+  data_X, data_y = generate_games(model, data_model, seasons, num_historic_win_loss, normalize)
 
   if aggregate_all_data:
     _input = None
@@ -278,8 +346,8 @@ def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10
       _input = np.nan_to_num(_input)  # Convert NaNs to 0
 
     if save:
-      _input = np.split(_input, num_splits)
-      _output = np.split(_output, num_splits)
+      _input = np.array_split(_input, num_splits)
+      _output = np.array_split(_output, num_splits)
       filenames = []
       for split in range(0, num_splits):
         X = np.array(_input[split])
@@ -300,6 +368,7 @@ def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10
       return _input, _output
    
   else:
+    # Do not aggregate data
     if normalize:
       print("TODO: NOT IMPLEMENTED, normalize over season-split data")
 
@@ -325,19 +394,32 @@ def load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10
     
     
   
-def generate_games(detailed, include_tourney, seasons, NUM_HISTORIC_WIN_LOSS, normalize):
-  def get_historic_win_loss(team1, team2, num_previous_games):
+def generate_games(model, data_model, seasons, NUM_HISTORIC_WIN_LOSS, normalize):
+  def get_rival_streak(team1, team2, num_previous_games, constrained_dataframe):
     '''
       Find the num_previous_games most recent games team1 and team2 have played against each other
       and return a vector of the win-loss wrt team1
     '''
-    return np.zeros((num_previous_games, 1))
+    # sort reverse chronologically
+    constrained_dataframe = constrained_dataframe.sort_values([CSV_REG_GAMES.SEASON, CSV_REG_GAMES.DAYNUM], ascending=[False, False])
 
-  if detailed:
+    # apply limit
+    constrained_dataframe = constrained_dataframe[:num_previous_games]
+
+    # set 1 for win, -1 for loss wrt team1
+    assert(SYMBOL_WIN == 1)
+    assert(SYMBOL_LOSE == -1)
+    rival_streak = constrained_dataframe[CSV_REG_GAMES.WINNING_TEAM] == team1
+    rival_streak = (np.array(rival_streak).astype(int) << 1) - 1
+    rival_streak = np.lib.pad(rival_streak, (num_previous_games - rival_streak.shape[0], 0), 'constant', constant_values=(0))
+    return rival_streak
+
+  if data_model.detailed:
     CSV_REG_GAMES = CSV_REGULAR_SEASON_DETAILED
     CSV_TOU_GAMES = CSV_TOURNEY_GAMES_DETAILED
     SEASON_FILENAME = SEASON_FILENAME_DETAILED
   else:
+    print("using compact")
     CSV_REG_GAMES = CSV_REGULAR_SEASON_COMPACT
     CSV_TOU_GAMES = CSV_TOURNEY_GAMES_COMPACT
     SEASON_FILENAME = SEASON_FILENAME_COMPACT
@@ -345,7 +427,7 @@ def generate_games(detailed, include_tourney, seasons, NUM_HISTORIC_WIN_LOSS, no
 
   team_to_one_hot = load_teams()
   team_data = {}
-  historic_games = HistoricGames(10)
+  #historic_games = HistoricGames(10)
 
 
   # TODO: check to see if cached files already exist...would need to update though to determine whether data is detailed or compact and the 'num_historic_win_loss' value used to create data
@@ -358,7 +440,7 @@ def generate_games(detailed, include_tourney, seasons, NUM_HISTORIC_WIN_LOSS, no
   df = None
   with open(CSV_REG_GAMES.get_path(), 'r') as games_file:
     df = pd.read_csv(games_file)
-    if include_tourney:
+    if data_model.include_tourney:
       # Merge regular season and tournament games together
       with open(CSV_TOU_GAMES.get_path(), 'r') as tourney_file:
         df = df.merge(pd.read_csv(tourney_file), how='outer')
@@ -387,11 +469,11 @@ def generate_games(detailed, include_tourney, seasons, NUM_HISTORIC_WIN_LOSS, no
 
     if winning_team not in team_data:
       '''Create initial empty season data'''
-      team_data[winning_team] = TeamData(winning_team, team_to_one_hot[winning_team])
+      team_data[winning_team] = TeamData(winning_team, team_to_one_hot[winning_team], data_model)
 
     if losing_team not in team_data:
       '''Create initial empty season data'''
-      team_data[losing_team] = TeamData(losing_team, team_to_one_hot[losing_team])
+      team_data[losing_team] = TeamData(losing_team, team_to_one_hot[losing_team], data_model)
 
 
     if season not in _input:
@@ -399,21 +481,61 @@ def generate_games(detailed, include_tourney, seasons, NUM_HISTORIC_WIN_LOSS, no
       _output[season] = list()
 
     # Create two training examples for symmetry
-    wteam_snapshot = team_data[winning_team].snapshot(season)
-    lteam_snapshot = team_data[losing_team].snapshot(season)
-    historic_win_loss = get_historic_win_loss(winning_team, losing_team, NUM_HISTORIC_WIN_LOSS)
+    wteam_snapshot = team_data[winning_team].snapshot(season, model.hot_streak)
+    lteam_snapshot = team_data[losing_team].snapshot(season, model.hot_streak)
 
-    train = np.vstack((wteam_snapshot, lteam_snapshot, historic_win_loss.reshape(-1,1)))
-    _input[season].append(train.T)
+    # Need to trim the dataframe to include only games that have occurred up to this point
+    previous_seasons = df[CSV_REG_GAMES.SEASON] < season
+    current_season = df[CSV_REG_GAMES.SEASON] == season
+    current_season &= df[CSV_REG_GAMES.DAYNUM] < CSV_REG_GAMES.get_day_number(row)
+
+    # Get rival streak if model allows it
+    if model.rival_streak:
+      rival_streak = get_rival_streak(
+        winning_team, 
+        losing_team,
+        NUM_HISTORIC_WIN_LOSS,
+        df[previous_seasons | current_season]) 
+    else:
+      rival_streak = np.empty(0)
 
     assert(SYMBOL_WIN == 1)
     assert(SYMBOL_LOSE == -1)
-    historic_win_loss = np.multiply(-1, historic_win_loss)
-    train = np.concatenate((lteam_snapshot, wteam_snapshot, historic_win_loss), axis=0)
-    _input[season].append(train.T)
 
-    _output[season].append(team_to_one_hot[winning_team].T)
-    _output[season].append(team_to_one_hot[winning_team].T)
+    if model == MODEL_WINNING_TEAM_ID:
+      train = np.concatenate((team_to_one_hot[winning_team].reshape(-1,1), wteam_snapshot, team_to_one_hot[losing_team].reshape(-1,1), lteam_snapshot, rival_streak.reshape(-1,1)))
+      _input[season].append(train.T)
+
+      rival_streak = np.multiply(-1, rival_streak)
+
+      train = np.concatenate((team_to_one_hot[losing_team].reshape(-1,1), lteam_snapshot, team_to_one_hot[winning_team].reshape(-1,1), wteam_snapshot, rival_streak.reshape(-1,1)))
+      _input[season].append(train.T)
+
+      _output[season].append(team_to_one_hot[winning_team].T)
+      _output[season].append(team_to_one_hot[winning_team].T)
+    elif model == MODEL_SYMETRICAL:
+      train = np.concatenate((wteam_snapshot, lteam_snapshot, rival_streak.reshape(-1,1)))
+      _input[season].append(train.T)
+      _output[season].append(np.array([1,0]))
+
+      historic_win_loss = np.multiply(-1, historic_win_loss)
+
+      train = np.concatenate((lteam_snapshot, wteam_snapshot, rival_streak.reshape(-1,1)))
+      _input[season].append(train.T)
+      _output[season].append(np.array([0,1]))
+    elif model == MODEL_PROBABILITY:
+      train = np.concatenate((wteam_snapshot, lteam_snapshot, rival_streak.reshape(-1,1)))
+      _input[season].append(train.T)
+      _output[season].append(1.0)
+
+      historic_win_loss = np.multiply(-1, historic_win_loss)
+
+      train = np.concatenate((lteam_snapshot, wteam_snapshot, rival_streak.reshape(-1,1)))
+      _input[season].append(train.T)
+      _output[season].append(0.0)
+    else:
+      exit("UNKNOWN MODEL")
+    
 
     # Now that training example has been created we can add it to our knowledge base
     
@@ -422,7 +544,7 @@ def generate_games(detailed, include_tourney, seasons, NUM_HISTORIC_WIN_LOSS, no
     team_data[losing_team].add_data(CSV_REG_GAMES, row)
     
     # Add to historic games
-    historic_games.add_game(winning_team, losing_team, winning_team)
+    #historic_games.add_game(winning_team, losing_team, winning_team)
 
   for season in _input.keys():
     # Convert lists to np.ndarrays
@@ -522,5 +644,5 @@ def read_file(filename):
   
 
 if __name__ == "__main__":
-  load_games(detailed=True, include_tourney=True, aggregate_all_data=True, save=True, num_splits=10)
+  load_games(MODEL_WINNING_TEAM_ID, DATA_MODEL_DETAILED, aggregate_all_data=True, save=True, num_splits=10)
   #load_team_to_region_mapping()

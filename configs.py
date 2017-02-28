@@ -102,8 +102,18 @@ class CSVTourneyGamesDetailed(CSVRegularSeasonDetailed):
 
 
 class AttributeMapper:
-  ATTRIBUTE_MAP_WINNING_TEAM = {
-    'against': CSVRegularSeasonDetailed.LOSING_TEAM,
+  ATTRIBUTE_MAP_COMPACT_WINNING_TEAM = {
+    #'against': CSVRegularSeasonCompact.LOSING_TEAM,
+    'score': CSVRegularSeasonCompact.WINNING_SCORE
+  }
+  
+  ATTRIBUTE_MAP_COMPACT_LOSING_TEAM = {
+    #'against': CSVRegularSeasonCompact.WINNING_TEAM,
+    'score': CSVRegularSeasonCompact.LOSING_SCORE
+  }
+
+  ATTRIBUTE_MAP_DETAILED_WINNING_TEAM = {
+    #'against': CSVRegularSeasonDetailed.LOSING_TEAM,
     'assists': CSVRegularSeasonDetailed.WINNING_ASSISTS,
     'blocks': CSVRegularSeasonDetailed.WINNING_BLOCKS,
     'fieldgoalsattempted': CSVRegularSeasonDetailed.WINNING_FIELD_GOALS_ATTEMPTED,
@@ -121,8 +131,8 @@ class AttributeMapper:
     'turnovers': CSVRegularSeasonDetailed.WINNING_TURNOVERS
   }
 
-  ATTRIBUTE_MAP_LOSING_TEAM = {
-    'against': CSVRegularSeasonDetailed.WINNING_TEAM,
+  ATTRIBUTE_MAP_DETAILED_LOSING_TEAM = {
+    #'against': CSVRegularSeasonDetailed.WINNING_TEAM,
     'assists': CSVRegularSeasonDetailed.LOSING_ASSISTS,
     'blocks': CSVRegularSeasonDetailed.LOSING_BLOCKS,
     'fieldgoalsattempted': CSVRegularSeasonDetailed.LOSING_FIELD_GOALS_ATTEMPTED,
@@ -139,21 +149,32 @@ class AttributeMapper:
     'threepointsmade': CSVRegularSeasonDetailed.LOSING_THREE_POINTS_MADE,
     'turnovers': CSVRegularSeasonDetailed.LOSING_TURNOVERS
   }
-  assert(set(ATTRIBUTE_MAP_WINNING_TEAM.keys()) == set(ATTRIBUTE_MAP_LOSING_TEAM.keys()))
+  
+  assert(set(ATTRIBUTE_MAP_COMPACT_WINNING_TEAM.keys()) == set(ATTRIBUTE_MAP_COMPACT_LOSING_TEAM.keys()))
+  assert(set(ATTRIBUTE_MAP_DETAILED_WINNING_TEAM.keys()) == set(ATTRIBUTE_MAP_DETAILED_LOSING_TEAM.keys()))
 
   def __init__(self):
     pass
   
   @classmethod
-  def get_map(cls, is_winner):
-    if is_winner:
-      return cls.ATTRIBUTE_MAP_WINNING_TEAM
-    
-    return cls.ATTRIBUTE_MAP_LOSING_TEAM
+  def get_map(cls, detailed, is_winner):
+    if detailed:
+      if is_winner:
+        return cls.ATTRIBUTE_MAP_DETAILED_WINNING_TEAM
+      
+      return cls.ATTRIBUTE_MAP_DETAILED_LOSING_TEAM
+    else:
+      if is_winner:
+        return cls.ATTRIBUTE_MAP_COMPACT_WINNING_TEAM
+
+      return cls.ATTRIBUTE_MAP_COMPACT_LOSING_TEAM
 
   @classmethod
-  def get_attributes(cls):
-    return cls.ATTRIBUTE_MAP_WINNING_TEAM.keys()
+  def get_attributes(cls, detailed):
+    if detailed:
+      return sorted(cls.ATTRIBUTE_MAP_DETAILED_WINNING_TEAM.keys())
+    else:
+      return sorted(cls.ATTRIBUTE_MAP_COMPACT_WINNING_TEAM.keys())
 
 
 class CSVTourneySeed(CSVInfo):
