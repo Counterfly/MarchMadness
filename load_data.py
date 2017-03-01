@@ -11,8 +11,9 @@ CSV_TEAMS, CSV_SEASON, CSV_REGULAR_SEASON_COMPACT, CSV_REGULAR_SEASON_DETAILED, 
 
 
 class Model:
-  def __init__(self, desc, hot_streak, rival_streak):
+  def __init__(self, desc, log_dir, hot_streak, rival_streak):
     self._description = desc
+    self._log_dir = log_dir
     self._hot_streak = hot_streak
     self._rival_streak = rival_streak
 
@@ -27,6 +28,10 @@ class Model:
   @property
   def rival_streak(self):
     return self._rival_streak
+
+  @property
+  def log_dir(self):
+    return self._log_dir
 
   def __eq__(self, other):
     return \
@@ -47,20 +52,34 @@ class DataModel:
     def include_tourney(self):
       return self._include_tourney
 
+    @property
+    def description(self):
+      if self._detailed and self._include_tourney:
+        return 'detailed_with_tourney'
+      if self._detailed:
+        return 'detailed'
+      if self._include_tourney:
+        return 'compact_with_tourney'
+
+      return 'compact'
+
     def __eq__(self, other):
       return self._detailed == other.detailed and self._include_tourney == other.include_tourney
 
 
 MODEL_WINNING_TEAM_ID = Model(
   'Target is the Winning Team ID',
+  '/wteamid/',
   True,
   True)
 MODEL_SYMMETRICAL = Model(
   'Output is two nodes where the target is the first or second half team (based on input is symmetrical)',
+  '/symmetrical/',
   True,
-  True)
+  False)
 MODEL_PROBABILITY = Model(
   'Target is the probability of the first team winning',
+  '/probability/',
   True,
   True)
 
@@ -81,10 +100,6 @@ class OneHotGenerator:
     one_hot[self.current_element] = 1
     self.current_element += 1
     return one_hot
-
-class DataSet:
-  def __init__():
-    pass
 
 
 def load_teams(force=False):
@@ -513,12 +528,12 @@ def generate_games(model, data_model, seasons, NUM_HISTORIC_WIN_LOSS, normalize)
 
       _output[season].append(team_to_one_hot[winning_team].T)
       _output[season].append(team_to_one_hot[winning_team].T)
-    elif model == MODEL_SYMETRICAL:
+    elif model == MODEL_SYMMETRICAL:
       train = np.concatenate((wteam_snapshot, lteam_snapshot, rival_streak.reshape(-1,1)))
       _input[season].append(train.T)
       _output[season].append(np.array([1,0]))
 
-      historic_win_loss = np.multiply(-1, historic_win_loss)
+      rival_streak = np.multiply(-1, rival_streak)
 
       train = np.concatenate((lteam_snapshot, wteam_snapshot, rival_streak.reshape(-1,1)))
       _input[season].append(train.T)
@@ -528,7 +543,7 @@ def generate_games(model, data_model, seasons, NUM_HISTORIC_WIN_LOSS, normalize)
       _input[season].append(train.T)
       _output[season].append(1.0)
 
-      historic_win_loss = np.multiply(-1, historic_win_loss)
+      rival_streak = np.multiply(-1, rival_streak)
 
       train = np.concatenate((lteam_snapshot, wteam_snapshot, rival_streak.reshape(-1,1)))
       _input[season].append(train.T)

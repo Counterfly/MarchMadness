@@ -7,6 +7,7 @@ import load_data
 from data_sets import DataSetsFiles
 from flag_values import _FlagValues as FlagValues
 
+# This isn't used, just for reference
 hyperparameters = {
   'num_historic_win_loss': 10,
   'learn_rate': 0.005,
@@ -27,19 +28,20 @@ FLAGS.summaries_dir = './logs'
 data_partition_fractions = [0.8, 0.1, 0.1]  # Train, Valid, Test
 
 # the input/output model to use
-model = load_data.MODEL_WINNING_TEAM_ID
+model = load_data.MODEL_SYMMETRICAL
 
 # the data model to use
-data_model = load_data.DATA_MODEL_COMPACT
+data_model = load_data.DATA_MODEL_DETAILED
 
 filenames = load_data.load_games(model, data_model, num_historic_win_loss=10, aggregate_all_data=True, normalize=True, save=True, num_splits=10)
 datasets = DataSetsFiles(filenames, data_partition_fractions, load_data.read_file)
 
 
+print("example sizes: %d %d %d" % (datasets.train.num_examples, datasets.valid.num_examples, datasets.test.num_examples))
+
 #del dataset
 
 if __name__ == "__main__":
-  print("1")
   # Hyper Parameters
   hidden_layer1_size = 1024
 
@@ -151,13 +153,13 @@ if __name__ == "__main__":
 
   # Merge summaries
   merged = tf.summary.merge_all()
-  train_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '/train', session.graph)
-  valid_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '/valid')
-  test_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '/test')
+  train_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '%s/%s/%s' % (model.log_dir, data_model.description, 'train'), session.graph)
+  valid_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '%s/%s/%s' % (model.log_dir, data_model.description, 'valid'))
+  test_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '%s/%s/%s' % (model.log_dir, data_model.description, 'test'))
                                      
   #####
   batch_size = 64
-  num_steps = math.ceil(datasets.train.num_examples / batch_size * 20)
+  num_steps = math.ceil(datasets.train.num_examples / batch_size * 2)#0)
   print("Num steps = %d" % num_steps)
     
   tf.global_variables_initializer().run()
@@ -184,6 +186,10 @@ if __name__ == "__main__":
   print("Final validation accuracy: %.3f" % acc_valid)#accuracy.eval(feed_dict={ X_: datasets.valid.data, y_: datasets.valid.labels, keep_prob: 1.0 }))
   
   summary_test, acc_test = session.run([merged, accuracy], feed_dict={ X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 })
+
+  # Add summary twice to test writer so it can have a 'line' in the charts.
+  # Each data stream must have at least two points
+  test_writer.add_summary(summary_test, num_steps-1)
   test_writer.add_summary(summary_test, num_steps)
   print("Test accuracy: %.3f" % acc_test)#accuracy.eval(feed_dict={ X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 }))
 
