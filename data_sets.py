@@ -19,8 +19,24 @@ class DataSetsFiles:
       
     # Create datasets, Train, Valid, Test
     self._train = DataSetFiles(filenames[:train_end_index], read_file_fn)
-    self._valid = DataSetFiles(filenames[train_end_index:valid_end_index], read_file_fn)
-    self._test = DataSetFiles(filenames[valid_end_index:test_end_index], read_file_fn)
+
+    # We shouldn't need the validation and test datasets in files as we want to evaluate the model on the entire validation/testing set
+    data, labels = self.load_data_from_files(filenames[train_end_index:valid_end_index], read_file_fn)
+    self._valid = DataSet(data, labels)
+
+    data, labels = self.load_data_from_files(filenames[valid_end_index:test_end_index], read_file_fn)
+    self._test = DataSet(data, labels)
+
+  def load_data_from_files(self, filenames, read_file_fn):
+    assert(len(filenames) > 0)
+
+    _data, _labels = read_file_fn(filenames[0])
+    for f in filenames[1:]:
+      data, labels = read_file_fn(f)
+      _data = np.concatenate((_data, data))
+      _labels = np.concatenate((_labels, labels))
+
+    return _data, _labels
 
   @property
   def num_features(self):
@@ -49,6 +65,7 @@ class DataSetFiles:
 
     print("num files = %d" % len(self._filenames))
     self._num_examples = 0
+
     for f in filenames:
       _, labels = read_file_fn(f)
       self._num_examples += labels.shape[0]
@@ -58,11 +75,13 @@ class DataSetFiles:
     self._read_file = read_file_fn
 
     self._current_file_index = -1
-    self.next_file()
-
     self._file_epochs_completed = 0
     self._mini_epochs_completed = 0
     self._index_in_epoch = 0
+    
+    # Load file to populate data and labels
+    self.next_file()
+
 
   @property
   def data(self):
@@ -181,7 +200,7 @@ class DataSets:
     return self._test
 
 class DataSet(object):
-  def __init__(self, data, labels, normalize=True):
+  def __init__(self, data, labels, normalize=False):
     assert data.shape[0] == labels.shape[0], (
         "data.shape: %s labels.shape: %s" % (data.shape,
                                                labels.shape))
