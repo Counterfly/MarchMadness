@@ -5,39 +5,11 @@ import sys
 import pickle
 import scipy.io as scio
 import configs
+import hashlib
 from configs import AttributeMapper,\
 DATA_DIRECTORY, SEASON_FILENAME_COMPACT, SEASON_FILENAME_DETAILED,\
 CSV_TEAMS, CSV_SEASON, CSV_REGULAR_SEASON_COMPACT, CSV_REGULAR_SEASON_DETAILED, CSV_SEASON, CSV_TOURNEY_GAMES_COMPACT, CSV_TOURNEY_GAMES_DETAILED, CSV_TOURNEY_SEED, SYMBOL_WIN, SYMBOL_LOSE, CSVSeason
 
-
-class Model:
-  def __init__(self, desc, log_dir, hot_streak, rival_streak):
-    self._description = desc
-    self._log_dir = log_dir
-    self._hot_streak = hot_streak
-    self._rival_streak = rival_streak
-
-  @property
-  def description(self):
-    return self._description
-
-  @property
-  def hot_streak(self):
-    return self._hot_streak
-
-  @property
-  def rival_streak(self):
-    return self._rival_streak
-
-  @property
-  def log_dir(self):
-    return self._log_dir
-
-  def __eq__(self, other):
-    return \
-      self._description == other.description and\
-      self._hot_streak == other.hot_streak and\
-      self._rival_streak == other.rival_streak
 
 class DataModel:
     def __init__(self, detailed, include_tourney):
@@ -67,21 +39,6 @@ class DataModel:
       return self._detailed == other.detailed and self._include_tourney == other.include_tourney
 
 
-MODEL_WINNING_TEAM_ID = Model(
-  'Target is the Winning Team ID',
-  '/wteamid/',
-  True,
-  True)
-MODEL_SYMMETRICAL = Model(
-  'Output is two nodes where the target is the first or second half team (based on input is symmetrical)',
-  '/symmetrical/',
-  True,
-  False)
-MODEL_PROBABILITY = Model(
-  'Target is the probability of the first team winning',
-  '/probability/',
-  True,
-  True)
 
 DATA_MODEL_DETAILED = DataModel(True, True)
 DATA_MODEL_COMPACT = DataModel(False, True)
@@ -245,7 +202,7 @@ class TeamData:
     else:
       season_wins = np.empty(0)
 
-    num_games_played = np.count_nonzero(season_wins)
+    num_games_played = np.count_nonzero(season_data.wins)
 
     if num_games_played == 0:
       num_games_played = 1
@@ -363,6 +320,8 @@ def load_games(model, data_model, num_historic_win_loss = 10, seasons=range(0, 2
     if save:
       _input = np.array_split(_input, num_splits)
       _output = np.array_split(_output, num_splits)
+
+
       filenames = []
       for split in range(0, num_splits):
         X = np.array(_input[split])
@@ -370,10 +329,14 @@ def load_games(model, data_model, num_historic_win_loss = 10, seasons=range(0, 2
 
         X = np.squeeze(X)
         y = np.squeeze(y)
+        if (len(y.shape) == 1):
+          # Output label is one-dimensional but need to keep format numExamples x numDimensions
+          y = y.reshape(-1, 1)
+          assert(X.shape[0] == y.shape[0])
 
         # Save input and output datasets
         filename = '%s.mat' % (configs.all_data_filename(split+1, num_splits))
-        print("saving %s " % filename)
+        print("saving %s with shapes X,y %s, %s" % (filename, X.shape, y.shape))
         filenames.append(filename)
         scio.savemat(filename, mdict = {'X': X, 'y': y})
 
@@ -452,6 +415,8 @@ def generate_games(model, data_model, seasons, NUM_HISTORIC_WIN_LOSS, normalize)
   # dictionaries of season->input examples
   _input = dict()
   _output = dict()
+  data_hashes = set() # Keep track of duplicate data
+
   df = None
   with open(CSV_REG_GAMES.get_path(), 'r') as games_file:
     df = pd.read_csv(games_file)
@@ -517,39 +482,21 @@ def generate_games(model, data_model, seasons, NUM_HISTORIC_WIN_LOSS, normalize)
     assert(SYMBOL_WIN == 1)
     assert(SYMBOL_LOSE == -1)
 
-    if model == MODEL_WINNING_TEAM_ID:
-      train = np.concatenate((team_to_one_hot[winning_team].reshape(-1,1), wteam_snapshot, team_to_one_hot[losing_team].reshape(-1,1), lteam_snapshot, rival_streak.reshape(-1,1)))
-      _input[season].append(train.T)
+    data, labels = model.generate_data(wteam_snapshot, lteam_snapshot, wteam_one_hot=team_to_one_hot[winning_team], lteam_one_hot=team_to_one_hot[losing_team], rival_streak=rival_streak)
 
-      rival_streak = np.multiply(-1, rival_streak)
+    previous = None
+    for i in range(0, len(labels)):
+      data_hash = hashlib.sha1(data[i]).hexdigest()
 
-      train = np.concatenate((team_to_one_hot[losing_team].reshape(-1,1), lteam_snapshot, team_to_one_hot[winning_team].reshape(-1,1), wteam_snapshot, rival_streak.reshape(-1,1)))
-      _input[season].append(train.T)
-
-      _output[season].append(team_to_one_hot[winning_team].T)
-      _output[season].append(team_to_one_hot[winning_team].T)
-    elif model == MODEL_SYMMETRICAL:
-      train = np.concatenate((wteam_snapshot, lteam_snapshot, rival_streak.reshape(-1,1)))
-      _input[season].append(train.T)
-      _output[season].append(np.array([1,0]))
-
-      rival_streak = np.multiply(-1, rival_streak)
-
-      train = np.concatenate((lteam_snapshot, wteam_snapshot, rival_streak.reshape(-1,1)))
-      _input[season].append(train.T)
-      _output[season].append(np.array([0,1]))
-    elif model == MODEL_PROBABILITY:
-      train = np.concatenate((wteam_snapshot, lteam_snapshot, rival_streak.reshape(-1,1)))
-      _input[season].append(train.T)
-      _output[season].append(1.0)
-
-      rival_streak = np.multiply(-1, rival_streak)
-
-      train = np.concatenate((lteam_snapshot, wteam_snapshot, rival_streak.reshape(-1,1)))
-      _input[season].append(train.T)
-      _output[season].append(0.0)
-    else:
-      exit("UNKNOWN MODEL")
+      if data_hash not in data_hashes:
+        _input[season].append(data[i])
+        _output[season].append(labels[i])
+      
+        # add to data hash
+        data_hashes.add(data_hash)
+        previous = True
+      else:
+        previous = False
     
 
     # Now that training example has been created we can add it to our knowledge base
@@ -565,7 +512,7 @@ def generate_games(model, data_model, seasons, NUM_HISTORIC_WIN_LOSS, normalize)
     # Convert lists to np.ndarrays
     _input[season] = np.squeeze(np.array(_input[season]))
     _output[season] = np.squeeze(np.array(_output[season]))
-
+    print("%d has shape %s" %(season, _input[season].shape))
 
 
   return _input, _output
