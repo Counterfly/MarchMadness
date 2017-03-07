@@ -6,6 +6,7 @@
 \usepackage{graphicx}
 \usepackage[numbers]{natbib}
 \usepackage{amsmath}
+\usepackage[normalem]{ulem}
 
 %\documentstyle[nips13submit_09,times,art10]{article} % For LaTeX 2.09
 
@@ -18,6 +19,10 @@ University of Toronto
 Toronto, Ontario, Canada}
 }
 
+
+
+
+
 \newcommand{\fix}{\marginpar{FIX}}
 \newcommand{\new}{\marginpar{NEW}}
 
@@ -29,7 +34,7 @@ Toronto, Ontario, Canada}
 This project focuses on predicting the bracketology for NCAA's March Madness tournament.  We leverage the dataset from Kaggle's online competition \citep{kagglecompetition}.  Parsing the data and constructing relevant features is one of the main efforts in this project as all the data provided is.  The data comes in two forms: detailed and compact, where compact is a subset of the features in detailed.  The ground-truth labels are stored as another feature in the data and so can easily be obtained.  For each example, the a subset of the features can remain to comprise the feature vector; however, additional features are added and discussed in section~\ref{sec:data-features}.
 
 
-The task of predicting the all-but-first bracketology is complex: the first round (initial seedings are provided to you, and you must predict the winners of the subsequent rounds until only one team remains and is crowned champion.  For the second round there will be $2^{32}$ possible outcomes since there are 64 teams in the first round.  Then $2^{16}$, \dots, $2$ possibilities for each subsequent round.  Since each round depends on the results of the previous there are $\prod_{i=1}^{\log(32)} 2^{2^{i}} = \prod_{i=1}^{\log(32)} 4^{i} = 4^{\Sigma_{i=1}^{\log(32)} i} = 4^{15}$ possible outcomes.   The odds of predicting a perfect bracket are, needless to say; however, the exact probability in this case would be $\frac{1}{4^{15}} \approx 9.3132257e^{-10}$.  So, let the odds forever be in our favour.
+The task of predicting the all-but-first bracketology is complex: the first round (initial seedings are provided to you, and you must predict the winners of the subsequent rounds until only one team remains and is crowned champion.  For the second round there will be $2^{32}$ possible outcomes since there are 64 teams in the first round.  Then $2^{16}$, \dots, $2$ possibilities for each subsequent round.  Since each round depends on the results of the previous there are $\prod_{i=1}^{\log(32)} 2^{2^{i}} = \prod_{i=1}^{\log(32)} 4^{i} = 4^{\Sigma_{i=1}^{\log(32)} i} = 4^{15}$ possible outcomes.   The odds of predicting a perfect bracket are poor with the probability being $\frac{1}{4^{15}} \approx 9.3132257e^{-10}$.  So, let the odds forever be in our favour.
 
 
 To generate competitive performance, we considered a variety of deep learning models which exploit different feature representations.  We attempt both the detailed and compact feature sets as well as additional hand-crafted and learned features as well.  Since the application of deep learning to predicting tournament bracketology is new (we could not find any articles to people who have tried this before) we experiment with a few different deep learning models to see which performs/generalizes best.  The models are described in section~\ref{sec:models}.  We describe the setup, performance, results, and summarize the investigation for each of the techniques.
@@ -98,7 +103,7 @@ The data provided was on a per-game basis.  The features per example were tempor
   \item \label{itm:features-pertinent} Which features are pertinent to predict future game outcomes
   \item \label{itm:features-aggregate} What aggregation methods should be used to summarize the values of the features across time
   \item \label{itm:features-horizon} What temporal horizon should be used when aggregating the features?  Should only the current season statistics be used, or the entire lifetime, or the past X games?
-\end{itemize}
+\end{enumerate}
 
 We will discuss each of these in turn, but first \label{itm:features-pertinent} will be discussed with respect to the two datasets (compact vs detailed).
 
@@ -154,30 +159,43 @@ The second handcrafted feature is called a team's ``rival streak" with respect t
 
 As a test-bed we evaluated the impact of hot streak and rival streak in a single hidden layer network (the network model is in section~\ref{sec:architectures-winning-team-id}).  The results are in tables~\ref{tbl:streak-impact-compact}~and~\ref{tbl:streak-impact-detailed} where the training data is evaluated on a batch of size 64.  Both tables seem to suggest that the addition of hot streak may not provide any additional information in predicting the outcome of a game as the accuracy slightly descreases in the compact dataset but slightly increases in the detailed dataset.  However, it is evident that rival streak is a good indicator of who will win.
 
-
-\begin{tabular}{|l|c|c|}
-\hline
-Data & Training & Validation & Testing\\
-\hline
-Vanilla & 0.625 & 0.538 & 0.534\\
-+hot streak & 0.500 & 0.474 & 0.520\\
-+rival streak & 0.719 & 0.640 & 0.631\\
-+both streaks & 0.625 & 0.621 & 0.657\\
-\end{tabular}
+\begin{table}
+\centering
+  \begin{tabular}{|l|c|c|c|}
+  \hline
+  Data & Training & Validation & Testing\\
+  \hline
+  Vanilla & 0.625 & 0.538 & 0.534\\
+  \hline
+  +hot streak & 0.500 & 0.474 & 0.520\\
+  \hline
+  +rival streak & 0.719 & 0.640 & 0.631\\
+  \hline
+  +both streaks & 0.625 & 0.621 & 0.657\\
+  \hline
+  \end{tabular}
 \caption{Impact of the handcrafted streak features using the compact dataset.}
+\end{table}
 \label{tbl:streak-impact-detaled}
 
 
-\begin{tabular}{|l|c|c|}
-\hline
-Data & Training & Validation & Testing\\
-\hline
-Vanilla & 0.641 & 0.537 & 0.534\\
-+hot streak & 0.516 & 0.531 & 0.540\\
-+rival streak & 0.594 & 0.576 & 0.589\\
-+both streaks & 0.781 & 0.694 & 0.694\\
-\end{tabular}
-\caption{Impact of the handcrafted streak features using the detailed dataset.}
+\begin{table}
+\centering
+  \begin{tabular}{|l|c|c|c|}
+  \hline
+  Data & Training & Validation & Testing\\
+  \hline
+  Vanilla & 0.641 & 0.537 & 0.534\\
+  \hline
+  +hot streak & 0.516 & 0.531 & 0.540\\
+  \hline
+  +rival streak & 0.594 & 0.576 & 0.589\\
+  \hline
+  +both streaks & 0.781 & 0.694 & 0.694\\
+  \hline
+  \end{tabular}
+  \caption{Impact of the handcrafted streak features using the detailed dataset.}
+\end{table}
 \label{tbl:streak-impact-detaled}
 
 
@@ -282,12 +300,8 @@ which will be \textit{flattened} into a single row vector in the input matrix.
 And the output would be
 \[
 \begin{cases}
-  \begin{Bmatrix}
-    1, 0
-  \end{Bmatrix} & \text{ if the first input team is predicted to win}
-  \begin{Bmatrix}
-    0, 1
-  \end{Bmatrix} & \text{ if the second input team is predicted to win}
+  \begin{Bmatrix} 1, 0 \end{Bmatrix}, & \mbox{ if the first input team is predicted to win}\\
+  \begin{Bmatrix} 0, 1 \end{Bmatrix}, & \mbox{ if the second input team is predicted to win}
 \end{cases}
 \]
 
@@ -360,37 +374,39 @@ All models are evaluated on both the Compact and Detailed datasets and we look a
 
 \begin{figure}[!htb]
 \minipage{0.5\textwidth}
-  \includegraphics[width=\linewidth]{plots/model1/wteam_onehot/streak-/accuracy.png.png}
+  \includegraphics[width=\linewidth]{plots/model1/wteam_onehot/streak-/accuracy.png}
   \caption{Accuracy using no streaks.}\label{fig:wteam-onehot--accuracy}
 \endminipage\hfill
 \minipage{0.5\textwidth}
-  \includegraphics[width=\linewidth]{plots/model1/wteam_onehot/streak-h/accuracy.png.png}
+  \includegraphics[width=\linewidth]{plots/model1/wteam_onehot/streak-h/accuracy.png}
   \caption{Accuracy using only hot streak.}\label{fig:wteam-onehot-h-accuracy}
 \endminipage\hfill
 \minipage{0.5\textwidth}%
-  \includegraphics[width=\linewidth]{plots/model1/wteam_onehot/streak-r/accuracy.png.png}
+  \includegraphics[width=\linewidth]{plots/model1/wteam_onehot/streak-r/accuracy.png}
   \caption{Accuracy using only rival streak.}\label{fig:wteam-onehot-r-accuracy}
 \endminipage
 \minipage{0.5\textwidth}%
-  \includegraphics[width=\linewidth]{plots/model1/wteam_onehot/streak-hr/accuracy.png.png}
+  \includegraphics[width=\linewidth]{plots/model1/wteam_onehot/streak-hr/accuracy.png}
   \caption{Accuracy using both hot and rival streaks.}\label{fig:wteam-onehot-hr-accuracy}
 \endminipage
 \end{figure}
 
 What is evident is that all the curves in each of the graphs exhibit the same growth shape.  What changes is the x and y values for when each graph plateaus, where x is epoch and y is the accuracy.  These metrics are described table~\ref{tbl:accuracy-teamid}.  Additionally, in many cases the training accuracy shoots upat the final epoch while the validation and test accuracy stay around the same position.  However, note that using only the rival streak, the training data for the detailed set has a sharp drop around 27000 epoch suggesting the model was saturated and could not learn a better separating hyper plane.
 
-
-\begin{tabular}{|l|c|c|c|c}
-\hline
- & \multicolumn{2}{Compact} & \multicolumn{2}{Detailed}
-Data & epoch & accuracy & epoch & accuracy\\
-\hline
-Vanilla & 4000 & 0.522 & 4000 & 0.526\\ 
-+hot streak & 7000, 0.516, 7000, 0.484\\
-+rival streak 10000 & 0.589 & 10000 & 0.606\\
-+both streaks & 15000 & 0.683 & 15000 & 0.630\\
-\end{tabular}
-\caption{Impact of the handcrafted streak features using the compact dataset.}
+\begin{table}
+\centering
+  \begin{tabular}{|l|c|c|c|c|}
+  \hline
+  a & \multicolumn{2}{|c|}{Compact} & \multicolumn{2}{|c|}{Detailed}\\
+  Data & epoch & accuracy & epoch & accuracy\\
+  \hline
+  Vanilla & 4000 & 0.522 & 4000 & 0.526\\ 
+  +hot streak & 7000 & 0.516 & 7000 & 0.484\\
+  +rival streak 10000 & 0.589 & 10000 & 0.606\\
+  +both streaks & 15000 & 0.683 & 15000 & 0.630\\
+  \end{tabular}
+  \caption{Impact of the handcrafted streak features using the compact dataset.}
+\end{table}
 \label{tbl:accuracy-wteamid}
 
 
