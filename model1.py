@@ -4,6 +4,7 @@ import tensorflow as tf
 
 # User defined modules
 import load_data
+import models
 from data_sets import DataSetsFiles
 from flag_values import _FlagValues as FlagValues
 
@@ -23,15 +24,13 @@ FLAGS.summaries_dir = './logs'
 
 #print("datasets memory = %d" % dataset.nbytes)
 
-
-
 data_partition_fractions = [0.8, 0.1, 0.1]  # Train, Valid, Test
 
 # the input/output model to use
-model = load_data.MODEL_SYMMETRICAL
+model = models.ModelWinningTeamOneHot(hot_streak=True, rival_streak=True)
 
 # the data model to use
-data_model = load_data.DATA_MODEL_DETAILED
+data_model = load_data.DATA_MODEL_COMPACT
 
 filenames = load_data.load_games(model, data_model, num_historic_win_loss=10, aggregate_all_data=True, normalize=True, save=True, num_splits=10)
 datasets = DataSetsFiles(filenames, data_partition_fractions, load_data.read_file)
@@ -130,6 +129,8 @@ if __name__ == "__main__":
   # Do not apply softmax yet
   output_activation = nn_layer(hidden1, weights_layer2, biases_layer2, 'output_activation')
 
+  #softmax_probabilities = tf.nn.softmax(output_activation)
+  
   # Training computation.
   loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=output_activation, labels=y_))
 
@@ -159,7 +160,7 @@ if __name__ == "__main__":
                                      
   #####
   batch_size = 64
-  num_steps = math.ceil(datasets.train.num_examples / batch_size * 2)#0)
+  num_steps = 50000
   print("Num steps = %d" % num_steps)
     
   tf.global_variables_initializer().run()
@@ -173,24 +174,26 @@ if __name__ == "__main__":
 
     train_writer.add_summary(summary, step)
 
-    if (step % 1000 == 0):
+    if (step % (num_steps//50) == 0):
       print("Minibatch loss at step %d: %f" % (step, loss_))
       print("Minibatch accuracy: %.3f" % acc) #accuracy.eval(feed_dict={X_: batch_data, y_: batch_labels, keep_prob: 1.0 }))
       
       summary_valid, acc_valid = session.run([merged, accuracy], feed_dict={ X_: datasets.valid.data, y_: datasets.valid.labels, keep_prob: 1.0 })
       valid_writer.add_summary(summary_valid, step)
       print("Validation accuracy: %.3f" % acc_valid)#accuracy.eval(feed_dict={ X_: datasets.valid.data, y_: datasets.valid.labels, keep_prob: 1.0 }))
+ 
+      # This is only added so that the Test data can be visualized 
+      summary_test, _ = session.run([merged, accuracy], feed_dict={ X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 })
+      test_writer.add_summary(summary_test, step)
 
+  print("====\ndone learning\n====")
   summary_valid, acc_valid = session.run([merged, accuracy], feed_dict={ X_: datasets.valid.data, y_: datasets.valid.labels, keep_prob: 1.0 })
   valid_writer.add_summary(summary_valid, num_steps)
   print("Final validation accuracy: %.3f" % acc_valid)#accuracy.eval(feed_dict={ X_: datasets.valid.data, y_: datasets.valid.labels, keep_prob: 1.0 }))
   
   summary_test, acc_test = session.run([merged, accuracy], feed_dict={ X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 })
-
-  # Add summary twice to test writer so it can have a 'line' in the charts.
-  # Each data stream must have at least two points
-  test_writer.add_summary(summary_test, num_steps-1)
   test_writer.add_summary(summary_test, num_steps)
+
   print("Test accuracy: %.3f" % acc_test)#accuracy.eval(feed_dict={ X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 }))
 
   print("Num Epochs completed = %d " % datasets.train.epochs_completed)
