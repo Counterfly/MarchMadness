@@ -484,19 +484,16 @@ def generate_games(model, data_model, seasons, NUM_HISTORIC_WIN_LOSS, normalize)
 
     data, labels = model.generate_data(wteam_snapshot, lteam_snapshot, wteam_one_hot=team_to_one_hot[winning_team], lteam_one_hot=team_to_one_hot[losing_team], rival_streak=rival_streak)
 
-    previous = None
     for i in range(0, len(labels)):
       data_hash = hashlib.sha1(data[i]).hexdigest()
 
       if data_hash not in data_hashes:
         _input[season].append(data[i])
         _output[season].append(labels[i])
-      
+     
+        #print(data[i], labels[i])     
         # add to data hash
         data_hashes.add(data_hash)
-        previous = True
-      else:
-        previous = False
     
 
     # Now that training example has been created we can add it to our knowledge base
@@ -606,5 +603,12 @@ def read_file(filename):
   
 
 if __name__ == "__main__":
-  load_games(MODEL_WINNING_TEAM_ID, DATA_MODEL_DETAILED, aggregate_all_data=True, save=True, num_splits=10)
+  import models
+  # the input/output model to use
+  model = models.ModelProbability(hot_streak=False, rival_streak=True)
+
+  # the data model to use
+  data_model = DATA_MODEL_COMPACT
+
+  load_games(model, data_model, num_historic_win_loss=10, aggregate_all_data=True, normalize=True)
   #load_team_to_region_mapping()
