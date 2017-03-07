@@ -115,7 +115,7 @@ class DataSetFiles:
     """Return the next `batch_size` examples from this data set."""
     start = self._index_in_epoch
     self._index_in_epoch += batch_size
-    if self._index_in_epoch > self._current_num_examples:
+    if self._index_in_epoch >= self._current_num_examples:
       #Finished mini file epoch
       self._mini_epochs_completed += 1
 
