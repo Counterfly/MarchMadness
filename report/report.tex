@@ -434,11 +434,122 @@ For both datasets, the cross entropy loss follows an analogous curve to the accu
 
 
 Since the accuracy plateaus and the training data doesn't seem to be overfitting, this is evidence that the model is not complex enough and could better generalize using either additional hidden layers and/or more hidden nodes.
+Also since the accuracy is only slightly above $50\%$ for the Vanilla and ``Vanilla + hot streak" models (with the detailed dataset using ``Vanilla + hot streak" predicting below $50\%$, suggests that predicting team id adds a signifcant amount of noise as the model must also learn valid outputs.  Otherwise, this problem should be producing $50\%$ accuracy for a random prediction model, but since we actually require the team id it makes a random prediction model have accuracy $\approx \frac{100}{N}\%$, where $N$ is the number of teams.
 
 
 
 \subsection{Predicting Win/Loss Vector}
 \label{sec:results-winloss-vector}
+
+
+\begin{figure}[!htb]
+\minipage{0.5\textwidth}
+  \includegraphics[width=\linewidth]{plots/model1/symmetrical/streak-/accuracy.png}
+  \caption{Accuracy using no streaks.}\label{fig:symmetrical--accuracy}
+\endminipage\hfill
+\minipage{0.5\textwidth}
+  \includegraphics[width=\linewidth]{plots/model1/symmetrical/streak-h/accuracy.png}
+  \caption{Accuracy using only hot streak.}\label{fig:symmetrical-h-accuracy}
+\endminipage\hfill
+\minipage{0.5\textwidth}%
+  \includegraphics[width=\linewidth]{plots/model1/symmetrical/streak-r/accuracy.png}
+  \caption{Accuracy using only rival streak.}\label{fig:symmetrical-r-accuracy}
+\endminipage
+\minipage{0.5\textwidth}%
+  \includegraphics[width=\linewidth]{plots/model1/symmetrical/streak-hr/accuracy.png}
+  \caption{Accuracy using both hot and rival streaks.}\label{fig:symmetrical-hr-accuracy}
+\endminipage
+\end{figure}
+
+We can see that with a this model there is a clear discrepancy between the compact and detailed datasets, where the detailed dataset being the better predictor.
+Though the respective curves (train, valid, test) exhibit the same behaviour, the curves for the detailed dataset dominate compact.
+
+Note that the figures \ref{fig:symmetrical-r-accuracy} and \ref{fig:symmetrical-hr-accuracy} is zoomed in to the first 2000 epochs as the lines looked like a horizontal line when observing from the full 50,000 epochs.  This is evidence that the rival streak is a good predictive feature.
+
+Again, since all graphs do not overfit on either dataset, this suggests that the model is not flexible enough; however, incorporating rival streak then leads the model to $100\%$ accuracy which is quite unsettling.
+
+
+
+\begin{figure}[!htb]
+\minipage{0.5\textwidth}
+  \includegraphics[width=\linewidth]{plots/model1/symmetrical/streak-/crossentropy.png}
+  \caption{Cross Entropy using no streaks.}\label{fig:symmetrical--crossentropy}
+\endminipage\hfill
+\minipage{0.5\textwidth}
+  \includegraphics[width=\linewidth]{plots/model1/symmetrical/streak-h/crossentropy.png}
+  \caption{Cross Entropy using only hot streak.}\label{fig:symmetrical-h-crossentropy}
+\endminipage\hfill
+\minipage{0.5\textwidth}%
+  \includegraphics[width=\linewidth]{plots/model1/symmetrical/streak-r/crossentropy.png}
+  \caption{Cross Entropy using only rival streak.}\label{fig:symmetrical-r-crossentropy}
+\endminipage
+\minipage{0.5\textwidth}%
+  \includegraphics[width=\linewidth]{plots/model1/symmetrical/streak-hr/crossentropy.png}
+  \caption{Cross Entropy using both hot and rival streaks.}\label{fig:symmetrical-hr-crossentropy}
+\endminipage
+\end{figure}
+\label{fig:symmetrical-accuracies}
+
+The cross entropies are shown in figure~\ref{fig:symmetrical-accuracies} where there does not seem to be any anomalies with respect to the corresponding accuracies.
+
+Both input models that incorporate the rival streak are zoomed in to view the portion where the behaviour in the graph is changing.  You can see that the cross entropy rapidly decreases and converges at 0.  This normally should not happen and suggests either that the features are expressive enough to construct a hyperplane that completely separates the input data, or that there is a bug with the way the data is aggregated.
+
+Additionally, all models are able to predict with accuracy $> 50\%$, thus beating the random predictor model and the input-output model of predicting the winning team's id \ref{sec:results-wteam-onehot}.
+
+\subsection{Predicting First Team Win Probability}
+\label{sec:results-first-team-win-probability}
+
+
+\begin{figure}[!htb]
+\minipage{0.5\textwidth}
+  \includegraphics[width=\linewidth]{plots/model1/probability/streak-/accuracy.png}
+  \caption{Accuracy using no streaks.}\label{fig:probability--accuracy}
+\endminipage\hfill
+\minipage{0.5\textwidth}
+  \includegraphics[width=\linewidth]{plots/model1/probability/streak-h/accuracy.png}
+  \caption{Accuracy using only hot streak.}\label{fig:probability-h-accuracy}
+\endminipage\hfill
+\minipage{0.5\textwidth}%
+  \includegraphics[width=\linewidth]{plots/model1/probability/streak-r/accuracy.png}
+  \caption{Accuracy using only rival streak.}\label{fig:probability-r-accuracy}
+\endminipage
+\minipage{0.5\textwidth}%
+  \includegraphics[width=\linewidth]{plots/model1/probability/streak-hr/accuracy.png}
+  \caption{Accuracy using both hot and rival streaks.}\label{fig:probability-hr-accuracy}
+\endminipage
+\end{figure}
+
+We can see that with a this model there is a clear discrepancy between the compact and detailed datasets, where the detailed dataset being the better predictor.
+Though the respective curves (train, valid, test) exhibit the same behaviour, the curves for the detailed dataset dominate compact.
+
+Note that the figures \ref{fig:probability-r-accuracy} and \ref{fig:probability-hr-accuracy} is zoomed in to the first 2000 epochs as the lines looked like a horizontal line when observing from the full 50,000 epochs.  This is evidence that the rival streak is a good predictive feature.
+
+Again, since all graphs do not overfit on either dataset, this suggests that the model is not flexible enough; however, incorporating rival streak then leads the model to $100\%$ accuracy which is quite unsettling.
+
+
+
+\begin{figure}[!htb]
+\minipage{0.5\textwidth}
+  \includegraphics[width=\linewidth]{plots/model1/probability/streak-/crossentropy.png}
+  \caption{Cross Entropy using no streaks.}\label{fig:probability--crossentropy}
+\endminipage\hfill
+\minipage{0.5\textwidth}
+  \includegraphics[width=\linewidth]{plots/model1/probability/streak-h/crossentropy.png}
+  \caption{Cross Entropy using only hot streak.}\label{fig:probability-h-crossentropy}
+\endminipage\hfill
+\minipage{0.5\textwidth}%
+  \includegraphics[width=\linewidth]{plots/model1/probability/streak-r/crossentropy.png}
+  \caption{Cross Entropy using only rival streak.}\label{fig:probability-r-crossentropy}
+\endminipage
+\minipage{0.5\textwidth}%
+  \includegraphics[width=\linewidth]{plots/model1/probability/streak-hr/crossentropy.png}
+  \caption{Cross Entropy using both hot and rival streaks.}\label{fig:probability-hr-crossentropy}
+\endminipage
+\end{figure}
+\label{fig:probability-accuracies}
+
+The cross entropies are shown in figure~\ref{fig:probability-accuracies} where there does not seem to be any anomalies with respect to the corresponding accuracies.
+
 
 \section{Conclusion}
 \label{sec:conclusion}
