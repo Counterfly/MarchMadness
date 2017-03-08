@@ -8,39 +8,12 @@ import models
 from data_sets import DataSetsFiles
 from flag_values import _FlagValues as FlagValues
 
-# This isn't used, just for reference
-hyperparameters = {
-  'num_historic_win_loss': 10,
-  'learn_rate': 0.005,
-  'hidden_layer1_size': 1024
-}
 
-FLAGS = FlagValues()
-FLAGS.learning_rate = 1e-4
-FLAGS.summaries_dir = './logs'
+def train(datasets, save_model_path=None):
+  FLAGS = FlagValues()
+  FLAGS.learning_rate = 1e-4
+  FLAGS.summaries_dir = './logs'
 
-
-#dataset, labels = load_data.load_games(detailed=True, include_tourney = True, num_historic_win_loss = 10, aggregate_all_data = True)
-
-#print("datasets memory = %d" % dataset.nbytes)
-
-data_partition_fractions = [0.8, 0.1, 0.1]  # Train, Valid, Test
-
-# the input/output model to use
-model = models.ModelWinningTeamOneHot(hot_streak=True, rival_streak=True)
-
-# the data model to use
-data_model = load_data.DATA_MODEL_COMPACT
-
-filenames = load_data.load_games(model, data_model, num_historic_win_loss=10, aggregate_all_data=True, normalize=True, save=True, num_splits=10)
-datasets = DataSetsFiles(filenames, data_partition_fractions, load_data.read_file)
-
-
-print("example sizes: %d %d %d" % (datasets.train.num_examples, datasets.valid.num_examples, datasets.test.num_examples))
-
-#del dataset
-
-if __name__ == "__main__":
   # Hyper Parameters
   hidden_layer1_size = 1024
 
@@ -52,13 +25,13 @@ if __name__ == "__main__":
   gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.9)
   session = tf.InteractiveSession(config=tf.ConfigProto(gpu_options=gpu_options))
 
-  def weight_variable(shape, stddev=0.1):
+  def weight_variable(shape, stddev=0.1, name=''):
     initial = tf.truncated_normal(shape, stddev=stddev)
-    return tf.Variable(initial)
+    return tf.Variable(initial, name=name)
 
-  def bias_variable(shape, const=0.1):
+  def bias_variable(shape, const=0.1, name=''):
     initial = tf.constant(const, shape=shape)
-    return tf.Variable(initial)
+    return tf.Variable(initial, name=name)
 
   def variable_summaries(var):
     """Attach a lot of summaries to a Tensor (for TensorBoard visualization).
@@ -115,11 +88,15 @@ if __name__ == "__main__":
 
   # Model
   # Variables.
-  weights_layer1 = weight_variable([layer1['in'], layer1['out']])
-  biases_layer1 = bias_variable([layer1['out']])
+  weights_layer1 = weight_variable([layer1['in'], layer1['out']], name='w1')
+  biases_layer1 = bias_variable([layer1['out']], name='b1')
+  tf.add_to_collection('vars', weights_layer1)
+  tf.add_to_collection('vars', biases_layer1)
 
-  weights_layer2 = weight_variable([layer2['in'], layer2['out']], stddev=math.sqrt(2.0/hidden_layer1_size))
-  biases_layer2 = bias_variable([layer2['out']])
+  weights_layer2 = weight_variable([layer2['in'], layer2['out']], stddev=math.sqrt(2.0/hidden_layer1_size), name='w2')
+  biases_layer2 = bias_variable([layer2['out']], name='b2')
+  tf.add_to_collection('vars', weights_layer2)
+  tf.add_to_collection('vars', biases_layer2)
 
 
 
@@ -127,9 +104,10 @@ if __name__ == "__main__":
   hidden1 = tf.nn.dropout(nn_layer(X_, weights_layer1, biases_layer1, 'hidden1'), keep_prob)
 
   # Do not apply softmax yet
-  output_activation = nn_layer(hidden1, weights_layer2, biases_layer2, 'output_activation')
+  output_activation = nn_layer(hidden1, weights_layer2, biases_layer2, 'output_activation', tf.identity)
 
-  #softmax_probabilities = tf.nn.softmax(output_activation)
+  # This is only used to read output probability, doesn't serve in remainder computations
+  softmax_probabilities = tf.nn.softmax(output_activation)
   
   # Training computation.
   loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=output_activation, labels=y_))
@@ -142,9 +120,9 @@ if __name__ == "__main__":
   optimizer = tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(loss)
 
   with tf.name_scope('accuracy'): 
-    output_layer = tf.nn.softmax(output_activation) 
     # Predictions for the training, validation, and test data.
-    predictions = tf.argmax(output_layer, 1)
+    # predictions don't need softmax if simply choosing max. softmax won't alter ranking
+    predictions = tf.argmax(output_activation, 1)
     with tf.name_scope('correct_prediction'):
       correct_prediction = tf.equal(predictions, tf.argmax(y_, 1))
     with tf.name_scope('accuracy'):
@@ -160,7 +138,7 @@ if __name__ == "__main__":
                                      
   #####
   batch_size = 64
-  num_steps = 50000
+  num_steps = 15000
   print("Num steps = %d" % num_steps)
     
   tf.global_variables_initializer().run()
@@ -197,3 +175,25 @@ if __name__ == "__main__":
   print("Test accuracy: %.3f" % acc_test)#accuracy.eval(feed_dict={ X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 }))
 
   print("Num Epochs completed = %d " % datasets.train.epochs_completed)
+
+  if save_model_path:
+    saver = tf.train.Saver()
+    saver.save(session, save_model_path)
+
+
+
+if __name__ == "__main__":
+  data_partition_fractions = [0.8, 0.1, 0.1]  # Train, Valid, Test
+
+  # the input/output model to use
+  model = models.ModelWinningTeamOneHot(hot_streak=False, rival_streak=True)
+
+  # the data model to use
+  data_model = load_data.DATA_MODEL_DETAILED
+
+  filenames = load_data.load_games(model, data_model, num_historic_win_loss=10, aggregate_all_data=True, normalize=True, save=True, num_splits=10)
+  datasets = DataSetsFiles(filenames, data_partition_fractions, load_data.read_file)
+  print("example sizes: %d %d %d" % (datasets.train.num_examples, datasets.valid.num_examples, datasets.test.num_examples))
+
+  save_model = './trained/model1'
+  train(datasets, save_model_path=save_model)
