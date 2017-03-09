@@ -1,6 +1,61 @@
-This is BibTeX, Version 0.99dThe top-level auxiliary file: report.aux
+This is BibTeX, Version 0.99d (TeX Live 2016)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: report.aux
 The style file: plainnat.bst
 Database file #1: research.bib
-Warning--to sort, need author or key in googletensorflow
-Warning--empty year in googletensorflow
-(There were 2 warnings)
+Warning--I didn't find a database entry for "elo"
+Warning--to sort, need author or key in kagglecompetition
+Warning--to sort, need author or key in kaggle2015winner
+Warning--to sort, need author or key in kaggle2016winner
+Warning--to sort, need author or key in dtarlow2013winner
+Warning--to sort, need author or key in kaggle2014winner
+Warning--to sort, need author or key in ncaabracketbeat
+Warning--empty year in dtarlow2013winner
+Warning--empty year in kaggle2014winner
+Warning--empty year in kaggle2015winner
+Warning--empty year in kaggle2016winner
+Warning--empty year in kagglecompetition
+Warning--empty year in ncaabracketbeat
+Warning--empty journal in cao2012sports
+You've used 8 entries,
+            2773 wiz_defined-function locations,
+            621 strings with 5957 characters,
+and the built_in function-call counts, 2223 in all, are:
+= -- 211
+> -- 31
+< -- 2
++ -- 20
+- -- 9
+* -- 137
+:= -- 244
+add.period$ -- 24
+call.type$ -- 8
+change.case$ -- 27
+chr.to.int$ -- 5
+cite$ -- 35
+duplicate$ -- 132
+empty$ -- 281
+format.name$ -- 13
+if$ -- 518
+int.to.chr$ -- 4
+int.to.str$ -- 1
+missing$ -- 2
+newline$ -- 48
+num.names$ -- 8
+pop$ -- 123
+preamble$ -- 1
+purify$ -- 19
+quote$ -- 0
+skip$ -- 79
+stack$ -- 0
+substring$ -- 22
+swap$ -- 12
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 88
+warning$ -- 13
+while$ -- 6
+width$ -- 0
+write$ -- 100
+(There were 14 warnings)

@@ -12,8 +12,10 @@
 \BOOKMARK [1][-]{section.4}{Network Input Output Architectures}{}% 12
 \BOOKMARK [2][-]{subsubsection.4.0.1}{Predicting Winning Team ID}{section.4}% 13
 \BOOKMARK [2][-]{subsection.4.1}{Predicting Win/Loss Vector}{section.4}% 14
-\BOOKMARK [3][-]{subsubsection.4.1.1}{Predicting Probabiliy First Team Wins}{subsection.4.1}% 15
+\BOOKMARK [3][-]{subsubsection.4.1.1}{Predicting One-Shot Outcome}{subsection.4.1}% 15
 \BOOKMARK [1][-]{section.5}{Neural Network Architecture}{}% 16
 \BOOKMARK [1][-]{section.6}{Results}{}% 17
 \BOOKMARK [2][-]{subsection.6.1}{Predicting Winning Team ID}{section.6}% 18
 \BOOKMARK [2][-]{subsection.6.2}{Predicting Win/Loss Vector}{section.6}% 19
+\BOOKMARK [2][-]{subsection.6.3}{Predicting One-Shot Outcomes}{section.6}% 20
+\BOOKMARK [1][-]{section.7}{Conclusion}{}% 21

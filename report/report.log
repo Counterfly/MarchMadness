@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  7 MAR 2017 15:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  9 MAR 2017 13:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -386,47 +386,14 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 33.
 
 
-Package natbib Warning: Citation `kagglecompetition' on page 1 undefined on inp
-ut line 34.
-
-
 LaTeX Warning: Reference `sec:models' on page 1 undefined on input line 40.
-
-
-Package natbib Warning: Citation `kagglecompetition' on page 1 undefined on inp
-ut line 46.
 
 
 Package natbib Warning: Citation `elo' on page 1 undefined on input line 46.
 
-
-Package natbib Warning: Citation `kaggle2015winner' on page 1 undefined on inpu
-t line 48.
-
-
-Package natbib Warning: Citation `kaggle2016winner' on page 1 undefined on inpu
-t line 48.
-
 [1{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-
-Package natbib Warning: Citation `cao2012sports' on page 2 undefined on input l
-ine 50.
-
-
-Package natbib Warning: Citation `bashuk2012using' on page 2 undefined on input
- line 52.
-
-
-Package natbib Warning: Citation `bashuk2012using' on page 2 undefined on input
- line 52.
-
-
-Package natbib Warning: Citation `kagglecompetition' on page 2 undefined on inp
-ut line 63.
-
-
 Underfull \hbox (badness 1127) in paragraph at lines 65--66
 []\OT1/ptm/m/n/10 The re-sults datasets (Reg-u-larSea-son-Com-pactRe-sults, Reg
 -u-larSea-son-De-taile-dResults, Tour-n-ey-
@@ -487,178 +454,161 @@ ned on input line 311.
 
 
 LaTeX Warning: Reference `sec:io-architectures-winloss-vector' on page 8 undefi
-ned on input line 317.
+ned on input line 321.
 
 
-Overfull \hbox (5.13127pt too wide) detected at line 336
+Overfull \hbox (5.13127pt too wide) detected at line 340
 []
  []
 
 
 LaTeX Warning: Reference `sec:io-architectures-winloss-vector' on page 8 undefi
-ned on input line 350.
+ned on input line 354.
 
 
-<plots/model1/wteam_onehot/streak-/accuracy.png, id=141, 781.92125pt x 400.4962
+<plots/model1/wteam_onehot/streak-/accuracy.png, id=158, 781.92125pt x 400.4962
 5pt>
 File: plots/model1/wteam_onehot/streak-/accuracy.png Graphic file (type png)
  <use plots/model1/wteam_onehot/streak-/accuracy.png>
 Package pdftex.def Info: plots/model1/wteam_onehot/streak-/accuracy.png used on
- input line 377.
+ input line 381.
 (pdftex.def)             Requested size: 198.7425pt x 101.79213pt.
 
-<plots/model1/wteam_onehot/streak-h/accuracy.png, id=142, 786.94pt x 402.50375p
+<plots/model1/wteam_onehot/streak-h/accuracy.png, id=159, 786.94pt x 402.50375p
 t>
 File: plots/model1/wteam_onehot/streak-h/accuracy.png Graphic file (type png)
  <use plots/model1/wteam_onehot/streak-h/accuracy.png>
 Package pdftex.def Info: plots/model1/wteam_onehot/streak-h/accuracy.png used o
-n input line 381.
+n input line 385.
 (pdftex.def)             Requested size: 198.7425pt x 101.65135pt.
 
-<plots/model1/wteam_onehot/streak-r/accuracy.png, id=143, 784.9325pt x 398.4887
+<plots/model1/wteam_onehot/streak-r/accuracy.png, id=160, 784.9325pt x 398.4887
 5pt>
 File: plots/model1/wteam_onehot/streak-r/accuracy.png Graphic file (type png)
  <use plots/model1/wteam_onehot/streak-r/accuracy.png>
 Package pdftex.def Info: plots/model1/wteam_onehot/streak-r/accuracy.png used o
-n input line 385.
+n input line 389.
 (pdftex.def)             Requested size: 198.7425pt x 100.89275pt.
 
-<plots/model1/wteam_onehot/streak-hr/accuracy.png, id=144, 788.9475pt x 405.515
+<plots/model1/wteam_onehot/streak-hr/accuracy.png, id=161, 788.9475pt x 405.515
 pt>
 File: plots/model1/wteam_onehot/streak-hr/accuracy.png Graphic file (type png)
  <use plots/model1/wteam_onehot/streak-hr/accuracy.png>
 Package pdftex.def Info: plots/model1/wteam_onehot/streak-hr/accuracy.png used 
-on input line 389.
+on input line 393.
 (pdftex.def)             Requested size: 198.7425pt x 102.15195pt.
 
 
 LaTeX Warning: Reference `tbl:accuracy-teamid' on page 8 undefined on input lin
-e 394.
+e 398.
 
 [8]
-<plots/model1/wteam_onehot/streak-/crossentropy.png, id=149, 777.90625pt x 401.
+<plots/model1/wteam_onehot/streak-/crossentropy.png, id=167, 777.90625pt x 401.
 5pt>
 File: plots/model1/wteam_onehot/streak-/crossentropy.png Graphic file (type png
 )
  <use plots/model1/wteam_onehot/streak-/crossentropy.png>
 Package pdftex.def Info: plots/model1/wteam_onehot/streak-/crossentropy.png use
-d on input line 417.
+d on input line 421.
 (pdftex.def)             Requested size: 198.7425pt x 102.57411pt.
 
-<plots/model1/wteam_onehot/streak-h/crossentropy.png, id=150, 782.925pt x 403.5
+<plots/model1/wteam_onehot/streak-h/crossentropy.png, id=168, 782.925pt x 403.5
 075pt>
 File: plots/model1/wteam_onehot/streak-h/crossentropy.png Graphic file (type pn
 g)
  <use plots/model1/wteam_onehot/streak-h/crossentropy.png>
 Package pdftex.def Info: plots/model1/wteam_onehot/streak-h/crossentropy.png us
-ed on input line 421.
+ed on input line 425.
 (pdftex.def)             Requested size: 198.7425pt x 102.42819pt.
 
-<plots/model1/wteam_onehot/streak-r/crossentropy.png, id=151, 769.87625pt x 401
+<plots/model1/wteam_onehot/streak-r/crossentropy.png, id=169, 769.87625pt x 401
 .5pt>
 File: plots/model1/wteam_onehot/streak-r/crossentropy.png Graphic file (type pn
 g)
  <use plots/model1/wteam_onehot/streak-r/crossentropy.png>
 Package pdftex.def Info: plots/model1/wteam_onehot/streak-r/crossentropy.png us
-ed on input line 425.
+ed on input line 429.
 (pdftex.def)             Requested size: 198.7425pt x 103.64624pt.
 
-<plots/model1/wteam_onehot/streak-hr/crossentropy.png, id=152, 776.9025pt x 401
+<plots/model1/wteam_onehot/streak-hr/crossentropy.png, id=170, 776.9025pt x 401
 .5pt>
 File: plots/model1/wteam_onehot/streak-hr/crossentropy.png Graphic file (type p
 ng)
  <use plots/model1/wteam_onehot/streak-hr/crossentropy.png>
 Package pdftex.def Info: plots/model1/wteam_onehot/streak-hr/crossentropy.png u
-sed on input line 429.
+sed on input line 433.
 (pdftex.def)             Requested size: 198.7425pt x 102.7089pt.
 
-<plots/model1/symmetrical/streak-/accuracy.png, id=153, 788.9475pt x 406.51875p
+<plots/model1/symmetrical/streak-/accuracy.png, id=171, 788.9475pt x 406.51875p
 t>
 File: plots/model1/symmetrical/streak-/accuracy.png Graphic file (type png)
  <use plots/model1/symmetrical/streak-/accuracy.png>
 Package pdftex.def Info: plots/model1/symmetrical/streak-/accuracy.png used on 
-input line 447.
+input line 451.
 (pdftex.def)             Requested size: 198.7425pt x 102.4048pt.
 
-<plots/model1/symmetrical/streak-h/accuracy.png, id=154, 787.94376pt x 401.5pt>
+<plots/model1/symmetrical/streak-h/accuracy.png, id=172, 787.94376pt x 401.5pt>
 File: plots/model1/symmetrical/streak-h/accuracy.png Graphic file (type png)
 <use plots/model1/symmetrical/streak-h/accuracy.png>
 Package pdftex.def Info: plots/model1/symmetrical/streak-h/accuracy.png used on
- input line 451.
+ input line 455.
 (pdftex.def)             Requested size: 198.7425pt x 101.2692pt.
 
-<plots/model1/symmetrical/streak-r/accuracy.png, id=155, 791.95876pt x 402.5037
-5pt>
+<plots/model1/symmetrical/streak-r/accuracy.png, id=173, 789.95125pt x 399.4925
+pt>
 File: plots/model1/symmetrical/streak-r/accuracy.png Graphic file (type png)
  <use plots/model1/symmetrical/streak-r/accuracy.png>
 Package pdftex.def Info: plots/model1/symmetrical/streak-r/accuracy.png used on
- input line 455.
-(pdftex.def)             Requested size: 198.7425pt x 101.00647pt.
+ input line 459.
+(pdftex.def)             Requested size: 198.7425pt x 100.50684pt.
 
-<plots/model1/symmetrical/streak-hr/accuracy.png, id=156, 791.95876pt x 403.507
-5pt>
+<plots/model1/symmetrical/streak-hr/accuracy.png, id=174, 785.93625pt x 401.5pt
+>
 File: plots/model1/symmetrical/streak-hr/accuracy.png Graphic file (type png)
  <use plots/model1/symmetrical/streak-hr/accuracy.png>
 Package pdftex.def Info: plots/model1/symmetrical/streak-hr/accuracy.png used o
-n input line 459.
-(pdftex.def)             Requested size: 198.7425pt x 101.25836pt.
-
-
-LaTeX Warning: Reference `fig:symmetrical-r-accuracy' on page 9 undefined on in
-put line 467.
-
-
-LaTeX Warning: Reference `fig:symmetrical-hr-accuracy' on page 9 undefined on i
-nput line 467.
-
-
-Underfull \vbox (badness 1275) has occurred while \output is active []
-
+n input line 463.
+(pdftex.def)             Requested size: 198.7425pt x 101.5265pt.
  [9 <./plots/model1/wteam_onehot/streak-/accuracy.png> <./plots/model1/wteam_on
 ehot/streak-h/accuracy.png> <./plots/model1/wteam_onehot/streak-r/accuracy.png>
  <./plots/model1/wteam_onehot/streak-hr/accuracy.png>]
-<plots/model1/symmetrical/streak-/crossentropy.png, id=167, 782.925pt x 405.515
+<plots/model1/symmetrical/streak-/crossentropy.png, id=186, 782.925pt x 405.515
 pt>
 File: plots/model1/symmetrical/streak-/crossentropy.png Graphic file (type png)
 
  <use plots/model1/symmetrical/streak-/crossentropy.png>
 Package pdftex.def Info: plots/model1/symmetrical/streak-/crossentropy.png used
- on input line 475.
+ on input line 479.
 (pdftex.def)             Requested size: 198.7425pt x 102.93777pt.
 
-<plots/model1/symmetrical/streak-h/crossentropy.png, id=168, 779.91376pt x 402.
+<plots/model1/symmetrical/streak-h/crossentropy.png, id=187, 779.91376pt x 402.
 50375pt>
 File: plots/model1/symmetrical/streak-h/crossentropy.png Graphic file (type png
 )
  <use plots/model1/symmetrical/streak-h/crossentropy.png>
 Package pdftex.def Info: plots/model1/symmetrical/streak-h/crossentropy.png use
-d on input line 479.
+d on input line 483.
 (pdftex.def)             Requested size: 198.7425pt x 102.56647pt.
 
-<plots/model1/symmetrical/streak-r/crossentropy.png, id=169, 779.91376pt x 404.
-51125pt>
+<plots/model1/symmetrical/streak-r/crossentropy.png, id=188, 782.925pt x 400.49
+625pt>
 File: plots/model1/symmetrical/streak-r/crossentropy.png Graphic file (type png
 )
  <use plots/model1/symmetrical/streak-r/crossentropy.png>
 Package pdftex.def Info: plots/model1/symmetrical/streak-r/crossentropy.png use
-d on input line 483.
-(pdftex.def)             Requested size: 198.7425pt x 103.07802pt.
+d on input line 487.
+(pdftex.def)             Requested size: 198.7425pt x 101.6638pt.
 
-<plots/model1/symmetrical/streak-hr/crossentropy.png, id=170, 782.925pt x 399.4
-925pt>
+<plots/model1/symmetrical/streak-hr/crossentropy.png, id=189, 780.9175pt x 404.
+51125pt>
 File: plots/model1/symmetrical/streak-hr/crossentropy.png Graphic file (type pn
 g)
  <use plots/model1/symmetrical/streak-hr/crossentropy.png>
 Package pdftex.def Info: plots/model1/symmetrical/streak-hr/crossentropy.png us
-ed on input line 487.
-(pdftex.def)             Requested size: 198.7425pt x 101.409pt.
+ed on input line 491.
+(pdftex.def)             Requested size: 198.7425pt x 102.9484pt.
 
-
-LaTeX Warning: Reference `fig:symmetrical-accuracies' on page 10 undefined on i
-nput line 493.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 4913) has occurred while \output is active []
 
  [10 <./plots/model1/wteam_onehot/streak-/crossentropy.png> <./plots/model1/wte
 am_onehot/streak-h/crossentropy.png> <./plots/model1/wteam_onehot/streak-r/cros
@@ -667,55 +617,161 @@ sentropy.png> <./plots/model1/wteam_onehot/streak-hr/crossentropy.png> <./plots
 accuracy.png> <./plots/model1/symmetrical/streak-r/accuracy.png> <./plots/model
 1/symmetrical/streak-hr/accuracy.png>]
 
+LaTeX Warning: Reference `fig:symmetrical-accuracies' on page 11 undefined on i
+nput line 499.
+
+
 LaTeX Warning: Reference `sec:results-wteam-onehot' on page 11 undefined on inp
-ut line 497.
+ut line 501.
 
 
-LaTeX Warning: File `plots/model1/probability/streak-/accuracy.png' not found o
-n input line 505.
+<plots/model1/oneshot/streak-/accuracy.png, id=203, 773.89125pt x 404.51125pt>
+File: plots/model1/oneshot/streak-/accuracy.png Graphic file (type png)
+
+<use plots/model1/oneshot/streak-/accuracy.png>
+Package pdftex.def Info: plots/model1/oneshot/streak-/accuracy.png used on inpu
+t line 511.
+(pdftex.def)             Requested size: 198.7425pt x 103.88042pt.
+
+<plots/model1/oneshot/streak-h/accuracy.png, id=204, 787.94376pt x 399.4925pt>
+File: plots/model1/oneshot/streak-h/accuracy.png Graphic file (type png)
+
+<use plots/model1/oneshot/streak-h/accuracy.png>
+Package pdftex.def Info: plots/model1/oneshot/streak-h/accuracy.png used on inp
+ut line 515.
+(pdftex.def)             Requested size: 198.7425pt x 100.76285pt.
+
+<plots/model1/oneshot/streak-r/accuracy.png, id=205, 791.95876pt x 408.52625pt>
+File: plots/model1/oneshot/streak-r/accuracy.png Graphic file (type png)
+<use plots/model1/oneshot/streak-r/accuracy.png>
+Package pdftex.def Info: plots/model1/oneshot/streak-r/accuracy.png used on inp
+ut line 519.
+(pdftex.def)             Requested size: 198.7425pt x 102.51779pt.
+
+<plots/model1/oneshot/streak-hr/accuracy.png, id=206, 791.95876pt x 401.5pt>
+File: plots/model1/oneshot/streak-hr/accuracy.png Graphic file (type png)
+
+<use plots/model1/oneshot/streak-hr/accuracy.png>
+Package pdftex.def Info: plots/model1/oneshot/streak-hr/accuracy.png used on in
+put line 523.
+(pdftex.def)             Requested size: 198.7425pt x 100.75458pt.
+
+<plots/model1/oneshot/streak-/crossentropy.png, id=209, 780.9175pt x 401.5pt>
+File: plots/model1/oneshot/streak-/crossentropy.png Graphic file (type png)
+
+<use plots/model1/oneshot/streak-/crossentropy.png>
+Package pdftex.def Info: plots/model1/oneshot/streak-/crossentropy.png used on 
+input line 540.
+(pdftex.def)             Requested size: 198.7425pt x 102.18202pt.
+
+<plots/model1/oneshot/streak-h/crossentropy.png, id=210, 778.91pt x 403.5075pt>
+File: plots/model1/oneshot/streak-h/crossentropy.png Graphic file (type png)
+<use plots/model1/oneshot/streak-h/crossentropy.png>
+Package pdftex.def Info: plots/model1/oneshot/streak-h/crossentropy.png used on
+ input line 544.
+(pdftex.def)             Requested size: 198.7425pt x 102.95154pt.
+
+<plots/model1/oneshot/streak-r/crossentropy.png, id=211, 779.91376pt x 404.5112
+5pt>
+File: plots/model1/oneshot/streak-r/crossentropy.png Graphic file (type png)
+ <use plots/model1/oneshot/streak-r/crossentropy.png>
+Package pdftex.def Info: plots/model1/oneshot/streak-r/crossentropy.png used on
+ input line 548.
+(pdftex.def)             Requested size: 198.7425pt x 103.07802pt.
+
+<plots/model1/oneshot/streak-hr/crossentropy.png, id=212, 782.925pt x 401.5pt>
+File: plots/model1/oneshot/streak-hr/crossentropy.png Graphic file (type png)
+
+<use plots/model1/oneshot/streak-hr/crossentropy.png>
+Package pdftex.def Info: plots/model1/oneshot/streak-hr/crossentropy.png used o
+n input line 552.
+(pdftex.def)             Requested size: 198.7425pt x 101.9186pt.
+ (./report.bbl [11 <./plots/model1/symmetrical/streak-/crossentropy.png> <./plo
+ts/model1/symmetrical/streak-h/crossentropy.png> <./plots/model1/symmetrical/st
+reak-r/crossentropy.png> <./plots/model1/symmetrical/streak-hr/crossentropy.png
+>]
+Underfull \hbox (badness 3068) in paragraph at lines 21--26
+\OT1/pcr/m/n/9 predicting-[]march-[]madness-[]1st-[]place-[]finisher-[]zach-[]b
+radshaw/$[]\OT1/ptm/m/n/9 , .  Ac-cessed:
+ []
 
 
-! Package pdftex.def Error: File `plots/model1/probability/streak-/accuracy.png
-' not found.
+Overfull \hbox (35.65848pt too wide) in paragraph at lines 28--33
+\OT1/pcr/m/n/9 march-[]machine-[]learning-[]mania-[]2016-[]winners-[]interview-
+[]1st-[]place-[]miguel-[]alomar/$[]\OT1/ptm/m/n/9 ,
+ []
 
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.505 .../model1/probability/streak-/accuracy.png}
-                                                  
-? X
- 
+
+Overfull \hbox (22.6767pt too wide) in paragraph at lines 35--39
+[]\OT1/ptm/m/n/9 Kaggle march mad-ness.  []$\OT1/pcr/m/n/9 https : / / www . ka
+ggle . com / c / march-[]machine-[]learning-[]mania-[]2017$[]\OT1/ptm/m/n/9 ,
+ []
+
+[12 <./plots/model1/oneshot/streak-/accuracy.png> <./plots/model1/oneshot/strea
+k-h/accuracy.png> <./plots/model1/oneshot/streak-r/accuracy.png> <./plots/model
+1/oneshot/streak-hr/accuracy.png> <./plots/model1/oneshot/streak-/crossentropy.
+png> <./plots/model1/oneshot/streak-h/crossentropy.png> <./plots/model1/oneshot
+/streak-r/crossentropy.png> <./plots/model1/oneshot/streak-hr/crossentropy.png>
+]
+Underfull \hbox (badness 1796) in paragraph at lines 41--45
+[]\OT1/ptm/m/n/9 March mad-ness 2017: Print-able ncaa tour-na-ment bracket.  []
+$\OT1/pcr/m/n/9 http : / / www . ncaa . com / news /
+ []
+
+
+Overfull \hbox (28.75848pt too wide) in paragraph at lines 41--45
+\OT1/pcr/m/n/9 basketball-[]men / bracket-[]beat / march-[]madness-[]printable-
+[]ncaa-[]tournament-[]bracket$[]\OT1/ptm/m/n/9 .
+ []
+
+)
+
+Package natbib Warning: There were undefined citations.
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 570.
+[13]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 570.
+ (./report.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 570.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 570.
+Package rerunfilecheck Info: File `report.out' has not changed.
+(rerunfilecheck)             Checksum: 69FD158380B49585A0A23F910FB0216F;1363.
+
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 570.
+ ) 
 Here is how much of TeX's memory you used:
- 6952 strings out of 493014
- 101966 string characters out of 6133351
- 200722 words of memory out of 5000000
- 10361 multiletter control sequences out of 15000+600000
- 16538 words of font info for 35 fonts, out of 8000000 for 9000
+ 7075 strings out of 493014
+ 104969 string characters out of 6133351
+ 201808 words of memory out of 5000000
+ 10441 multiletter control sequences out of 15000+600000
+ 22597 words of font info for 49 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,15n,39p,1741b,329s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{section.7} has been referenced but does not exist, 
-replaced by a fixed one
-
-{/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/tex
-live/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texl
-ive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texli
-ve/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive
-/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2
-016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/201
-6/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2016/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2016/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2016/texmf
--dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2016/texmf-d
-ist/fonts/type1/urw/courier/ucrb8a.pfb></usr/local/texlive/2016/texmf-dist/font
-s/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1
-/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times
-/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmri8a.p
-fb>
-Output written on report.pdf (10 pages, 839367 bytes).
+ 37i,15n,39p,1741b,440s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
+exlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
+xlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
+live/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texli
+ve/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive
+/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2
+016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2016
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2016/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2016/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2016/texmf
+-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/local/texlive/2016/texmf-dist/fo
+nts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type
+1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/t
+imes/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmr8
+a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on report.pdf (13 pages, 1364403 bytes).
 PDF statistics:
- 243 PDF objects out of 1000 (max. 8388607)
- 199 compressed objects within 2 object streams
- 49 named destinations out of 1000 (max. 500000)
- 241 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 323 PDF objects out of 1000 (max. 8388607)
+ 266 compressed objects within 3 object streams
+ 74 named destinations out of 1000 (max. 500000)
+ 289 words of extra memory for PDF output out of 10000 (max. 10000000)
 
