@@ -248,6 +248,20 @@ def all_data_filename(split_num, total_splits):
   return '%s%s%sof%s' % (DATA_DIRECTORY, DATA_ALL_FILENAME, split_num, total_splits)
 
 
+
+def get_regular_season_games_csv(detailed):
+  if detailed:
+    return CSV_REGULAR_SEASON_DETAILED
+  else:
+    return CSV_REGULAR_SEASON_COMPACT
+
+
+def get_tournament_games_csv(detailed):
+  if detailed:
+    return CSV_TOURNEY_GAMES_DETAILED
+  else:
+    return CSV_TOURNEY_GAMES_COMPACT
+
 SEASON_FILENAME_COMPACT = 'compact_season'
 SEASON_FILENAME_DETAILED = 'detailed_season'
 
