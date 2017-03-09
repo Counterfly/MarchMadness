@@ -311,10 +311,14 @@ The advantages for this model is that we can read the winning team directly from
 Furthermore, an advantage over the model~\ref{sec:io-architectures-winloss-vector} is that we are given a direct probability for the game outcome instead of a win/loss vector.  This can be useful in practical situations, for example when game analysts provide their prediction in either likelihood or odds.
 
 
-\subsubsection{Predicting Probabiliy First Team Wins}
-\label{sec:io-architectures-first-team-probability}
+\subsubsection{Predicting One-Shot Outcome}
+\label{sec:io-architectures-oneshot}
 
-This model is asked to output the probability that the first input team beats the second. For the model, we no longer require the input to include either team's unqiue id as the output is relative to the ordering of the input.  The intuitive reasoning for this is that the team's themselves are probably not a significant indicator for winning or losing, but their seasonal and lifetimes statistics are (relevant indicators).  This also removes the requirement for the model to learn that outputs can be invalid according to the input.  Invalid outputs are removed entirely with this model as well and reducing the memory burden during learning by reducing the feature dimension.  The reason to try this model is that it outputs a single probabiliy instead of a probability distribution like in \ref{sec:io-architectures-winloss-vector}; however, similar results are expected.
+This model is asked to output whether the first input team beats the second. For the model, we no longer require the input to include either team's unqiue id as the output is relative to the ordering of the input.
+The intuitive reasoning for this is that the team's themselves are probably not a significant indicator for winning or losing, but their seasonal and lifetimes statistics are (relevant indicators).
+This also removes the requirement for the model to learn that outputs can be invalid according to the input.
+Invalid outputs are removed entirely with this model as well and reducing the memory burden during learning by reducing the feature dimension.
+The reason to try this model is that it outputs a single extremum probabiliy instead of a probability distribution like in \ref{sec:io-architectures-winloss-vector}; however, similar results are expected.
 
 So, an example of a single input is:
 
@@ -461,12 +465,12 @@ Also since the accuracy is only slightly above $50\%$ for the Vanilla and ``Vani
 \endminipage
 \end{figure}
 
-We can see that with a this model there is a clear discrepancy between the compact and detailed datasets, where the detailed dataset being the better predictor.
-Though the respective curves (train, valid, test) exhibit the same behaviour, the curves for the detailed dataset dominate compact.
+We can see that with a this model there is not a clear discrepancy between the compact and detailed datasets.
+Though the respective curves (train, valid, test) exhibit the same behaviour, the compact-valid and detailed-test curves are significantly lower than their respective accuracy evaluation coutnerparts.
 
-Note that the figures \ref{fig:symmetrical-r-accuracy} and \ref{fig:symmetrical-hr-accuracy} is zoomed in to the first 2000 epochs as the lines looked like a horizontal line when observing from the full 50,000 epochs.  This is evidence that the rival streak is a good predictive feature.
+Note that the figures \ref{fig:symmetrical-r-accuracy} and \ref{fig:symmetrical-hr-accuracy} illustrate higher accuracies.  This is evidence that the rival streak is a good predictive feature.  It is also evident that the model can learn good parameter settings quickly with a steep ascend and plateauing around 3000 epochs, thereafter the model stalls and seems to be stuck in a local minimum.
 
-Again, since all graphs do not overfit on either dataset, this suggests that the model is not flexible enough; however, incorporating rival streak then leads the model to $100\%$ accuracy which is quite unsettling.
+Again, since all graphs do not overfit on either dataset, this suggests that the model is not flexible enough; however, the significantly poorer performance of the compact-valid and detailed-test curves seem to suggest that overfitting is occuring.
 
 
 
@@ -488,41 +492,44 @@ Again, since all graphs do not overfit on either dataset, this suggests that the
   \caption{Cross Entropy using both hot and rival streaks.}\label{fig:symmetrical-hr-crossentropy}
 \endminipage
 \end{figure}
-\label{fig:symmetrical-accuracies}
+\label{fig:symmetrical-crossentropies}
 
-The cross entropies are shown in figure~\ref{fig:symmetrical-accuracies} where there does not seem to be any anomalies with respect to the corresponding accuracies.
+The cross entropies are shown in figure~\ref{fig:symmetrical-crossentropies} where there does not seem to be any anomalies with respect to the corresponding accuracies.
 
-Both input models that incorporate the rival streak are zoomed in to view the portion where the behaviour in the graph is changing.  You can see that the cross entropy rapidly decreases and converges at 0.  This normally should not happen and suggests either that the features are expressive enough to construct a hyperplane that completely separates the input data, or that there is a bug with the way the data is aggregated.
+Both input models that incorporate the rival streak have less loss as seen with higher accuracies in figure~\ref{fig:symmetrical-accuracies}.
 
 Additionally, all models are able to predict with accuracy $> 50\%$, thus beating the random predictor model and the input-output model of predicting the winning team's id \ref{sec:results-wteam-onehot}.
 
-\subsection{Predicting First Team Win Probability}
-\label{sec:results-first-team-win-probability}
+\subsection{Predicting One-Shot Outcomes}
+\label{sec:results-oneshot}
+
+This model predicts in a one-shot fashion, either the first team wins or loses--team1 wins with probability $1.0$ or $0.0$.
 
 
 \begin{figure}[!htb]
 \minipage{0.5\textwidth}
-  \includegraphics[width=\linewidth]{plots/model1/probability/streak-/accuracy.png}
-  \caption{Accuracy using no streaks.}\label{fig:probability--accuracy}
+  \includegraphics[width=\linewidth]{plots/model1/oneshot/streak-/accuracy.png}
+  \caption{Accuracy using no streaks.}\label{fig:oneshot--accuracy}
 \endminipage\hfill
 \minipage{0.5\textwidth}
-  \includegraphics[width=\linewidth]{plots/model1/probability/streak-h/accuracy.png}
-  \caption{Accuracy using only hot streak.}\label{fig:probability-h-accuracy}
+  \includegraphics[width=\linewidth]{plots/model1/oneshot/streak-h/accuracy.png}
+  \caption{Accuracy using only hot streak.}\label{fig:oneshot-h-accuracy}
 \endminipage\hfill
 \minipage{0.5\textwidth}%
-  \includegraphics[width=\linewidth]{plots/model1/probability/streak-r/accuracy.png}
-  \caption{Accuracy using only rival streak.}\label{fig:probability-r-accuracy}
+  \includegraphics[width=\linewidth]{plots/model1/oneshot/streak-r/accuracy.png}
+  \caption{Accuracy using only rival streak.}\label{fig:oneshot-r-accuracy}
 \endminipage
 \minipage{0.5\textwidth}%
-  \includegraphics[width=\linewidth]{plots/model1/probability/streak-hr/accuracy.png}
-  \caption{Accuracy using both hot and rival streaks.}\label{fig:probability-hr-accuracy}
+  \includegraphics[width=\linewidth]{plots/model1/oneshot/streak-hr/accuracy.png}
+  \caption{Accuracy using both hot and rival streaks.}\label{fig:oneshot-hr-accuracy}
 \endminipage
 \end{figure}
+\label{fig:oneshot-accuracies}
 
 We can see that with a this model there is a clear discrepancy between the compact and detailed datasets, where the detailed dataset being the better predictor.
 Though the respective curves (train, valid, test) exhibit the same behaviour, the curves for the detailed dataset dominate compact.
 
-Note that the figures \ref{fig:probability-r-accuracy} and \ref{fig:probability-hr-accuracy} is zoomed in to the first 2000 epochs as the lines looked like a horizontal line when observing from the full 50,000 epochs.  This is evidence that the rival streak is a good predictive feature.
+Note that the figures \ref{fig:oneshot-r-accuracy} and \ref{fig:oneshot-hr-accuracy} is zoomed in to the first 2000 epochs as the lines looked like a horizontal line when observing from the full 50,000 epochs.  This is evidence that the rival streak is a good predictive feature.
 
 Again, since all graphs do not overfit on either dataset, this suggests that the model is not flexible enough; however, incorporating rival streak then leads the model to $100\%$ accuracy which is quite unsettling.
 
@@ -530,25 +537,25 @@ Again, since all graphs do not overfit on either dataset, this suggests that the
 
 \begin{figure}[!htb]
 \minipage{0.5\textwidth}
-  \includegraphics[width=\linewidth]{plots/model1/probability/streak-/crossentropy.png}
-  \caption{Cross Entropy using no streaks.}\label{fig:probability--crossentropy}
+  \includegraphics[width=\linewidth]{plots/model1/oneshot/streak-/crossentropy.png}
+  \caption{Cross Entropy using no streaks.}\label{fig:oneshot--crossentropy}
 \endminipage\hfill
 \minipage{0.5\textwidth}
-  \includegraphics[width=\linewidth]{plots/model1/probability/streak-h/crossentropy.png}
-  \caption{Cross Entropy using only hot streak.}\label{fig:probability-h-crossentropy}
+  \includegraphics[width=\linewidth]{plots/model1/oneshot/streak-h/crossentropy.png}
+  \caption{Cross Entropy using only hot streak.}\label{fig:oneshot-h-crossentropy}
 \endminipage\hfill
 \minipage{0.5\textwidth}%
-  \includegraphics[width=\linewidth]{plots/model1/probability/streak-r/crossentropy.png}
-  \caption{Cross Entropy using only rival streak.}\label{fig:probability-r-crossentropy}
+  \includegraphics[width=\linewidth]{plots/model1/oneshot/streak-r/crossentropy.png}
+  \caption{Cross Entropy using only rival streak.}\label{fig:oneshot-r-crossentropy}
 \endminipage
 \minipage{0.5\textwidth}%
-  \includegraphics[width=\linewidth]{plots/model1/probability/streak-hr/crossentropy.png}
-  \caption{Cross Entropy using both hot and rival streaks.}\label{fig:probability-hr-crossentropy}
+  \includegraphics[width=\linewidth]{plots/model1/oneshot/streak-hr/crossentropy.png}
+  \caption{Cross Entropy using both hot and rival streaks.}\label{fig:oneshot-hr-crossentropy}
 \endminipage
 \end{figure}
-\label{fig:probability-crossentropies}
+\label{fig:oneshot-crossentropies}
 
-The cross entropies are shown in figure~\ref{fig:probability-crossentropies} where there does not seem to be any anomalies with respect to the corresponding accuracies.
+The cross entropies are shown in figure~\ref{fig:oneshot-crossentropies} where there does not seem to be any anomalies with respect to the corresponding accuracies.
 
 
 \section{Conclusion}
