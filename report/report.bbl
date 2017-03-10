@@ -1,38 +1,57 @@
-\begin{thebibliography}{5}
+\begin{thebibliography}{8}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem[goo()]{googletensorflow}
-Tensorflow.
+\bibitem[dta()]{dtarlow2013winner}
+Congratulations to the machine march madness winner (2013).
+\newblock \url{inser url here}.
+\newblock Accessed: 2017-02-04.
+
+\bibitem[kag({\natexlab{a}})]{kaggle2014winner}
+Kaggle march madness winners interview 2016.
 \newblock
-  \url{https://www.tensorflow.org/versions/master/tutorials/index.html}.
-\newblock Accessed: 2015-12-15.
+  \url{http://blog.kaggle.com/2014/04/21/qa-with-gregory-and-michael-1st-place-in-march-ml-mania/},
+  {\natexlab{a}}.
+\newblock Accessed: 2017-02-03.
 
-\bibitem[Netzer et~al.(2011)Netzer, Wang, Coates, Bissacco, Wu, and Ng]{svhn}
-Yuval Netzer, Tao Wang, Adam Coates, Alessandro Bissacco, Bo~Wu, and Andrew~Y
-  Ng.
-\newblock Reading digits in natural images with unsupervised feature learning.
-\newblock \emph{NIPS Workshop on Deep Learning and Unsupervised Feature
-  Learning}, 2011.
+\bibitem[kag({\natexlab{b}})]{kaggle2015winner}
+Kaggle march madness winners interview 2016.
+\newblock
+  \url{http://blog.kaggle.com/2015/04/17/predicting-march-madness-1st-place-finisher-zach-bradshaw/},
+  {\natexlab{b}}.
+\newblock Accessed: 2017-02-03.
 
-\bibitem[Sermanet et~al.(2012)Sermanet, Chintala, and LeCun]{lecun2012}
-Pierre Sermanet, Soumith Chintala, and Yann LeCun.
-\newblock Convolutional neural networks applied to house numbers digit
-  classification.
-\newblock \emph{Computer Vision and Pattern Recognition}, 2012.
+\bibitem[kag({\natexlab{c}})]{kaggle2016winner}
+Kaggle march madness winners interview 2016.
+\newblock
+  \url{http://blog.kaggle.com/2016/05/10/march-machine-learning-mania-2016-winners-interview-1st-place-miguel-alomar/},
+  {\natexlab{c}}.
+\newblock Accessed: 2017-02-03.
 
-\bibitem[Sherer et~al.(2010)Sherer, Mueller, and Behnke]{pooling}
-Dominik Sherer, Andreas Mueller, and Sven Behnke.
-\newblock Evaluation of pooling operations in convolutional architectures for
-  object recognition.
-\newblock \emph{International Conference on Artificial Neural Networks}, 2010.
+\bibitem[kag({\natexlab{d}})]{kagglecompetition}
+Kaggle march madness.
+\newblock \url{https://www.kaggle.com/c/march-machine-learning-mania-2017},
+  {\natexlab{d}}.
+\newblock Accessed: 2017-02-02.
 
-\bibitem[van~der Zwaag(2001)]{handwrittendigits}
-Berend-Jan van~der Zwaag.
-\newblock Handwritten digit recognition: A neural network demo.
-\newblock \emph{Computational Intelligence}, 2001.
+\bibitem[nca()]{ncaabracketbeat}
+March madness 2017: Printable ncaa tournament bracket.
+\newblock
+  \url{http://www.ncaa.com/news/basketball-men/bracket-beat/march-madness-printable-ncaa-tournament-bracket}.
+\newblock Accessed: 2017-02-02.
+
+\bibitem[Bashuk and Intelligence(2012)]{bashuk2012using}
+Mark Bashuk and Business Intelligence.
+\newblock Using cumulative win probabilities to predict ncaa basketball
+  performance.
+\newblock In \emph{Proc. MIT Sloan Sports Analytics Conf.}, 2012.
+
+\bibitem[Cao(2012)]{cao2012sports}
+Chenjie Cao.
+\newblock Sports data mining technology used in basketball outcome prediction.
+\newblock 2012.
 
 \end{thebibliography}
