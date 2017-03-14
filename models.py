@@ -49,11 +49,11 @@ class ModelWinningTeamOneHot(Model):
     data = []
     labels = []
 
-    data.append(np.concatenate((wteam_one_hot.reshape(-1,1), wteam_snapshot, lteam_one_hot.reshape(-1,1), lteam_snapshot, rival_streak.reshape(-1,1))))
+    data.append(np.concatenate((wteam_one_hot.reshape(-1,1), wteam_snapshot, lteam_one_hot.reshape(-1,1), lteam_snapshot, rival_streak)))
     labels.append(wteam_one_hot.reshape(-1,1))
 
     rival_streak = np.multiply(-1, rival_streak)
-    data.append(np.concatenate((lteam_one_hot.reshape(-1,1), lteam_snapshot, wteam_one_hot.reshape(-1,1), wteam_snapshot, rival_streak.reshape(-1,1))))
+    data.append(np.concatenate((lteam_one_hot.reshape(-1,1), lteam_snapshot, wteam_one_hot.reshape(-1,1), wteam_snapshot, rival_streak)))
     labels.append(wteam_one_hot.reshape(-1,1))
     return data, labels
 
@@ -73,23 +73,25 @@ class ModelSymmetrical(Model):
     data = []
     labels = []
 
-    data.append(np.concatenate((wteam_snapshot, lteam_snapshot, rival_streak.reshape(-1,1))))
+    data.append(np.concatenate((wteam_snapshot, lteam_snapshot, rival_streak)))
     labels.append(np.array([1.0, 0.0]))
+    #data.append(rival_streak)
 
     rival_streak = np.multiply(-1, rival_streak)
-    data.append(np.concatenate((lteam_snapshot, wteam_snapshot, rival_streak.reshape(-1,1))))
+    data.append(np.concatenate((lteam_snapshot, wteam_snapshot, rival_streak)))
+    #data.append(rival_streak)
     labels.append(np.array([0.0, 1.0]))
     return data, labels
 
 
-class ModelProbability(Model):
+class ModelOneShot(Model):
   def __init__(self, hot_streak=True, rival_streak=True):
     streak_string = ""
     if hot_streak: streak_string += 'h' 
     if rival_streak: streak_string += 'r'
-    super(ModelProbability, self).__init__(
+    super(ModelOneShot, self).__init__(
       'Target is the probability of the first team winning',
-      '/%s-%s/' % ('probability', streak_string),
+      '/%s-%s/' % ('oneshot', streak_string),
       hot_streak,
       rival_streak)
 
@@ -97,10 +99,10 @@ class ModelProbability(Model):
     data = []
     labels = []
 
-    data.append(np.concatenate((wteam_snapshot, lteam_snapshot, rival_streak.reshape(-1,1))))
+    data.append(np.concatenate((wteam_snapshot, lteam_snapshot, rival_streak)))
     labels.append(1.0)
 
     rival_streak = np.multiply(-1, rival_streak)
-    data.append(np.concatenate((lteam_snapshot, wteam_snapshot, rival_streak.reshape(-1,1))))
+    data.append(np.concatenate((lteam_snapshot, wteam_snapshot, rival_streak)))
     labels.append(0.0)
     return data, labels
