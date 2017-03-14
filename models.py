@@ -83,26 +83,3 @@ class ModelSymmetrical(Model):
     labels.append(np.array([0.0, 1.0]))
     return data, labels
 
-
-class ModelOneShot(Model):
-  def __init__(self, hot_streak=True, rival_streak=True):
-    streak_string = ""
-    if hot_streak: streak_string += 'h' 
-    if rival_streak: streak_string += 'r'
-    super(ModelOneShot, self).__init__(
-      'Target is the probability of the first team winning',
-      '/%s-%s/' % ('oneshot', streak_string),
-      hot_streak,
-      rival_streak)
-
-  def generate_data(self, wteam_snapshot, lteam_snapshot, wteam_one_hot=np.empty(0), lteam_one_hot=np.empty(0), rival_streak=np.empty(0)):
-    data = []
-    labels = []
-
-    data.append(np.concatenate((wteam_snapshot, lteam_snapshot, rival_streak)))
-    labels.append(1.0)
-
-    rival_streak = np.multiply(-1, rival_streak)
-    data.append(np.concatenate((lteam_snapshot, wteam_snapshot, rival_streak)))
-    labels.append(0.0)
-    return data, labels
