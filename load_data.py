@@ -5,11 +5,13 @@ import sys
 import pickle
 import scipy.io as scio
 import configs
+import team_stats
 import hashlib
 from configs import AttributeMapper,\
 DATA_DIRECTORY, SEASON_FILENAME_COMPACT, SEASON_FILENAME_DETAILED,\
 CSV_TEAMS, CSV_SEASON, CSV_REGULAR_SEASON_COMPACT, CSV_REGULAR_SEASON_DETAILED, CSV_SEASON, CSV_TOURNEY_GAMES_COMPACT, CSV_TOURNEY_GAMES_DETAILED, CSV_TOURNEY_SEED, SYMBOL_WIN, SYMBOL_LOSE, CSVSeason
 
+from team_data import TeamData
 
 class DataModel:
     def __init__(self, detailed, include_tourney):
@@ -34,6 +36,9 @@ class DataModel:
         return 'compact_with_tourney'
 
       return 'compact'
+
+    def get_csv(self):
+      return configs.get_regular_season_games_csv(self._detailed)
 
     def __eq__(self, other):
       return self._detailed == other.detailed and self._include_tourney == other.include_tourney
@@ -98,132 +103,8 @@ def load_teams(one_hot=True, force=False):
     return team_ids
 
 
-class SeasonData:
-  #MAX_REGULAR_GAMES_PER_SEASON_PER_TEAM = 40   # for non-tournament data
-  MAX_REGULAR_GAMES_PER_SEASON_PER_TEAM = 44    # include tournament data
-  def __init__(self, season, team_id, data_model):
-    '''
-      season: year
-      team_id: integer
-      data_model: used to determine the AttributeMapper to determine what to keep track of.
-    '''
-    self._season = season
-    self._team_id = team_id
-    self._data_model = data_model
-    self._attributes = {}
-    for attribute in AttributeMapper.get_attributes(data_model.detailed):
-      self._attributes[attribute] = np.zeros((self.MAX_REGULAR_GAMES_PER_SEASON_PER_TEAM, 1))
- 
-    # wins will be tracked separatly to allow for proper averaging   
-    self._wins = np.zeros((self.MAX_REGULAR_GAMES_PER_SEASON_PER_TEAM, 1))
 
 
-  @property
-  def season(self):
-    return self._season
-
-  @property
-  def team_id(self):
-    return self._team_id
-
-  def add_data(self, csvinfo, data_frame, attribute_mapper):
-    '''
-      Add data based on self._attributes but index the data (data_frame)
-      according to attribute_mapper since this will change whether team is winner or loser in a game
-      So,
-        attr in self._attributes is what we want to use as a feature,
-        data_frame is the current game
-        attribute_mapper maps attributes in self._attributes to the proper key in data_frame
-    '''
-    game_number = 0
-    while self._wins[game_number] != 0:
-      # earliest position of 0 (win is +1, loss is -1)
-      game_number += 1
-      if game_number >= self.MAX_REGULAR_GAMES_PER_SEASON_PER_TEAM:
-        print(self.team_id, self.season)
-
-    for attribute in self._attributes.keys():
-      data_key = attribute_mapper[attribute]
-      self._attributes[attribute][game_number] = data_frame[data_key]
-
-    is_winner = csvinfo.get_winning_team(data_frame) == self.team_id
-    assert(is_winner or csvinfo.get_losing_team(data_frame) == self.team_id)
-    self._wins[game_number] = SYMBOL_WIN if is_winner else SYMBOL_LOSE
-        
-     
-  @property
-  def wins(self):
-    '''1 -> win, -1 -> loss, 0 -> game not played'''
-    return self._wins
-
-  @property
-  def scores(self):
-    '''scores for each game in current season'''
-    return self._scores
-
-  def get_attribute(self, attribute):
-    '''Returns the data for the specified attribute or raises KeyError if attribute DNE'''
-    return self._attributes[attribute]
-
-
-class TeamData:
-  def __init__(self, teamid, team_one_hot_encoding, data_model):
-    self._team_id = teamid
-    self._team_one_hot = team_one_hot_encoding
-    self._seasons = dict()
-    self._data_model = data_model
-
-
-  def add_data(self, csvinfo, data_frame):
-    '''Add data ..which attributes?''' 
-    # Create Training data for this game
-    is_winner = csvinfo.get_winning_team(data_frame) == self._team_id
-    assert(is_winner or csvinfo.get_losing_team(data_frame) == self._team_id)
-
-    season = csvinfo.get_season(data_frame)
-    season_data = self.get_or_create_season_data(season)
-
-    attribute_mapper = AttributeMapper.get_map(self._data_model.detailed, is_winner)
-    season_data.add_data(csvinfo, data_frame, attribute_mapper)
-
-  @property
-  def team_one_hot(self):
-    return self._team_one_hot
-
-  def get_season_win_list(self, csvinfo, data_frame):
-    season = csvinfo.get_season(data_frame)
-    season_data = self.get_or_create_season_data(season)
-
-    return season_data.get_wins()
-
-  def get_or_create_season_data(self, season):
-    if season not in self._seasons:
-      self._seasons[season] = SeasonData(season, self._team_id, self._data_model)
-    return self._seasons[season]
-
-  def snapshot(self, season, include_hot_streak):
-    '''Create input example as a column vector'''
-    season_data = self.get_or_create_season_data(season)
-
-    if include_hot_streak:
-      season_wins = season_data.wins  # hot streak
-    else:
-      season_wins = np.empty(0)
-
-    num_games_played = np.count_nonzero(season_data.wins)
-
-    if num_games_played == 0:
-      num_games_played = 1
-
-    attribute_list = []
-    attributes = sorted(AttributeMapper.get_map(self._data_model.detailed, True).keys())
-    for attribute in attributes:
-      attribute_list.append(np.sum(season_data.get_attribute(attribute)) / num_games_played)
-
-    attribute_column = np.array(attribute_list).reshape(len(attribute_list), 1)
-    snap = np.concatenate((season_wins.reshape(-1,1), attribute_column), axis=0)
-
-    return snap
 
 
 
@@ -275,7 +156,7 @@ class HistoricGames:
   def get_historic_win_loss(self, team1, team2):
     '''
     Use SYMBOL_WIN and SYMBOL_LOSE as identifiers for whether team won or lost
-    win loss is wrt team1
+    win/loss is wrt team1
     '''
     team_tuple = self.get_team_tuple(team1, team2)
 
@@ -291,6 +172,8 @@ class HistoricGames:
 
 def split_data_to_files(_input, _output, num_splits):
   filenames = []
+
+  print("shapes=", str(_input.shape), str(_output.shape))
   _input = np.array_split(_input, num_splits)
   _output = np.array_split(_output, num_splits)
 
@@ -298,8 +181,15 @@ def split_data_to_files(_input, _output, num_splits):
     X = np.array(_input[split])
     y = np.array(_output[split])
 
+    print("priorsqueeze:", str(X.shape), str(y.shape) )
     X = np.squeeze(X)
     y = np.squeeze(y)
+    print("postsqueeze:", str(X.shape), str(y.shape) )
+    if (len(X.shape) == 1):
+      # Output label is one-dimensional but need to keep format numExamples x numDimensions
+      X = X.reshape(-1, 1)
+      assert(X.shape[0] == y.shape[0])
+
     if (len(y.shape) == 1):
       # Output label is one-dimensional but need to keep format numExamples x numDimensions
       y = y.reshape(-1, 1)
@@ -307,14 +197,14 @@ def split_data_to_files(_input, _output, num_splits):
 
     # Save input and output datasets
     filename = '%s.mat' % (configs.all_data_filename(split+1, num_splits))
-    print("saving %s with shapes X,y %s, %s" % (filename, X.shape, y.shape))
+    print("saving %s with shapes X,y %s, %s" % (filename, str(X.shape), str(y.shape)))
     filenames.append(filename)
     scio.savemat(filename, mdict = {'X': X, 'y': y})
 
   return filenames
 
 
-def load_games(model, data_model, num_historic_win_loss = 10, seasons=range(0, 2020), aggregate_all_data = True, normalize=True, save=False, num_splits=-1):
+def load_games(model, data_model, teamstats, num_historic_win_loss = 10, seasons=range(0, 2020), normalize=False, save=False, num_splits=-1):
   '''
   2020 is arbitrary so that it will include all seasons to date
   '''
@@ -322,74 +212,25 @@ def load_games(model, data_model, num_historic_win_loss = 10, seasons=range(0, 2
   if save:
     assert(num_splits >= 1, "Cannot save data into %d number of files" % num_splits)
  
-  data_X, data_y, _ = generate_games(model, data_model, seasons, num_historic_win_loss, normalize)
+  data_X, data_y, _ = generate_games(model, data_model, teamstats, seasons, num_historic_win_loss)
 
-  return parse_seasonal_data(data_X, data_y, seasons=seasons, aggregate_all_data=aggregate_all_data, normalize=normalize, save=save, num_splits=num_splits)
+  if normalize:
+    # Normalize all data together
+    print("Need to be careful...if data is being partitioned to train/test sets then shouldn't normalize data all together. Should only normalize training and then normalize testing using mean and std from train data")
+    data_X = data_X.astype(np.float32)
+    mu = np.tile(np.mean(data_X, axis=0), (data_X.shape[0], 1))
+    data_X = (data_X - mu) / (np.max(data_X, axis=0) - np.min(data_X, axis=0))
+    data_X = np.nan_to_num(data_X)  # Convert NaNs to 0
 
-
-def parse_seasonal_data(data_X, data_y, seasons=range(0, 2020), aggregate_all_data=True, normalize=True, save=False, num_splits=-1):
-
-  print("in seasonal")
-  if aggregate_all_data:
-    _input = None
-    _output = None
-    for season in seasons:
-      if season in data_X:
-        if _input is None:
-          _input = data_X[season]
-          _output = data_y[season]
-        else:
-          _input = np.concatenate((_input, data_X[season]), axis=0)
-          _output = np.concatenate((_output, data_y[season]), axis=0)
-
-        # Free up memory
-        del data_X[season]
-        del data_y[season]
-
-    _input = np.squeeze(np.array(_input))
-    _output = np.squeeze(np.array(_output))
-
-    if normalize:
-      # Normalize all data together
-      _input = _input.astype(np.float32)
-      mu = np.tile(np.mean(_input, axis=0), (_input.shape[0], 1))
-      _input = (_input - mu) / (np.max(_input, axis=0) - np.min(_input, axis=0))
-      _input = np.nan_to_num(_input)  # Convert NaNs to 0
-
-    if save:
-      return split_data_to_files(_input, _output, num_splits)
-    else:
-      # Return aggregated data
-      return _input, _output
-   
+  if save:
+    return split_data_to_files(data_X, data_y, num_splits)
   else:
-    # Do not aggregate data
-    if normalize:
-      print("TODO: NOT IMPLEMENTED, normalize over season-split data")
+    # Return aggregated data
+    return data_X, data_y
 
-    if save:
-      # Save data by seasons
-      print("Starting to save examples by season")
-      filenames = []
-      for season in sorted(_input.keys()):
-        X = np.array(_input[season])
-        y = np.array(_output[season])
-
-        X = np.squeeze(X)
-        y = np.squeeze(y)
-
-        # Save input and output datasets
-        filename = '%s.mat' % (configs.season_data_filename(season))
-        print("saving %s " % filename)
-        filenames.append(filename)
-        scio.savemat(filename, mdict = {'X': X, 'y': y})
-      return filenames
-    else: 
-      return data_X, data_y
-    
     
   
-def generate_games(model, data_model, seasons, NUM_HISTORIC_WIN_LOSS, normalize):
+def generate_games(model, data_model, teamstats, seasons, NUM_HISTORIC_WIN_LOSS):
   # TODO: check to see if cached files already exist...would need to update though to determine whether data is detailed or compact and the 'num_historic_win_loss' value used to create data
 
   if data_model.detailed:
@@ -401,10 +242,6 @@ def generate_games(model, data_model, seasons, NUM_HISTORIC_WIN_LOSS, normalize)
     CSV_REG_GAMES = CSV_REGULAR_SEASON_COMPACT
     CSV_TOU_GAMES = CSV_TOURNEY_GAMES_COMPACT
     SEASON_FILENAME = SEASON_FILENAME_COMPACT
-
-  # dictionaries of season->input examples
-  _input = dict()
-  _output = dict()
 
   df = None
   with open(CSV_REG_GAMES.get_path(), 'r') as games_file:
@@ -422,10 +259,10 @@ def generate_games(model, data_model, seasons, NUM_HISTORIC_WIN_LOSS, normalize)
 
   # ensure data is chronologically sorted
   df = df.sort_values([CSV_REG_GAMES.SEASON, CSV_REG_GAMES.DAYNUM], ascending=[True, True])
-  iteration_count = 0
   
-  return generate_examples_from_data(df, model, data_model, NUM_HISTORIC_WIN_LOSS)
+  data, labels = generate_examples_from_data(df, model, data_model, teamstats, NUM_HISTORIC_WIN_LOSS)
 
+  return data, labels, df
 
   
 def get_rival_streak(team1, team2, num_previous_games, df_past_games, CSV):
@@ -448,18 +285,20 @@ def get_rival_streak(team1, team2, num_previous_games, df_past_games, CSV):
   assert(SYMBOL_WIN == 1)
   assert(SYMBOL_LOSE == -1)
   rival_streak = df_past_games[CSV.WINNING_TEAM] == team1
-  rival_streak = np.array(rival_streak).astype(int)[::-1] # Convert to ints and have most recent games at right of array..so [10th most recent game, 9th, ..., 2nd, 1st most recent game]
+
+  # Convert to ints and have most recent games at right of array..so [10th most recent game, 9th, ..., 2nd, 1st most recent game]
+  # Also maps losses to '-1' and wins to '+1'
+  rival_streak = (np.array(rival_streak).astype(int)[::-1] * 2) - 1
   rival_streak = np.lib.pad(rival_streak, (num_previous_games - rival_streak.shape[0], 0), 'constant', constant_values=(0))
   return rival_streak
 
 
 
-def generate_examples_from_data(df, model, data_model, NUM_HISTORIC_WIN_LOSS):
+def generate_examples_from_data(df, model, data_model, teamstats, NUM_HISTORIC_WIN_LOSS):
   '''
   Generates the training examples from the specified dataframe.
   '''
   team_to_one_hot = load_teams()
-  team_data = {}
   data_hashes = set() # Keep track of duplicate example data
 
   if data_model.detailed:
@@ -472,14 +311,16 @@ def generate_examples_from_data(df, model, data_model, NUM_HISTORIC_WIN_LOSS):
     CSV_TOU_GAMES = CSV_TOURNEY_GAMES_COMPACT
     SEASON_FILENAME = SEASON_FILENAME_COMPACT
 
-  _input = {}
-  _output = {}
-  iteration_count = 0
-  for _, row in df.iterrows():
-    winning_team = int(CSV_REG_GAMES.get_winning_team(row))
-    losing_team = int(CSV_REG_GAMES.get_losing_team(row))
+  CSV = CSV_REG_GAMES
 
-    season = CSV_REG_GAMES.get_season(row)
+  _input = []
+  _output = []
+  iteration_count = 0
+  for idx_row in range(df.shape[0]):
+    row = df.iloc[idx_row]
+    winning_team = int(CSV.get_winning_team(row))
+    losing_team = int(CSV.get_losing_team(row))
+    season = CSV.get_season(row)
     
     iteration_count += 1
     if iteration_count % 3000 == 0:
@@ -487,22 +328,8 @@ def generate_examples_from_data(df, model, data_model, NUM_HISTORIC_WIN_LOSS):
       sys.stdout.flush()
 
 
-    if winning_team not in team_data:
-      '''Create initial empty season data'''
-      team_data[winning_team] = TeamData(winning_team, team_to_one_hot[winning_team], data_model)
-
-    if losing_team not in team_data:
-      '''Create initial empty season data'''
-      team_data[losing_team] = TeamData(losing_team, team_to_one_hot[losing_team], data_model)
-
-
-    if season not in _input:
-      _input[season] = list()
-      _output[season] = list()
-
-    # Create two training examples for symmetry
-    wteam_snapshot = team_data[winning_team].snapshot(season, model.hot_streak)
-    lteam_snapshot = team_data[losing_team].snapshot(season, model.hot_streak)
+    dataframe = df.iloc[0:idx_row+1, :]
+    wteam_snapshot, lteam_snapshot = teamstats.generate_snapshots(winning_team, losing_team, dataframe, model, data_model)
 
 
     # Get rival streak if model allows it
@@ -523,38 +350,164 @@ def generate_examples_from_data(df, model, data_model, NUM_HISTORIC_WIN_LOSS):
     assert(SYMBOL_WIN == 1)
     assert(SYMBOL_LOSE == -1)
 
-    data, labels = model.generate_data(wteam_snapshot, lteam_snapshot, wteam_one_hot=team_to_one_hot[winning_team], lteam_one_hot=team_to_one_hot[losing_team], rival_streak=rival_streak)
+    #data, labels = model.generate_data(wteam_snapshot, lteam_snapshot, wteam_one_hot=team_to_one_hot[winning_team], lteam_one_hot=team_to_one_hot[losing_team], rival_streak=rival_streak)
+    data, labels = model.generate_data(wteam_snapshot, lteam_snapshot, rival_streak=rival_streak, wteam_one_hot=team_to_one_hot[winning_team], lteam_one_hot=team_to_one_hot[losing_team])
 
     #for i in range(len(labels)):
     #  print(str(i) + ": " + str(data[i]))
     #  print(str(i) + ": " + str(labels[i]))
 
     for i in range(0, len(labels)):
-      data_hash = hashlib.sha1(data[i]).hexdigest()
+      data_hash = hashlib.sha1(np.concatenate((data[i], labels[i].reshape(-1,1)))).hexdigest()
 
       if data_hash not in data_hashes:
-        _input[season].append(data[i])
-        _output[season].append(labels[i])
+        _input.append(data[i])
+        _output.append(labels[i])
      
         #print(data[i], labels[i])     
         # add to data hash
         data_hashes.add(data_hash)
+
+
+  print("input has length %d" % len(_input))   
+  # Convert lists to np.ndarrays
+  _input = np.squeeze(np.array(_input))
+  _output = np.squeeze(np.array(_output))
+  print("input has shape %s %s" % (str(_input.shape), str(_output.shape)))
+
+
+  return _input, _output
+
+
+
+
+
+
+
+def generate_sequenced_data(model, data_model, teamstats, seasons):
+  # TODO: check to see if cached files already exist...would need to update though to determine whether data is detailed or compact and the 'num_historic_win_loss' value used to create data
+
+  if data_model.detailed:
+    CSV_REG_GAMES = CSV_REGULAR_SEASON_DETAILED
+    CSV_TOU_GAMES = CSV_TOURNEY_GAMES_DETAILED
+    SEASON_FILENAME = SEASON_FILENAME_DETAILED
+  else:
+    print("using compact")
+    CSV_REG_GAMES = CSV_REGULAR_SEASON_COMPACT
+    CSV_TOU_GAMES = CSV_TOURNEY_GAMES_COMPACT
+    SEASON_FILENAME = SEASON_FILENAME_COMPACT
+
+  df = None
+  with open(CSV_REG_GAMES.get_path(), 'r') as games_file:
+    df = pd.read_csv(games_file)
+    if data_model.include_tourney:
+      # Merge regular season and tournament games together
+      with open(CSV_TOU_GAMES.get_path(), 'r') as tourney_file:
+        df = df.merge(pd.read_csv(tourney_file), how='outer')
+
+  print("data size = %d" %(len(df.index)))
+  # Keep specified seasons only
+  df = df[df[CSV_REG_GAMES.SEASON] >= seasons[0]]
+  df = df[df[CSV_REG_GAMES.SEASON] <= seasons[-1]]
+  print("new data size = %d" %(len(df.index)))
+
+  # ensure data is chronologically sorted
+  df = df.sort_values([CSV_REG_GAMES.SEASON, CSV_REG_GAMES.DAYNUM], ascending=[True, True])
+  
+  data, labels = generate_sequenced_examples(df, model, data_model, teamstats)
+
+  return data, labels, df
+
+
+
+def generate_sequenced_examples(df, model, data_model, teamstats):
+  '''
+  Generates the sequenced training examples from the specified dataframe.
+  '''
+  data_hashes = set() # Keep track of duplicate example data
+
+  if data_model.detailed:
+    CSV_REG_GAMES = CSV_REGULAR_SEASON_DETAILED
+    CSV_TOU_GAMES = CSV_TOURNEY_GAMES_DETAILED
+    SEASON_FILENAME = SEASON_FILENAME_DETAILED
+  else:
+    print("using compact")
+    CSV_REG_GAMES = CSV_REGULAR_SEASON_COMPACT
+    CSV_TOU_GAMES = CSV_TOURNEY_GAMES_COMPACT
+    SEASON_FILENAME = SEASON_FILENAME_COMPACT
+
+  CSV = CSV_REG_GAMES
+  sequence_length = model.sequence_length
+
+  _input = []
+  _output = []
+  iteration_count = 0
+  for idx_row in range(df.shape[0]):
+    row = df.iloc[idx_row]
+    winning_team = int(CSV.get_winning_team(row))
+    losing_team = int(CSV.get_losing_team(row))
+    season = CSV.get_season(row)
     
+    iteration_count += 1
+    if iteration_count % 3000 == 0:
+      print("iteration = %d, season=%d" % (iteration_count, season))
+      sys.stdout.flush()
 
-    # Now that training example has been created we can add it to our knowledge base
-    # Add game data (twice from both perspectives)
-    team_data[winning_team].add_data(CSV_REG_GAMES, row)
-    team_data[losing_team].add_data(CSV_REG_GAMES, row)
+
+    dataframe = df.iloc[0:idx_row+1, :]
+    wteam_sequence, lteam_sequence = teamstats.generate_snapshots(winning_team, losing_team, dataframe, model, data_model)
+
+    TEAM1 = 1
+    TEAM2 = 2
+    wteam_sequence['team_id'] = TEAM1
+    lteam_sequence['team_id'] = TEAM2
+    sequence = wteam_sequence.merge(lteam_sequence, how='outer').sort_values([CSV.SEASON, CSV.DAYNUM], ascending=[False, False])
+
+    if sequence.empty:
+      sequence = np.zeros((1, sequence.shape[1]))
+    else:
+      sequence = sequence[:sequence_length].as_matrix(columns=None)
+
+    # pad for sequence length
+    pad = np.zeros((sequence_length, sequence.shape[1]))
     
-  for season in _input.keys():
-    # Convert lists to np.ndarrays
-    _input[season] = np.squeeze(np.array(_input[season]))
-    _output[season] = np.squeeze(np.array(_output[season]))
-    print("%d has shape %s" %(season, _input[season].shape))
+    pad[0:len(sequence), :] = sequence
+    data = [pad]
+    #labels = [TEAM1]  # Doing this will require using the sparse cross entropy loss function
+    labels = [np.eye(2)[0]]
+
+    wteam_sequence['team_id'] = TEAM2
+    lteam_sequence['team_id'] = TEAM1
+    sequence = wteam_sequence.merge(lteam_sequence, how='outer').sort_values([CSV.SEASON, CSV.DAYNUM], ascending=[False, False])
+    if sequence.empty:
+      sequence = np.zeros((1, sequence.shape[1]))
+    else:
+      sequence = sequence[:sequence_length].as_matrix(columns=None)
+
+    pad = np.zeros((sequence_length, sequence.shape[1]))
+    pad[0:len(sequence), :] = sequence
+    data.append(pad)
+    #labels.append(TEAM2)
+    labels.append(np.eye(2)[1])
+    
+    for i in range(0, len(labels)):
+      #data_hash = hashlib.sha1(np.concatenate((data[i], labels[i]))).hexdigest() # if using a vector as labels
+      data_hash = hashlib.sha1(np.append(data[i], labels[i])).hexdigest() # if using an int as a label
+
+      if data_hash not in data_hashes:
+        _input.append(data[i])
+        _output.append(labels[i])
+     
+        # add to data hash
+        data_hashes.add(data_hash)
 
 
-  return _input, _output, team_data
-
+  print("input has length %d" % len(_input))   
+  # Convert lists to np.ndarrays
+  _input = np.squeeze(np.array(_input))
+  _output = np.squeeze(np.array(_output))
+  print("returning with input has shape %s %s" % (str(_input.shape), str(_output.shape)))
+  return (_input, _output)
     
 
 
@@ -648,19 +601,29 @@ def start_daynum_of_tournament(year):
   df = df[df[CSV_TOURNEY_GAMES_COMPACT.SEASON] == year]
   df = df.sort_values([CSV_TOURNEY_GAMES_COMPACT.DAYNUM], ascending=[True])
 
-  print("length of df = " + str(len(df)))
-  daynum = CSV_TOURNEY_GAMES_COMPACT.get_day_number(df.iloc[0])
+  if not df.empty:
+    print("df length = ", df.shape[0])
+    daynum = CSV_TOURNEY_GAMES_COMPACT.get_day_number(df.iloc[0])
 
-  # Make sure detailed dataset reflects the same value
-  df = None
-  with open(CSV_TOURNEY_GAMES_DETAILED.get_path(), 'r') as games_file:
-    df = pd.read_csv(games_file)
-  
-  df = df[df[CSV_TOURNEY_GAMES_DETAILED.SEASON] == year]
-  df = df.sort_values([CSV_TOURNEY_GAMES_DETAILED.DAYNUM], ascending=[True])
+    # Make sure detailed dataset reflects the same value
+    df = None
+    with open(CSV_TOURNEY_GAMES_DETAILED.get_path(), 'r') as games_file:
+      df = pd.read_csv(games_file)
+    
+    df = df[df[CSV_TOURNEY_GAMES_DETAILED.SEASON] == year]
+    df = df.sort_values([CSV_TOURNEY_GAMES_DETAILED.DAYNUM], ascending=[True])
 
-  assert(daynum == CSV_TOURNEY_GAMES_DETAILED.get_day_number(df.iloc[0]))
+    assert(daynum == CSV_TOURNEY_GAMES_DETAILED.get_day_number(df.iloc[0]))
+  else:
+    # No data for tournaments during specified year, get the last day of regular season games
+    print("Using regular season games to infer tournament start day 1 day later") 
+    with open(CSV_REGULAR_SEASON_COMPACT.get_path(), 'r') as games_file:
+      df = pd.read_csv(games_file)
+    
+    df = df[df[CSV_REGULAR_SEASON_COMPACT.SEASON] == year]
+    df = df.sort_values([CSV_REGULAR_SEASON_COMPACT.DAYNUM], ascending=[False])
 
+    daynum = CSV_REGULAR_SEASON_COMPACT.get_day_number(df.iloc[0]) + 1
   return daynum
  
 def randomize_data(dataset, labels):
@@ -686,5 +649,7 @@ if __name__ == "__main__":
   # the data model to use
   data_model = DATA_MODEL_COMPACT
 
-  load_games(model, data_model, num_historic_win_loss=10, aggregate_all_data=True, normalize=True, seasons=range(0,1986))
+  teamstats = team_stats.TeamStatsPairMatchups()
+
+  load_games(model, data_model, teamstats, num_historic_win_loss=10, aggregate_all_data=True, normalize=True, seasons=range(0,1986))
   #load_team_to_region_mapping()

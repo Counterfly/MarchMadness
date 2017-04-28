@@ -1,0 +1,333 @@
+from __future__ import print_function, division
+
+import math
+import numpy as np
+import tensorflow as tf
+import os
+
+from tensorflow.contrib import rnn
+from tensorflow.contrib import legacy_seq2seq
+
+# User defined modules
+import load_data
+import models
+import team_stats
+from data_sets import DataSetsFiles
+from flag_values import _FlagValues as FlagValues
+
+
+
+
+class Model():
+  def __init__(self, args, training=True):
+    self.args = args
+    if not training:
+      args.batch_size = 1
+      args.seq_length = 1
+
+    if args.model == 'rnn':
+      cell_fn = tf.contrib.rnn.BasicRNNCell
+    elif args.model == 'gru':
+      cell_fn = tf.contrib.rnn.GRUCell
+    elif args.model == 'lstm':
+      cell_fn = tf.contrib.rnn.BasicLSTMCell
+    elif args.model == 'nas':
+      cell_fn = tf.contrib.rnn.NASCell
+    else:
+      raise Exception("model type not supported: {}".format(args.model))
+
+    batch_size = args.batch_size  # Would be better if this could be variable
+
+    self.X_ = tf.placeholder(
+        tf.float32, [None, args.seq_length, args.num_features], name='X_')
+    self.y_ = tf.placeholder(
+      tf.float32, [None, args.num_classes], name='y_')
+    self.keep_prob = tf.placeholder(tf.float32, name='keep_prob')
+
+
+    cell = cell_fn(args.rnn_size, state_is_tuple=True)
+    if training and args.output_keep_prob and args.output_keep_prob < 1.0:
+      cell = tf.contrib.rnn.DropoutWrapper(cell, output_keep_prob=args.output_keep_prob)
+    cells = [cell] * args.num_layers
+    self.cell = cell = rnn.MultiRNNCell(cells, state_is_tuple=True)
+
+    self.initial_state = cell.zero_state(batch_size, tf.float32)
+
+    state_per_layer_list = tf.unstack(self.initial_state, axis=0)
+    rnn_tuple_state = tuple(
+        [tf.contrib.rnn.LSTMStateTuple(state_per_layer_list[idx][0], state_per_layer_list[idx][1])
+        for idx in range(args.num_layers)]
+        )
+    
+
+    with tf.variable_scope('rnnlm'):
+      softmax_w = tf.get_variable("softmax_w",
+          [args.rnn_size, args.num_classes])
+      softmax_b = tf.get_variable("softmax_b", [args.num_classes])
+
+
+    # Start
+    val, state = tf.nn.dynamic_rnn(cell, self.X_, initial_state=rnn_tuple_state, sequence_length=[args.seq_length] * batch_size)
+    print("val", val.shape)
+    val = tf.transpose(val, [1, 0, 2])
+    last = tf.gather(val, int(val.get_shape()[0]) - 1)
+
+    softmax_w = tf.Variable(tf.truncated_normal([args.rnn_size, int(args.num_classes)]))
+    softmax_b = tf.Variable(tf.constant(0.1, shape=[args.num_classes]))
+
+    self.logits = tf.matmul(last, softmax_w) + softmax_b
+    self.probs = tf.nn.softmax(self.logits)
+
+    # END
+
+
+    #loss = legacy_seq2seq.sequence_loss_by_example(
+    #  [self.logits],
+    #  [tf.reshape(self.y_, [-1])],
+    #  [tf.ones([args.batch_size * args.seq_length])])
+    print("logits, y_", self.logits.shape, self.y_.shape)
+    loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.logits, labels=self.y_))
+    with tf.name_scope('cost'):
+      self.cost = tf.reduce_sum(loss) / batch_size / args.seq_length
+    self.final_state = state
+    self.lr = tf.Variable(0.0, trainable=False)
+    tvars = tf.trainable_variables()
+    grads, _ = tf.clip_by_global_norm(tf.gradients(self.cost, tvars),
+        args.grad_clip)
+    with tf.name_scope('optimizer'):
+      optimizer = tf.train.AdamOptimizer(self.lr)
+      self.train_op = optimizer.apply_gradients(zip(grads, tvars))
+    with tf.name_scope('accuracy'):
+      correct_pred = tf.equal(tf.argmax(self.logits, 1), tf.argmax(self.y_, 1))
+      self.accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
+
+    # tensorboard
+    tf.summary.histogram('logits', self.logits)
+    tf.summary.histogram('loss', loss)
+    tf.summary.scalar('train_loss', self.cost)
+
+  @property
+  def input_data(self):
+    return self.X_
+
+  @property
+  def targets(self):
+    return self.y_
+
+
+
+
+  def train(datasets, log_dir=None, log_description=None, save_model_dir=None):
+    FLAGS = FlagValues()
+    FLAGS.learning_rate = 1e-4
+    FLAGS.summaries_dir = './logs'
+    FLAGS.dropout = 0.3
+
+    total_series_length = 50000
+    sequence_length = 20
+    state_size = 4
+    num_classes = 2
+    num_features = datasets.train.num_features
+    echo_step = 3
+    batch_size = 5
+    num_batches = total_series_length//batch_size//sequence_length
+    num_layers = 3
+
+
+# Input Placeholders
+    X_ = tf.placeholder(tf.float32, [None, sequence_length, num_features], name='X_')
+    y_ = tf.placeholder(tf.int32, [None, num_classes], name='y_')
+    keep_prob = tf.placeholder(tf.float32, name='keep_prob')  # dropout for hidden layer
+    tf.add_to_collection('X_', X_)
+    tf.add_to_collection('y_', y_)
+    tf.add_to_collection('keep_prob', keep_prob)
+
+    print(X_.shape)
+    x_ = tf.reshape(X_, [-1, num_features])
+    print(x_.shape)
+    x_ = tf.split(axis=0, num_or_size_splits=sequence_length, value=x_)
+    print(len(x_))
+
+    #state = tf.placeholder(tf.float32, [num_layers, 2, batch_size, state_size], name='init_state')
+    # Defined below now, right after lstm def
+
+    # Variables
+    weights_layer2 = tf.Variable(np.random.rand(state_size, num_classes),dtype=tf.float32)
+    biases_layer2 = tf.Variable(np.zeros((1,num_classes)), dtype=tf.float32)
+    tf.add_to_collection('vars', weights_layer1)
+    tf.add_to_collection('vars', biases_layer1)
+
+
+  # Forward passes
+    cell = tf.contrib.rnn.LSTMCell(state_size, state_is_tuple=True)
+    cell = tf.contrib.rnn.DropoutWrapper(cell, output_keep_prob=keep_prob)
+    cell = tf.contrib.rnn.MultiRNNCell([cell] * num_layers, state_is_tuple=True)
+
+    initial_state = state = cell.zero_state(batch_size, tf.float32)
+    tf.add_to_collection('initial_state', initial_state)
+
+    state_per_layer_list = tf.unstack(initial_state, axis=0)
+    rnn_tuple_state = tuple(
+        [tf.contrib.rnn.LSTMStateTuple(state_per_layer_list[idx][0], state_per_layer_list[idx][1])
+        for idx in range(num_layers)]
+        )
+
+    states_series, current_state = tf.contrib.rnn.static_rnn(cell, x_, initial_state=rnn_tuple_state, sequence_length=[sequence_length] * batch_size)
+    states_series = tf.reshape(states_series, [-1, state_size])
+
+
+    logits = tf.matmul(states_series, weights_layer2) + biases_layer2 #Broadcasted addition
+    #labels = tf.reshape(y_, [-1])
+
+    logits_series = tf.unstack(tf.reshape(logits, [batch_size, sequence_length, 2]), axis=1)
+    predictions_series = [tf.nn.softmax(logit) for logit in logits_series]
+    softmax_probabilities = tf.nn.softmax(logits)
+    tf.add_to_collection('softmax_probabilities', softmax_probabilities)
+
+    # Cost/Loss
+    loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=y_))
+    beta = 0.0001
+    #loss = loss + \
+    #      beta * tf.nn.l2_loss(weights_layer1) + \
+    #      beta * tf.nn.l2_loss(weights_layer2)
+    tf.add_to_collection('loss', loss)
+
+    # TensorBoard
+    tf.summary.scalar('cross_entropy', loss)
+
+    # Optimizer
+    optimizer = tf.train.AdagradOptimizer(FLAGS.learning_rate).minimize(loss)
+
+    # Evaluate model
+    with tf.name_scope('accuracy'): 
+    # Predictions for the training, validation, and test data.
+    # predictions don't need softmax if simply choosing max. softmax won't alter ranking
+      predictions = tf.argmax(logits, 1)
+    with tf.name_scope('correct_prediction'):
+      correct_prediction = tf.equal(predictions, tf.argmax(y_, 1))
+      with tf.name_scope('accuracy'):
+        accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+        tf.summary.scalar('accuracy', accuracy)
+        tf.add_to_collection('accuracy', accuracy)
+
+
+    # Merge summaries
+    merged = tf.summary.merge_all()
+    if log_dir:
+      train_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '%s/%s/%s' % (log_dir, log_description, 'train'))#, session.graph)
+      valid_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '%s/%s/%s' % (log_dir, log_description, 'valid'))
+      test_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '%s/%s/%s' % (log_dir, log_description, 'test'))
+
+
+    # Setup training
+    gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.05)
+    session = tf.InteractiveSession(config=tf.ConfigProto(gpu_options=gpu_options))
+    session.run(tf.initialize_all_variables())
+
+
+    #####
+    #batch_size = 128
+    num_epochs = 100
+    print("Num steps = %d" % num_epochs)
+
+    tf.global_variables_initializer().run()
+    print("Initialized")
+    for epoch_idx in range(1, num_epochs+1):
+      # Generate minibatch.
+      x,y = datasets.train.next_batch(batch_size)
+
+      print("shapes=", x.shape, y.shape)
+      _current_state = np.zeros((num_layers, 2, batch_size, state_size))
+
+      print("New data, epoch", epoch_idx)
+      print("Drop=", FLAGS.dropout)
+      print("keep_prob", keep_prob)
+
+      print(type(x), type(y))
+      feed_dict = {
+        X_: x,
+        y_: y,
+        initial_state: _current_state,
+        keep_prob: 0.3
+      }
+      #for i, (c, h) in enumerate(initial_state):
+      #  feed_dict[c] = state[i].c
+      #  feed_dict[h] = state[i].h
+
+      summary, loss_, _, acc = session.run([merged, loss, optimizer, accuracy], feed_dict=feed_dict)
+
+      if log_dir:
+        train_writer.add_summary(summary, epoch_idx)
+
+      if (epoch_idx % (num_epochs//50) == 0):
+        print("\n===\nstep: %d" % epoch_idx)
+        print("Minibatch loss: %f" % loss_)
+        print("Minibatch accuracy: %.5f" % acc)
+
+      if datasets.valid:
+        summary_valid, acc_loss, acc_valid = session.run([merged, loss, accuracy], feed_dict={ X_: datasets.valid.data, y_: datasets.valid.labels, init_state: _current_state, keep_prob: 1.0 })
+        print("Validation loss: %f" % acc_loss)
+        print("Validation accuracy: %.5f" % acc_valid)
+      if log_dir:
+        valid_writer.add_summary(summary_valid, epoch_idx)
+
+      if datasets.test: 
+        # This is only added so that the Test data can be visualized 
+        summary_test, _ = session.run([merged, accuracy], feed_dict={ X_: datasets.test.data, y_: datasets.test.labels, init_state: _current_state, keep_prob: 1.0 })
+      if log_dir:
+        test_writer.add_summary(summary_test, epoch_idx)
+
+    print("====\ndone learning\n====")
+
+
+
+
+if __name__ == "__main__":
+  data_partition_fractions = [0.8, 0.1, 0.1]  # Train, Valid, Test
+
+  sequence_length = 20
+  # the input/output model to use
+  model = models.ModelRNNRecentGames(sequence_length)
+
+  # the data model to use
+  data_model = load_data.DATA_MODEL_DETAILED
+
+  teamstats = team_stats.TeamStatsRecentGameSequence(sequence_length)
+
+  tpl = load_data.generate_sequenced_data(model, data_model, teamstats, range(0,2004))
+  data, labels = tpl[0], tpl[1]
+  filenames = load_data.split_data_to_files(data, labels, 10)
+  datasets = DataSetsFiles(filenames, data_partition_fractions, load_data.read_file, randomize=False, feature_dim=2)
+
+
+  num_valid_examples = 0 if not datasets.valid else datasets.valid.num_examples
+  num_test_examples = 0 if not datasets.test else datasets.test.num_examples
+  print("example sizes: %d %d %d" % (datasets.train.num_examples, num_valid_examples, num_test_examples))
+
+  save_model = './trained/modelrnn/'
+  train(datasets, model.log_dir, data_model.description, save_model_dir=save_model)
+
+
+  # Below is testing if storing/restoring model works
+  np.set_printoptions(threshold=np.nan)
+  #print(np.cov(datasets.test.data.T))
+  # Try reloading graph and recomputing test error
+  saver = tf.train.Saver()
+  with tf.Session() as session:
+    meta_graph_location = save_model + ".meta"
+    saver = tf.train.import_meta_graph(meta_graph_location, clear_devices=True)
+
+    saver.restore(session, save_model)
+
+    # Load required session vars
+    X_ = tf.get_collection('X_')[0]
+    y_ = tf.get_collection('y_')[0]
+    keep_prob = tf.get_collection('keep_prob')[0]
+    loss = tf.get_collection('loss')[0]
+    accuracy = tf.get_collection('accuracy')[0]
+
+    # this data is not normalized....
+    loss_, acc_ = session.run([loss, accuracy], feed_dict = { X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 })
+
+    print(loss_)
+    print(acc_)

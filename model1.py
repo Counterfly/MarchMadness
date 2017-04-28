@@ -1,15 +1,17 @@
 import math
 import numpy as np
 import tensorflow as tf
+import os
 
 # User defined modules
 import load_data
 import models
+import team_stats
 from data_sets import DataSetsFiles
 from flag_values import _FlagValues as FlagValues
 
 
-def train(datasets, save_model_path=None):
+def train(datasets, log_dir=None, log_description=None, save_model_dir=None):
   FLAGS = FlagValues()
   FLAGS.learning_rate = 1e-4
   FLAGS.summaries_dir = './logs'
@@ -19,10 +21,10 @@ def train(datasets, save_model_path=None):
 
 
   num_input_features = datasets.num_features
-  num_classification_labels = datasets.num_classification_labels # number of unique teams
+  num_classification_labels = datasets.num_classification_labels # number nodes in output layer
 
 
-  gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.9)
+  gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.95)
   session = tf.InteractiveSession(config=tf.ConfigProto(gpu_options=gpu_options))
 
   def weight_variable(shape, stddev=0.1, name=''):
@@ -80,11 +82,14 @@ def train(datasets, save_model_path=None):
     'out': num_classification_labels
   }
 
-  X_ = tf.placeholder(tf.float32, shape=(None, layer1['in']))
-  y_ = tf.placeholder(tf.float32, shape=(None, num_classification_labels))
+  X_ = tf.placeholder(tf.float32, shape=(None, layer1['in']), name='X_')
+  tf.add_to_collection('X_', X_)
+  y_ = tf.placeholder(tf.float32, shape=(None, num_classification_labels), name='y_')
+  tf.add_to_collection('y_', y_)
 
-  keep_prob = tf.placeholder(tf.float32)  # dropout for hidden layer
-  
+  keep_prob = tf.placeholder(tf.float32, name='keep_prob')  # dropout for hidden layer
+  tf.add_to_collection('keep_prob', keep_prob)
+
 
   # Model
   # Variables.
@@ -108,10 +113,17 @@ def train(datasets, save_model_path=None):
 
   # This is only used to read output probability, doesn't serve in remainder computations
   softmax_probabilities = tf.nn.softmax(output_activation)
-  
+  tf.add_to_collection('softmax_probabilities', softmax_probabilities)
+
   # Training computation.
   loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=output_activation, labels=y_))
 
+  beta = 0.0001
+  loss = loss + \
+        beta * tf.nn.l2_loss(weights_layer1) + \
+        beta * tf.nn.l2_loss(weights_layer2)
+  tf.add_to_collection('loss', loss)
+      
   # TensorBoard
   tf.summary.scalar('cross_entropy', loss)
 
@@ -129,16 +141,20 @@ def train(datasets, save_model_path=None):
       accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
       #accuracy = tf.scalar_mul(100, tf.reduce_mean(tf.cast(correct_prediction, tf.float32)))
   tf.summary.scalar('accuracy', accuracy)
+  tf.add_to_collection('accuracy', accuracy)
 
   # Merge summaries
   merged = tf.summary.merge_all()
-  train_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '%s/%s/%s' % (model.log_dir, data_model.description, 'train'), session.graph)
-  valid_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '%s/%s/%s' % (model.log_dir, data_model.description, 'valid'))
-  test_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '%s/%s/%s' % (model.log_dir, data_model.description, 'test'))
-                                     
+  if log_dir:
+    train_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '%s/%s/%s' % (log_dir, log_description, 'train'), session.graph)
+    valid_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '%s/%s/%s' % (log_dir, log_description, 'valid'))
+    test_writer = tf.summary.FileWriter(FLAGS.summaries_dir + '%s/%s/%s' % (log_dir, log_description, 'test'))
+    
+
+                                   
   #####
-  batch_size = 64
-  num_steps = 15000
+  batch_size = 128
+  num_steps = 40000
   print("Num steps = %d" % num_steps)
     
   tf.global_variables_initializer().run()
@@ -150,35 +166,49 @@ def train(datasets, save_model_path=None):
     feed_dict = {X_ : batch_data, y_ : batch_labels, keep_prob: 0.5 }
     summary, loss_, _, acc = session.run([merged, loss, optimizer, accuracy], feed_dict=feed_dict)
 
-    train_writer.add_summary(summary, step)
+    if log_dir:
+      train_writer.add_summary(summary, step)
 
     if (step % (num_steps//50) == 0):
-      print("Minibatch loss at step %d: %f" % (step, loss_))
-      print("Minibatch accuracy: %.3f" % acc) #accuracy.eval(feed_dict={X_: batch_data, y_: batch_labels, keep_prob: 1.0 }))
-      
-      summary_valid, acc_valid = session.run([merged, accuracy], feed_dict={ X_: datasets.valid.data, y_: datasets.valid.labels, keep_prob: 1.0 })
-      valid_writer.add_summary(summary_valid, step)
-      print("Validation accuracy: %.3f" % acc_valid)#accuracy.eval(feed_dict={ X_: datasets.valid.data, y_: datasets.valid.labels, keep_prob: 1.0 }))
- 
-      # This is only added so that the Test data can be visualized 
-      summary_test, _ = session.run([merged, accuracy], feed_dict={ X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 })
-      test_writer.add_summary(summary_test, step)
+      print("\n===\nstep: %d" % step)
+      print("Minibatch loss: %f" % loss_)
+      print("Minibatch accuracy: %.5f" % acc) #accuracy.eval(feed_dict={X_: batch_data, y_: batch_labels, keep_prob: 1.0 }))
+  
+      if datasets.valid:
+        summary_valid, acc_loss, acc_valid = session.run([merged, loss, accuracy], feed_dict={ X_: datasets.valid.data, y_: datasets.valid.labels, keep_prob: 1.0 })
+        print("Validation loss: %f" % acc_loss)
+        print("Validation accuracy: %.5f" % acc_valid)
+        if log_dir:
+          valid_writer.add_summary(summary_valid, step)
+
+      if datasets.test: 
+        # This is only added so that the Test data can be visualized 
+        summary_test, _ = session.run([merged, accuracy], feed_dict={ X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 })
+        if log_dir:
+          test_writer.add_summary(summary_test, step)
 
   print("====\ndone learning\n====")
-  summary_valid, acc_valid = session.run([merged, accuracy], feed_dict={ X_: datasets.valid.data, y_: datasets.valid.labels, keep_prob: 1.0 })
-  valid_writer.add_summary(summary_valid, num_steps)
-  print("Final validation accuracy: %.3f" % acc_valid)#accuracy.eval(feed_dict={ X_: datasets.valid.data, y_: datasets.valid.labels, keep_prob: 1.0 }))
-  
-  summary_test, acc_test = session.run([merged, accuracy], feed_dict={ X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 })
-  test_writer.add_summary(summary_test, num_steps)
+  if datasets.valid:
+    summary_valid, acc_valid = session.run([merged, accuracy], feed_dict={ X_: datasets.valid.data, y_: datasets.valid.labels, keep_prob: 1.0 })
+    print("Final validation accuracy: %.5f" % acc_valid)
+    if log_dir:
+      valid_writer.add_summary(summary_valid, num_steps)
+ 
+  if datasets.test: 
+    summary_test, loss_test, acc_test = session.run([merged, loss, accuracy], feed_dict={ X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 })
+    if log_dir:
+      test_writer.add_summary(summary_test, num_steps)
 
-  print("Test accuracy: %.3f" % acc_test)#accuracy.eval(feed_dict={ X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 }))
+    print("Test loss: %.5f" % loss_test)
+    print("Test accuracy: %.5f" % acc_test)
 
   print("Num Epochs completed = %d " % datasets.train.epochs_completed)
 
-  if save_model_path:
+  if save_model_dir:
+    if not os.path.exists(save_model_dir):
+      os.makedirs(save_model_dir)
     saver = tf.train.Saver()
-    saver.save(session, save_model_path)
+    saver.save(session, save_model_dir)
 
 
 
@@ -186,14 +216,50 @@ if __name__ == "__main__":
   data_partition_fractions = [0.8, 0.1, 0.1]  # Train, Valid, Test
 
   # the input/output model to use
-  model = models.ModelWinningTeamOneHot(hot_streak=False, rival_streak=True)
+  #model = models.ModelWinningTeamOneHot(hot_streak=True, rival_streak=True)
+  model = models.ModelSymmetrical(hot_streak=True, rival_streak=False)
 
   # the data model to use
   data_model = load_data.DATA_MODEL_DETAILED
 
-  filenames = load_data.load_games(model, data_model, num_historic_win_loss=10, aggregate_all_data=True, normalize=True, save=True, num_splits=10)
-  datasets = DataSetsFiles(filenames, data_partition_fractions, load_data.read_file)
-  print("example sizes: %d %d %d" % (datasets.train.num_examples, datasets.valid.num_examples, datasets.test.num_examples))
+  teamstats = team_stats.TeamStatsSeasonal()
+  #teamstats = team_stats.TeamStatsPairMatchups()
+  #teamstats = team_stats.TeamStatsLifetime()
 
-  save_model = './trained/model1'
-  train(datasets, save_model_path=save_model)
+  filenames = load_data.load_games(model, data_model, teamstats, num_historic_win_loss=10, normalize=False, save=True, num_splits=10)
+  datasets = DataSetsFiles(filenames, data_partition_fractions, load_data.read_file, randomize=False)
+
+
+  num_valid_examples = 0 if not datasets.valid else datasets.valid.num_examples
+  num_test_examples = 0 if not datasets.test else datasets.test.num_examples
+  print("example sizes: %d %d %d" % (datasets.train.num_examples, num_valid_examples, num_test_examples))
+
+  save_model = './trained/model1/'
+  train(datasets, model.log_dir, data_model.description, save_model_dir=save_model)
+
+
+
+  # Below is testing if storing/restoring model works
+  np.set_printoptions(threshold=np.nan)
+  #print(np.cov(datasets.test.data.T))
+  # Try reloading graph and recomputing test error
+  saver = tf.train.Saver()
+  with tf.Session() as session:
+    meta_graph_location = save_model + ".meta"
+    saver = tf.train.import_meta_graph(meta_graph_location, clear_devices=True)
+
+    saver.restore(session, save_model)
+
+    # Load required session vars
+    X_ = tf.get_collection('X_')[0]
+    y_ = tf.get_collection('y_')[0]
+    keep_prob = tf.get_collection('keep_prob')[0]
+    loss = tf.get_collection('loss')[0]
+    accuracy = tf.get_collection('accuracy')[0]
+  
+    # this data is not normalized....
+    loss_, acc_ = session.run([loss, accuracy], feed_dict = { X_: datasets.test.data, y_: datasets.test.labels, keep_prob: 1.0 })
+
+
+    print(loss_)
+    print(acc_)

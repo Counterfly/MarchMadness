@@ -9,13 +9,20 @@
 \BOOKMARK [2][-]{subsection.3.3}{Team Snapshot}{section.3}% 9
 \BOOKMARK [2][-]{subsection.3.4}{Feature Aggregation}{section.3}% 10
 \BOOKMARK [2][-]{subsection.3.5}{Feature Horizon}{section.3}% 11
-\BOOKMARK [1][-]{section.4}{Network Input Output Architectures}{}% 12
+\BOOKMARK [1][-]{section.4}{Input Output Architectures}{}% 12
 \BOOKMARK [2][-]{subsubsection.4.0.1}{Predicting Winning Team ID}{section.4}% 13
 \BOOKMARK [2][-]{subsection.4.1}{Predicting Win/Loss Vector}{section.4}% 14
-\BOOKMARK [3][-]{subsubsection.4.1.1}{Predicting One-Shot Outcome}{subsection.4.1}% 15
-\BOOKMARK [1][-]{section.5}{Neural Network Architecture}{}% 16
-\BOOKMARK [1][-]{section.6}{Results}{}% 17
-\BOOKMARK [2][-]{subsection.6.1}{Predicting Winning Team ID}{section.6}% 18
-\BOOKMARK [2][-]{subsection.6.2}{Predicting Win/Loss Vector}{section.6}% 19
-\BOOKMARK [2][-]{subsection.6.3}{Predicting One-Shot Outcomes}{section.6}% 20
-\BOOKMARK [1][-]{section.7}{Conclusion}{}% 21
+\BOOKMARK [1][-]{section.5}{Models}{}% 15
+\BOOKMARK [2][-]{subsection.5.1}{Logistic}{section.5}% 16
+\BOOKMARK [2][-]{subsection.5.2}{Neural Network Architectures}{section.5}% 17
+\BOOKMARK [1][-]{section.6}{Results}{}% 18
+\BOOKMARK [2][-]{subsection.6.1}{Linear Classifier}{section.6}% 19
+\BOOKMARK [2][-]{subsection.6.2}{Predicting Winning Team ID}{section.6}% 20
+\BOOKMARK [2][-]{subsection.6.3}{Predicting Binary Classification}{section.6}% 21
+\BOOKMARK [2][-]{subsection.6.4}{Investigating Different Temporal Horizons}{section.6}% 22
+\BOOKMARK [3][-]{subsubsection.6.4.1}{Lifetime Pairwise Matchups}{subsection.6.4}% 23
+\BOOKMARK [3][-]{subsubsection.6.4.2}{Lifetime Statistics}{subsection.6.4}% 24
+\BOOKMARK [2][-]{subsection.6.5}{Neural Network with 2 Hidden Layers}{section.6}% 25
+\BOOKMARK [1][-]{section.7}{Investigating Temporal Correlations for RNNs}{}% 26
+\BOOKMARK [1][-]{section.8}{Data Interpretation}{}% 27
+\BOOKMARK [1][-]{section.9}{Conclusion}{}% 28

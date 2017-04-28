@@ -8,7 +8,7 @@ def randomize_data(dataset, labels):
 
 
 class DataSetsFiles:
-  def __init__(self, filenames, data_partition_fractions, read_file_fn, randomize=True):
+  def __init__(self, filenames, data_partition_fractions, read_file_fn, randomize=True, feature_dim=1):
     num_files = len(filenames)
     train_end_index = int(data_partition_fractions[0] * num_files)
     valid_end_index = int((data_partition_fractions[0] + data_partition_fractions[1]) * num_files)
@@ -18,18 +18,18 @@ class DataSetsFiles:
       np.random.shuffle(filenames)
       
     # Create datasets, Train, Valid, Test
-    self._train = DataSetFiles(filenames[:train_end_index], read_file_fn)
+    self._train = DataSetFiles(filenames[:train_end_index], read_file_fn, feature_dim=feature_dim)
 
     # We shouldn't need the validation and test datasets in files as we want to evaluate the model on the entire validation/testing set
     self._valid = None
     if train_end_index < valid_end_index:
       data, labels = self.load_data_from_files(filenames[train_end_index:valid_end_index], read_file_fn)
-      self._valid = DataSet(data, labels)
+      self._valid = DataSet(data, labels, feature_dim=feature_dim)
 
     self._test = None
     if valid_end_index < test_end_index:
       data, labels = self.load_data_from_files(filenames[valid_end_index:test_end_index], read_file_fn)
-      self._test = DataSet(data, labels)
+      self._test = DataSet(data, labels, feature_dim=feature_dim)
 
   def load_data_from_files(self, filenames, read_file_fn):
 
@@ -65,7 +65,7 @@ class DataSetsFiles:
     return self._test
 
 class DataSetFiles:
-  def __init__(self, filenames, read_file_fn):
+  def __init__(self, filenames, read_file_fn, feature_dim=1):
     self._filenames = filenames
     np.random.shuffle(self._filenames)
 
@@ -84,6 +84,7 @@ class DataSetFiles:
     self._file_epochs_completed = 0
     self._mini_epochs_completed = 0
     self._index_in_epoch = 0
+    self._feature_dim = feature_dim
    
     if len(filenames) > 0: 
       # Load file to populate data and labels
@@ -108,7 +109,7 @@ class DataSetFiles:
   @property
   def num_features(self):
     if self.num_examples > 0:
-      return self._data.shape[1]
+      return self._data.shape[self._feature_dim]
     else:
       return 0
 
@@ -154,6 +155,8 @@ class DataSetFiles:
       #Finished mini file epoch
       self._mini_epochs_completed += 1
 
+      prev_data, prev_labels = self._data[start:], self._labels[start:]
+
       # Update file
       self.next_file()
       
@@ -164,8 +167,13 @@ class DataSetFiles:
       self._labels = self._labels[perm]
 
       # Start next epoch
-      self._index_in_epoch = 0
-      return self._data[start:], self._labels[start:]
+      end = batch_size - prev_data.shape[0]
+      
+      extra_data = self._data[:end]
+      extra_labels = self._labels[:end]
+
+      self._index_in_epoch = end
+      return np.concatenate((prev_data, extra_data)), np.concatenate((prev_labels, extra_labels))
     else:
       end = self._index_in_epoch
       return self._data[start:end], self._labels[start:end]
@@ -182,9 +190,17 @@ class DataSets:
     if normalize:
       # Normalize all data together
       data = data.astype(np.float32)
-      mu = np.tile(np.mean(data, axis=0), (data.shape[0], 1))
-      data = (data - mu) / (np.max(data, axis=0) - np.min(data, axis=0))
-      data = np.nan_to_num(data)  # Convert NaNs to 0
+      data_tr = data[:train_end_index, :]
+
+      #mu = np.tile(np.mean(data_tr, axis=0), (data_tr.shape[0], 1))
+      min_vec = np.tile(np.min(data_tr, axis=0), (data_tr.shape[0], 1))
+      data = (data_tr - min_vec) / (np.max(data_tr, axis=0) - np.min(data_tr, axis=0))
+      data = np.nan_to_num(data_tr)  # Convert NaNs to 0
+
+      # Should consider normalizing to [-1,1] range
+      #new_range_x = -1
+      #new_range_y = 1
+      #data = (data * (new_range_y - new_range_x)) + new_range_x
 
 
     if randomize:
@@ -216,13 +232,14 @@ class DataSets:
     return self._test
 
 class DataSet(object):
-  def __init__(self, data, labels, normalize=False):
+  def __init__(self, data, labels, normalize=False, feature_dim=1):
     assert data.shape[0] == labels.shape[0], (
         "data.shape: %s labels.shape: %s" % (data.shape,
                                                labels.shape))
     self._num_examples = data.shape[0]
+    self._feature_dim = feature_dim
 
-    assert(len(data.shape) == 2) # Assert shape is (num_examples, num_features)
+    #assert(len(data.shape) == 2) # Assert shape is (num_examples, num_features)
     
     if normalize:
       # Convert features (in columns) to have mean=0, stddev=1
@@ -247,7 +264,7 @@ class DataSet(object):
 
   @property
   def num_features(self):
-    return self._data.shape[1]
+    return self._data.shape[self._feature_dim]
 
   @property
   def num_classification_labels(self):

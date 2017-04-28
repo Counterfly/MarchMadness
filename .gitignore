@@ -1,3 +1,6 @@
 data/*
+logs/*
+trained/*
+save/*
 __pycache__
 *.pyc

@@ -101,6 +101,21 @@ class CSVTourneyGamesDetailed(CSVRegularSeasonDetailed):
     super(CSVTourneyGamesDetailed, self).__init__(filepath)
 
 
+
+def season_to_one_hot(season, detailed):
+  max_season = 2017
+  if detailed:
+    min_season = 2003
+  else:
+    min_season = 1985
+
+  num_hots = max_season - min_season + 1
+
+  encoding = np.zero((num_hots, 1))
+  encoding[season-min_season] = 1
+  return encoding
+
+
 class AttributeMapper:
   ATTRIBUTE_MAP_COMPACT_WINNING_TEAM = {
     #'against': CSVRegularSeasonCompact.LOSING_TEAM,

@@ -27,11 +27,14 @@
 \citation{cao2012sports}
 \citation{bashuk2012using}
 \citation{bashuk2012using}
-\citation{kagglecompetition}
+\citation{huang2010neural}
+\citation{mccabe2008artificial}
+\citation{loeffelholz2009predicting}
 \@writefile{toc}{\contentsline {section}{\numberline {3}Data}{2}{section.3}}
 \newlabel{sec:data}{{3}{2}{Data}{section.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Setup}{2}{subsection.3.1}}
-\newlabel{sec:data-setup}{{3.1}{2}{Setup}{subsection.3.1}{}}
+\citation{kagglecompetition}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Setup}{3}{subsection.3.1}}
+\newlabel{sec:data-setup}{{3.1}{3}{Setup}{subsection.3.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Features}{4}{subsection.3.2}}
 \newlabel{sec:data-features}{{3.2}{4}{Features}{subsection.3.2}{}}
 \newlabel{itm:features-pertinent}{{1}{4}{Features}{Item.1}{}}
@@ -44,97 +47,185 @@
 \newlabel{sec:data-features-detailed}{{3.2.2}{5}{Detailed}{subsubsection.3.2.2}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}Handcrafted Features}{5}{subsubsection.3.2.3}}
 \newlabel{sec:data-features-handcrafted}{{3.2.3}{5}{Handcrafted Features}{subsubsection.3.2.3}{}}
-\newlabel{tbl:streak-impact-detaled}{{3.2.3}{5}{Handcrafted Features}{table.1}{}}
-\newlabel{tbl:streak-impact-detaled}{{3.2.3}{5}{Handcrafted Features}{table.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Team Snapshot}{5}{subsection.3.3}}
-\newlabel{sec:data-team-snapshot}{{3.3}{5}{Team Snapshot}{subsection.3.3}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Impact of the handcrafted streak features using the compact dataset.}}{6}{table.1}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Impact of the handcrafted streak features using the detailed dataset.}}{6}{table.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Team Snapshot}{6}{subsection.3.3}}
+\newlabel{sec:data-team-snapshot}{{3.3}{6}{Team Snapshot}{subsection.3.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Feature Aggregation}{6}{subsection.3.4}}
 \newlabel{sec:feature-aggregation}{{3.4}{6}{Feature Aggregation}{subsection.3.4}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Feature Horizon}{6}{subsection.3.5}}
 \newlabel{sec:feature-horizon}{{3.5}{6}{Feature Horizon}{subsection.3.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Network Input Output Architectures}{6}{section.4}}
-\newlabel{sec:io-architectures}{{4}{6}{Network Input Output Architectures}{section.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Input Output Architectures}{6}{section.4}}
+\newlabel{sec:io-architectures}{{4}{6}{Input Output Architectures}{section.4}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.0.1}Predicting Winning Team ID}{6}{subsubsection.4.0.1}}
 \newlabel{sec:io-architectures-winning-team-id}{{4.0.1}{6}{Predicting Winning Team ID}{subsubsection.4.0.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Predicting Win/Loss Vector}{7}{subsection.4.1}}
-\newlabel{sec:architectures-winloss-vector}{{4.1}{7}{Predicting Win/Loss Vector}{subsection.4.1}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.1.1}Predicting One-Shot Outcome}{8}{subsubsection.4.1.1}}
-\newlabel{sec:io-architectures-oneshot}{{4.1.1}{8}{Predicting One-Shot Outcome}{subsubsection.4.1.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Neural Network Architecture}{8}{section.5}}
-\newlabel{sec:nn-architecture}{{5}{8}{Neural Network Architecture}{section.5}{}}
+\newlabel{sec:io-architectures-symmetrical}{{4.1}{7}{Predicting Win/Loss Vector}{subsection.4.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Models}{7}{section.5}}
+\newlabel{sec:models}{{5}{7}{Models}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Logistic}{8}{subsection.5.1}}
+\newlabel{sec:model-logistic}{{5.1}{8}{Logistic}{subsection.5.1}{}}
+\newlabel{eqn:logistic}{{1}{8}{Logistic}{equation.5.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Neural Network Architectures}{8}{subsection.5.2}}
+\newlabel{sec:nn-architectures}{{5.2}{8}{Neural Network Architectures}{subsection.5.2}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {6}Results}{8}{section.6}}
 \newlabel{sec:results}{{6}{8}{Results}{section.6}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Predicting Winning Team ID}{8}{subsection.6.1}}
-\newlabel{sec:results-wteamid}{{6.1}{8}{Predicting Winning Team ID}{subsection.6.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Accuracy using no streaks.}}{9}{figure.1}}
-\newlabel{fig:wteam-onehot--accuracy}{{1}{9}{Accuracy using no streaks}{figure.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Accuracy using only hot streak.}}{9}{figure.2}}
-\newlabel{fig:wteam-onehot-h-accuracy}{{2}{9}{Accuracy using only hot streak}{figure.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Accuracy using only rival streak.}}{9}{figure.3}}
-\newlabel{fig:wteam-onehot-r-accuracy}{{3}{9}{Accuracy using only rival streak}{figure.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Accuracy using both hot and rival streaks.}}{9}{figure.4}}
-\newlabel{fig:wteam-onehot-hr-accuracy}{{4}{9}{Accuracy using both hot and rival streaks}{figure.4}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Impact of the handcrafted streak features using the compact dataset.}}{9}{table.3}}
-\newlabel{tbl:accuracy-wteamid}{{6.1}{9}{Predicting Winning Team ID}{table.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Predicting Win/Loss Vector}{9}{subsection.6.2}}
-\newlabel{sec:results-winloss-vector}{{6.2}{9}{Predicting Win/Loss Vector}{subsection.6.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Cross Entropy using no streaks.}}{10}{figure.5}}
-\newlabel{fig:wteam-onehot--crossentropy}{{5}{10}{Cross Entropy using no streaks}{figure.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Cross Entropy using only hot streak.}}{10}{figure.6}}
-\newlabel{fig:wteam-onehot-h-crossentropy}{{6}{10}{Cross Entropy using only hot streak}{figure.6}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Cross Entropy using only rival streak.}}{10}{figure.7}}
-\newlabel{fig:wteam-onehot-r-crossentropy}{{7}{10}{Cross Entropy using only rival streak}{figure.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Cross Entropy using both hot and rival streaks.}}{10}{figure.8}}
-\newlabel{fig:wteam-onehot-hr-crossentropy}{{8}{10}{Cross Entropy using both hot and rival streaks}{figure.8}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Accuracy using no streaks.}}{10}{figure.9}}
-\newlabel{fig:symmetrical--accuracy}{{9}{10}{Accuracy using no streaks}{figure.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Accuracy using only hot streak.}}{10}{figure.10}}
-\newlabel{fig:symmetrical-h-accuracy}{{10}{10}{Accuracy using only hot streak}{figure.10}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Accuracy using only rival streak.}}{10}{figure.11}}
-\newlabel{fig:symmetrical-r-accuracy}{{11}{10}{Accuracy using only rival streak}{figure.11}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Accuracy using both hot and rival streaks.}}{10}{figure.12}}
-\newlabel{fig:symmetrical-hr-accuracy}{{12}{10}{Accuracy using both hot and rival streaks}{figure.12}{}}
-\newlabel{fig:symmetrical-crossentropies}{{6.2}{10}{Predicting Win/Loss Vector}{figure.16}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Impact of the handcrafted streak features using a logisitic classifier.\relax }}{9}{table.caption.4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Legend used for all accuracy and cross-entropy charts in this paper.\relax }}{9}{figure.caption.1}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{fig:legend}{{1}{9}{Legend used for all accuracy and cross-entropy charts in this paper.\relax }{figure.caption.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Linear Classifier}{9}{subsection.6.1}}
+\newlabel{fig:linear--accuracy}{{2a}{9}{Logistic accuracy using no streaks.\relax }{figure.caption.2}{}}
+\newlabel{sub@fig:linear--accuracy}{{a}{9}{Logistic accuracy using no streaks.\relax }{figure.caption.2}{}}
+\newlabel{fig:linear-h-accuracy}{{2b}{9}{Logistic accuracy using only hot streak.\relax }{figure.caption.2}{}}
+\newlabel{sub@fig:linear-h-accuracy}{{b}{9}{Logistic accuracy using only hot streak.\relax }{figure.caption.2}{}}
+\newlabel{fig:linear-r-accuracy}{{2c}{9}{Logistic accuracy using only rival streak.\relax }{figure.caption.2}{}}
+\newlabel{sub@fig:linear-r-accuracy}{{c}{9}{Logistic accuracy using only rival streak.\relax }{figure.caption.2}{}}
+\newlabel{fig:linear-hr-accuracy}{{2d}{9}{Logistic accuracy using both hot and rival streaks.\relax }{figure.caption.2}{}}
+\newlabel{sub@fig:linear-hr-accuracy}{{d}{9}{Logistic accuracy using both hot and rival streaks.\relax }{figure.caption.2}{}}
+\newlabel{tbl:test-results-logistic}{{6.1}{9}{Linear Classifier}{table.caption.4}{}}
+\newlabel{fig:linear--crossentropy}{{3a}{10}{Logistic cross entropy using no streaks.\relax }{figure.caption.3}{}}
+\newlabel{sub@fig:linear--crossentropy}{{a}{10}{Logistic cross entropy using no streaks.\relax }{figure.caption.3}{}}
+\newlabel{fig:linear-h-crossentropy}{{3b}{10}{Logistic cross entropy using only hot streak.\relax }{figure.caption.3}{}}
+\newlabel{sub@fig:linear-h-crossentropy}{{b}{10}{Logistic cross entropy using only hot streak.\relax }{figure.caption.3}{}}
+\newlabel{fig:linear-r-crossentropy}{{3c}{10}{Logistic cross entropy using only rival streak.\relax }{figure.caption.3}{}}
+\newlabel{sub@fig:linear-r-crossentropy}{{c}{10}{Logistic cross entropy using only rival streak.\relax }{figure.caption.3}{}}
+\newlabel{fig:linear-hr-crossentropy}{{3d}{10}{Logistic cross entropy using both hot and rival streaks.\relax }{figure.caption.3}{}}
+\newlabel{sub@fig:linear-hr-crossentropy}{{d}{10}{Logistic cross entropy using both hot and rival streaks.\relax }{figure.caption.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Predicting Winning Team ID}{10}{subsection.6.2}}
+\newlabel{sec:results-wteamid}{{6.2}{10}{Predicting Winning Team ID}{subsection.6.2}{}}
+\newlabel{fig:wteam-onehot--accuracy}{{4a}{10}{Accuracy using no streaks.\relax }{figure.caption.5}{}}
+\newlabel{sub@fig:wteam-onehot--accuracy}{{a}{10}{Accuracy using no streaks.\relax }{figure.caption.5}{}}
+\newlabel{fig:wteam-onehot-h-accuracy}{{4b}{10}{Accuracy using only hot streak.\relax }{figure.caption.5}{}}
+\newlabel{sub@fig:wteam-onehot-h-accuracy}{{b}{10}{Accuracy using only hot streak.\relax }{figure.caption.5}{}}
+\newlabel{fig:wteam-onehot-r-accuracy}{{4c}{10}{Accuracy using only rival streak.\relax }{figure.caption.5}{}}
+\newlabel{sub@fig:wteam-onehot-r-accuracy}{{c}{10}{Accuracy using only rival streak.\relax }{figure.caption.5}{}}
+\newlabel{fig:wteam-onehot-hr-accuracy}{{4d}{10}{Accuracy using both hot and rival streaks.\relax }{figure.caption.5}{}}
+\newlabel{sub@fig:wteam-onehot-hr-accuracy}{{d}{10}{Accuracy using both hot and rival streaks.\relax }{figure.caption.5}{}}
+\newlabel{fig:results-wteamid}{{6.2}{10}{Predicting Winning Team ID}{figure.caption.5}{}}
+\newlabel{fig:wteam-onehot--crossentropy}{{5a}{11}{Cross Entropy using no streaks.\relax }{figure.caption.6}{}}
+\newlabel{sub@fig:wteam-onehot--crossentropy}{{a}{11}{Cross Entropy using no streaks.\relax }{figure.caption.6}{}}
+\newlabel{fig:wteam-onehot-h-crossentropy}{{5b}{11}{Cross Entropy using only hot streak.\relax }{figure.caption.6}{}}
+\newlabel{sub@fig:wteam-onehot-h-crossentropy}{{b}{11}{Cross Entropy using only hot streak.\relax }{figure.caption.6}{}}
+\newlabel{fig:wteam-onehot-r-crossentropy}{{5c}{11}{Cross Entropy using only rival streak.\relax }{figure.caption.6}{}}
+\newlabel{sub@fig:wteam-onehot-r-crossentropy}{{c}{11}{Cross Entropy using only rival streak.\relax }{figure.caption.6}{}}
+\newlabel{fig:wteam-onehot-hr-crossentropy}{{5d}{11}{Cross Entropy using both hot and rival streaks.\relax }{figure.caption.6}{}}
+\newlabel{sub@fig:wteam-onehot-hr-crossentropy}{{d}{11}{Cross Entropy using both hot and rival streaks.\relax }{figure.caption.6}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Impact of the handcrafted streak features on the T-ary classification model.\relax }}{11}{table.caption.7}}
+\newlabel{tbl:test-results-wteamid}{{6.2}{11}{Predicting Winning Team ID}{table.caption.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Predicting Binary Classification}{11}{subsection.6.3}}
+\newlabel{sec:results-symmetrical}{{6.3}{11}{Predicting Binary Classification}{subsection.6.3}{}}
+\newlabel{fig:symmetrical--accuracy}{{6a}{12}{Accuracy using no streaks.\relax }{figure.caption.8}{}}
+\newlabel{sub@fig:symmetrical--accuracy}{{a}{12}{Accuracy using no streaks.\relax }{figure.caption.8}{}}
+\newlabel{fig:symmetrical-h-accuracy}{{6b}{12}{Accuracy using only hot streak.\relax }{figure.caption.8}{}}
+\newlabel{sub@fig:symmetrical-h-accuracy}{{b}{12}{Accuracy using only hot streak.\relax }{figure.caption.8}{}}
+\newlabel{fig:symmetrical-r-accuracy}{{6c}{12}{Accuracy using only rival streak.\relax }{figure.caption.8}{}}
+\newlabel{sub@fig:symmetrical-r-accuracy}{{c}{12}{Accuracy using only rival streak.\relax }{figure.caption.8}{}}
+\newlabel{fig:symmetrical-hr-accuracy}{{6d}{12}{Accuracy using both hot and rival streaks.\relax }{figure.caption.8}{}}
+\newlabel{sub@fig:symmetrical-hr-accuracy}{{d}{12}{Accuracy using both hot and rival streaks.\relax }{figure.caption.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Accuracies for binary classification using the default (seasonal) temporal horizon.\relax }}{12}{figure.caption.8}}
+\newlabel{fig:symmetrical-accuracies}{{6}{12}{Accuracies for binary classification using the default (seasonal) temporal horizon.\relax }{figure.caption.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Impact of the handcrafted streak features using the binary classification model.\relax }}{12}{table.caption.10}}
+\newlabel{tbl:test-results-symmetrical}{{6.3}{12}{Predicting Binary Classification}{table.caption.10}{}}
+\newlabel{fig:symmetrical--crossentropy}{{7a}{13}{Cross Entropy using no streaks.\relax }{figure.caption.9}{}}
+\newlabel{sub@fig:symmetrical--crossentropy}{{a}{13}{Cross Entropy using no streaks.\relax }{figure.caption.9}{}}
+\newlabel{fig:symmetrical-h-crossentropy}{{7b}{13}{Cross Entropy using only hot streak.\relax }{figure.caption.9}{}}
+\newlabel{sub@fig:symmetrical-h-crossentropy}{{b}{13}{Cross Entropy using only hot streak.\relax }{figure.caption.9}{}}
+\newlabel{fig:symmetrical-r-crossentropy}{{7c}{13}{Cross Entropy using only rival streak.\relax }{figure.caption.9}{}}
+\newlabel{sub@fig:symmetrical-r-crossentropy}{{c}{13}{Cross Entropy using only rival streak.\relax }{figure.caption.9}{}}
+\newlabel{fig:symmetrical-hr-crossentropy}{{7d}{13}{Cross Entropy using both hot and rival streaks.\relax }{figure.caption.9}{}}
+\newlabel{sub@fig:symmetrical-hr-crossentropy}{{d}{13}{Cross Entropy using both hot and rival streaks.\relax }{figure.caption.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Cross Entropies for binary classification using the default (seasonal) temporal horizon.\relax }}{13}{figure.caption.9}}
+\newlabel{fig:symmetrical-crossentropies}{{7}{13}{Cross Entropies for binary classification using the default (seasonal) temporal horizon.\relax }{figure.caption.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Investigating Different Temporal Horizons}{13}{subsection.6.4}}
+\newlabel{sec:temporal-horizons}{{6.4}{13}{Investigating Different Temporal Horizons}{subsection.6.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.1}Lifetime Pairwise Matchups}{13}{subsubsection.6.4.1}}
+\newlabel{fig:pairwise-matchups--accuracy}{{8a}{14}{Accuracy using no streaks.\relax }{figure.caption.11}{}}
+\newlabel{sub@fig:pairwise-matchups--accuracy}{{a}{14}{Accuracy using no streaks.\relax }{figure.caption.11}{}}
+\newlabel{fig:pairwise-matchups-h-accuracy}{{8b}{14}{Accuracy using only hot streak.\relax }{figure.caption.11}{}}
+\newlabel{sub@fig:pairwise-matchups-h-accuracy}{{b}{14}{Accuracy using only hot streak.\relax }{figure.caption.11}{}}
+\newlabel{fig:pairwise-matchups-r-accuracy}{{8c}{14}{Accuracy using only rival streak.\relax }{figure.caption.11}{}}
+\newlabel{sub@fig:pairwise-matchups-r-accuracy}{{c}{14}{Accuracy using only rival streak.\relax }{figure.caption.11}{}}
+\newlabel{fig:pairwise-matchups-hr-accuracy}{{8d}{14}{Accuracy using both hot and rival streaks.\relax }{figure.caption.11}{}}
+\newlabel{sub@fig:pairwise-matchups-hr-accuracy}{{d}{14}{Accuracy using both hot and rival streaks.\relax }{figure.caption.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Accuracies using lifetime pairwise matchups as the temporal horizon.\relax }}{14}{figure.caption.11}}
+\newlabel{fig:pairwise-accuracies}{{8}{14}{Accuracies using lifetime pairwise matchups as the temporal horizon.\relax }{figure.caption.11}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Impact of the handcrafted streak features using the binary classification model using pairwise matchups for temporal horizon.\relax }}{14}{table.caption.13}}
+\newlabel{tbl:test-results-symmetrical-pairmatchups}{{6.4.1}{14}{Lifetime Pairwise Matchups}{table.caption.13}{}}
+\newlabel{fig:pairwise--crossentropy}{{9a}{15}{Cross Entropy for pairwise matchups using no streaks.\relax }{figure.caption.12}{}}
+\newlabel{sub@fig:pairwise--crossentropy}{{a}{15}{Cross Entropy for pairwise matchups using no streaks.\relax }{figure.caption.12}{}}
+\newlabel{fig:pairwise-h-crossentropy}{{9b}{15}{Cross Entropy for pairwise matchups using only hot streak.\relax }{figure.caption.12}{}}
+\newlabel{sub@fig:pairwise-h-crossentropy}{{b}{15}{Cross Entropy for pairwise matchups using only hot streak.\relax }{figure.caption.12}{}}
+\newlabel{fig:pairwise-r-crossentropy}{{9c}{15}{Cross Entropy for pairwise matchups using only rival streak.\relax }{figure.caption.12}{}}
+\newlabel{sub@fig:pairwise-r-crossentropy}{{c}{15}{Cross Entropy for pairwise matchups using only rival streak.\relax }{figure.caption.12}{}}
+\newlabel{fig:pairwise-hr-crossentropy}{{9d}{15}{Cross Entropy for pairwise matchups using both hot and rival streaks.\relax }{figure.caption.12}{}}
+\newlabel{sub@fig:pairwise-hr-crossentropy}{{d}{15}{Cross Entropy for pairwise matchups using both hot and rival streaks.\relax }{figure.caption.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Cross Entropies using a lifetime pairwise matchup temporal horizon.\relax }}{15}{figure.caption.12}}
+\newlabel{fig:pairwise-crossentropies}{{9}{15}{Cross Entropies using a lifetime pairwise matchup temporal horizon.\relax }{figure.caption.12}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.2}Lifetime Statistics}{15}{subsubsection.6.4.2}}
+\newlabel{tbl:test-results-symmetrical-lifetime}{{6.4.2}{15}{Lifetime Statistics}{table.caption.16}{}}
+\newlabel{fig:lifetime--accuracy}{{10a}{16}{Accuracy using no streaks.\relax }{figure.caption.14}{}}
+\newlabel{sub@fig:lifetime--accuracy}{{a}{16}{Accuracy using no streaks.\relax }{figure.caption.14}{}}
+\newlabel{fig:lifetime-h-accuracy}{{10b}{16}{Accuracy using only hot streak.\relax }{figure.caption.14}{}}
+\newlabel{sub@fig:lifetime-h-accuracy}{{b}{16}{Accuracy using only hot streak.\relax }{figure.caption.14}{}}
+\newlabel{fig:lifetime-r-accuracy}{{10c}{16}{Accuracy using only rival streak.\relax }{figure.caption.14}{}}
+\newlabel{sub@fig:lifetime-r-accuracy}{{c}{16}{Accuracy using only rival streak.\relax }{figure.caption.14}{}}
+\newlabel{fig:lifetime-hr-accuracy}{{10d}{16}{Accuracy using both hot and rival streaks.\relax }{figure.caption.14}{}}
+\newlabel{sub@fig:lifetime-hr-accuracy}{{d}{16}{Accuracy using both hot and rival streaks.\relax }{figure.caption.14}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Accuracies using lifetime games as the temporal horizon.\relax }}{16}{figure.caption.14}}
+\newlabel{fig:lifetime-accuracies}{{10}{16}{Accuracies using lifetime games as the temporal horizon.\relax }{figure.caption.14}{}}
+\newlabel{fig:lifetime--crossentropy}{{11a}{16}{Cross Entropy across lifetime games using no streaks.\relax }{figure.caption.15}{}}
+\newlabel{sub@fig:lifetime--crossentropy}{{a}{16}{Cross Entropy across lifetime games using no streaks.\relax }{figure.caption.15}{}}
+\newlabel{fig:lifetime-h-crossentropy}{{11b}{16}{Cross Entropy across lifetime games using only hot streak.\relax }{figure.caption.15}{}}
+\newlabel{sub@fig:lifetime-h-crossentropy}{{b}{16}{Cross Entropy across lifetime games using only hot streak.\relax }{figure.caption.15}{}}
+\newlabel{fig:lifetime-r-crossentropy}{{11c}{16}{Cross Entropy across lifetime games using only rival streak.\relax }{figure.caption.15}{}}
+\newlabel{sub@fig:lifetime-r-crossentropy}{{c}{16}{Cross Entropy across lifetime games using only rival streak.\relax }{figure.caption.15}{}}
+\newlabel{fig:lifetime-hr-crossentropy}{{11d}{16}{Cross Entropy across lifetime games using both hot and rival streaks.\relax }{figure.caption.15}{}}
+\newlabel{sub@fig:lifetime-hr-crossentropy}{{d}{16}{Cross Entropy across lifetime games using both hot and rival streaks.\relax }{figure.caption.15}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Cross Entropies using lifetime games as the temporal horizon.\relax }}{16}{figure.caption.15}}
+\newlabel{fig:lifetime-crossentropies}{{11}{16}{Cross Entropies using lifetime games as the temporal horizon.\relax }{figure.caption.15}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Impact of the handcrafted streak features using the binary classification model using lifetime statistics for temporal horizon.\relax }}{17}{table.caption.16}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Neural Network with 2 Hidden Layers}{17}{subsection.6.5}}
+\newlabel{fig:model2--accuracy}{{12a}{17}{Accuracy using no streaks.\relax }{figure.caption.17}{}}
+\newlabel{sub@fig:model2--accuracy}{{a}{17}{Accuracy using no streaks.\relax }{figure.caption.17}{}}
+\newlabel{fig:model2-h-accuracy}{{12b}{17}{Accuracy using only hot streak.\relax }{figure.caption.17}{}}
+\newlabel{sub@fig:model2-h-accuracy}{{b}{17}{Accuracy using only hot streak.\relax }{figure.caption.17}{}}
+\newlabel{fig:model2-r-accuracy}{{12c}{17}{Accuracy using only rival streak.\relax }{figure.caption.17}{}}
+\newlabel{sub@fig:model2-r-accuracy}{{c}{17}{Accuracy using only rival streak.\relax }{figure.caption.17}{}}
+\newlabel{fig:model2-hr-accuracy}{{12d}{17}{Accuracy using both hot and rival streaks.\relax }{figure.caption.17}{}}
+\newlabel{sub@fig:model2-hr-accuracy}{{d}{17}{Accuracy using both hot and rival streaks.\relax }{figure.caption.17}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Accuracies using seasonal games with a neural network with two hidden layers.\relax }}{17}{figure.caption.17}}
+\newlabel{fig:model2-accuracies}{{12}{17}{Accuracies using seasonal games with a neural network with two hidden layers.\relax }{figure.caption.17}{}}
+\newlabel{tbl:test-results-symmetrical-2hiddenlayers}{{6.5}{17}{Neural Network with 2 Hidden Layers}{table.caption.19}{}}
+\newlabel{fig:model2--crossentropy}{{13a}{18}{Cross Entropy using no streaks.\relax }{figure.caption.18}{}}
+\newlabel{sub@fig:model2--crossentropy}{{a}{18}{Cross Entropy using no streaks.\relax }{figure.caption.18}{}}
+\newlabel{fig:model2-h-crossentropy}{{13b}{18}{Cross Entropy using only hot streak.\relax }{figure.caption.18}{}}
+\newlabel{sub@fig:model2-h-crossentropy}{{b}{18}{Cross Entropy using only hot streak.\relax }{figure.caption.18}{}}
+\newlabel{fig:model2-r-crossentropy}{{13c}{18}{Cross Entropy using only rival streak.\relax }{figure.caption.18}{}}
+\newlabel{sub@fig:model2-r-crossentropy}{{c}{18}{Cross Entropy using only rival streak.\relax }{figure.caption.18}{}}
+\newlabel{fig:model2-hr-crossentropy}{{13d}{18}{Cross Entropy using both hot and rival streaks.\relax }{figure.caption.18}{}}
+\newlabel{sub@fig:model2-hr-crossentropy}{{d}{18}{Cross Entropy using both hot and rival streaks.\relax }{figure.caption.18}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Cross Entropies using seasonal games with a neural network with two hidden layers.\relax }}{18}{figure.caption.18}}
+\newlabel{fig:model2-crossentropies}{{13}{18}{Cross Entropies using seasonal games with a neural network with two hidden layers.\relax }{figure.caption.18}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Impact of the handcrafted streak features using the binary classification model on a NN with 2 hidden layers.\relax }}{18}{table.caption.19}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Investigating Temporal Correlations for RNNs}{18}{section.7}}
+\citation{bracket-visual}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Data Interpretation}{19}{section.8}}
+\newlabel{sec:data-interpretation}{{8}{19}{Data Interpretation}{section.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Example visualization of a bracket which uses model-generated probabilities to complete the bracket.\relax }}{19}{figure.caption.20}}
+\newlabel{fig:bracket-visual}{{14}{19}{Example visualization of a bracket which uses model-generated probabilities to complete the bracket.\relax }{figure.caption.20}{}}
 \citation{*}
 \bibstyle{plainnat}
 \bibdata{research}
-\bibcite{dtarlow2013winner}{{1}{}{{dta}}{{}}}
-\bibcite{kaggle2014winner}{{2}{}{{kag}}{{}}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Cross Entropy using no streaks.}}{11}{figure.13}}
-\newlabel{fig:symmetrical--crossentropy}{{13}{11}{Cross Entropy using no streaks}{figure.13}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Cross Entropy using only hot streak.}}{11}{figure.14}}
-\newlabel{fig:symmetrical-h-crossentropy}{{14}{11}{Cross Entropy using only hot streak}{figure.14}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Cross Entropy using only rival streak.}}{11}{figure.15}}
-\newlabel{fig:symmetrical-r-crossentropy}{{15}{11}{Cross Entropy using only rival streak}{figure.15}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Cross Entropy using both hot and rival streaks.}}{11}{figure.16}}
-\newlabel{fig:symmetrical-hr-crossentropy}{{16}{11}{Cross Entropy using both hot and rival streaks}{figure.16}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Predicting One-Shot Outcomes}{11}{subsection.6.3}}
-\newlabel{sec:results-oneshot}{{6.3}{11}{Predicting One-Shot Outcomes}{subsection.6.3}{}}
-\newlabel{fig:oneshot-accuracies}{{6.3}{11}{Predicting One-Shot Outcomes}{figure.20}{}}
-\newlabel{fig:oneshot-crossentropies}{{6.3}{11}{Predicting One-Shot Outcomes}{figure.24}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{11}{section.7}}
-\newlabel{sec:conclusion}{{7}{11}{Conclusion}{section.7}{}}
-\bibcite{kaggle2015winner}{{3}{}{{kag}}{{}}}
-\bibcite{kaggle2016winner}{{4}{}{{kag}}{{}}}
-\bibcite{kagglecompetition}{{5}{}{{kag}}{{}}}
-\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces Accuracy using no streaks.}}{12}{figure.17}}
-\newlabel{fig:oneshot--accuracy}{{17}{12}{Accuracy using no streaks}{figure.17}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces Accuracy using only hot streak.}}{12}{figure.18}}
-\newlabel{fig:oneshot-h-accuracy}{{18}{12}{Accuracy using only hot streak}{figure.18}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces Accuracy using only rival streak.}}{12}{figure.19}}
-\newlabel{fig:oneshot-r-accuracy}{{19}{12}{Accuracy using only rival streak}{figure.19}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces Accuracy using both hot and rival streaks.}}{12}{figure.20}}
-\newlabel{fig:oneshot-hr-accuracy}{{20}{12}{Accuracy using both hot and rival streaks}{figure.20}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {21}{\ignorespaces Cross Entropy using no streaks.}}{12}{figure.21}}
-\newlabel{fig:oneshot--crossentropy}{{21}{12}{Cross Entropy using no streaks}{figure.21}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {22}{\ignorespaces Cross Entropy using only hot streak.}}{12}{figure.22}}
-\newlabel{fig:oneshot-h-crossentropy}{{22}{12}{Cross Entropy using only hot streak}{figure.22}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {23}{\ignorespaces Cross Entropy using only rival streak.}}{12}{figure.23}}
-\newlabel{fig:oneshot-r-crossentropy}{{23}{12}{Cross Entropy using only rival streak}{figure.23}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {24}{\ignorespaces Cross Entropy using both hot and rival streaks.}}{12}{figure.24}}
-\newlabel{fig:oneshot-hr-crossentropy}{{24}{12}{Cross Entropy using both hot and rival streaks}{figure.24}{}}
-\bibcite{ncaabracketbeat}{{6}{}{{nca}}{{}}}
-\bibcite{bashuk2012using}{{7}{2012}{{Bashuk and Intelligence}}{{}}}
-\bibcite{cao2012sports}{{8}{2012}{{Cao}}{{}}}
+\bibcite{bracket-visual}{{1}{}{{bra}}{{}}}
+\bibcite{dtarlow2013winner}{{2}{}{{dta}}{{}}}
+\bibcite{kaggle2014winner}{{3}{}{{kag}}{{}}}
+\bibcite{kaggle2015winner}{{4}{}{{kag}}{{}}}
+\bibcite{kaggle2016winner}{{5}{}{{kag}}{{}}}
+\bibcite{kagglecompetition}{{6}{}{{kag}}{{}}}
+\bibcite{ncaabracketbeat}{{7}{}{{nca}}{{}}}
+\bibcite{bashuk2012using}{{8}{2012}{{Bashuk and Intelligence}}{{}}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Conclusion}{20}{section.9}}
+\newlabel{sec:conclusion}{{9}{20}{Conclusion}{section.9}{}}
+\bibcite{cao2012sports}{{9}{2012}{{Cao}}{{}}}
+\bibcite{huang2010neural}{{10}{2010}{{Huang and Chang}}{{}}}
+\bibcite{loeffelholz2009predicting}{{11}{2009}{{Loeffelholz et~al.}}{{Loeffelholz, Bednar, Bauer, et~al.}}}
+\bibcite{mccabe2008artificial}{{12}{2008}{{McCabe and Trevathan}}{{}}}
