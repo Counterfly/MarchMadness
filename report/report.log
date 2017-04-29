@@ -1,14 +1,14 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.4.22)  28 APR 2017 10:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  28 APR 2017 23:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **report.tex
 (./report.tex
-LaTeX2e <2016/02/01>
-Babel <3.9q> and hyphenation patterns for 81 language(s) loaded.
-(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+LaTeX2e <2016/03/31>
+Babel <3.9r> and hyphenation patterns for 83 language(s) loaded.
+(/usr/local/texlive/2016/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
-(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
+(/usr/local/texlive/2016/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
@@ -24,47 +24,46 @@ File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 \bibindent=\dimen102
 )
 (./nips13submit_e.sty
-(/usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+(/usr/local/texlive/2016/texmf-dist/tex/latex/eso-pic/eso-pic.sty
 Package: eso-pic 2015/07/21 v2.0g eso-pic (RN)
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/atbegshi.sty
-Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
+(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/atbegshi.sty
+Package: atbegshi 2016/05/16 v1.17 At begin shipout hook (HO)
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
-Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
 )
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
-Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
 )
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
-Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
-Package ifpdf Info: pdfTeX in PDF mode is detected.
+(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2016/05/14 v3.1 Provides the ifpdf switch
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks14
 )
-(/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
-Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
+(/usr/local/texlive/2016/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
 
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
-File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: pdftex.def on input line 225.
 
-(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/local/texlive/2016/texmf-dist/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 \Gread@gobject=\count87
 )
-Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1337.
-Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1341.
-Package xcolor Info: Model `RGB' extended on input line 1353.
-Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1355.
-Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1356.
-Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1357.
-Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1358.
-Package xcolor Info: Model `Gray' substituted by `gray' on input line 1359.
-Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 ))
 \nipsrulerbox=\box26
 \nipsrulercount=\count88
@@ -77,104 +76,104 @@ Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
 \cv@tmpc@=\count91
 \cv@tmpc=\count92
 )
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/times.sty
+(/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/times.sty
 Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
 )
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2012/11/06 v6.83m Hypertext links for LaTeX
+(/usr/local/texlive/2016/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2016/05/05 v6.83n Hypertext links for LaTeX
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
-Package: hobsub-hyperref 2012/05/28 v1.13 Bundle oberdiek, subset hyperref (HO)
+(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
 
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
-Package: hobsub-generic 2012/05/28 v1.13 Bundle oberdiek, subset generic (HO)
-Package: hobsub 2012/05/28 v1.13 Construct package bundles (HO)
+(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
+Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
 Package hobsub Info: Skipping package `infwarerr' (already loaded).
 Package hobsub Info: Skipping package `ltxcmds' (already loaded).
-Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
-Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
+Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
 Package ifvtex Info: VTeX not detected.
-Package: intcalc 2007/09/27 v1.1 Expandable calculations with integers (HO)
+Package: intcalc 2016/05/16 v1.2 Expandable calculations with integers (HO)
 Package hobsub Info: Skipping package `ifpdf' (already loaded).
-Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
 Package etexcmds Info: Could not find \expanded.
 (etexcmds)             That can mean that you are not using pdfTeX 1.50 or
 (etexcmds)             that some package has redefined \expanded.
 (etexcmds)             In the latter case, load this package earlier.
-Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
-Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
-Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+Package: pdftexcmds 2016/05/10 v0.21 Utility functions of pdfTeX for LuaTeX (HO
 )
 Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
-Package: pdfescape 2011/11/25 v1.13 Implements pdfTeX's escape features (HO)
-Package: bigintcalc 2012/04/08 v1.3 Expandable calculations on big integers (HO
+Package: pdfescape 2016/05/16 v1.14 Implements pdfTeX's escape features (HO)
+Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO
 )
-Package: bitset 2011/01/30 v1.1 Handle bit-vector datatype (HO)
-Package: uniquecounter 2011/01/30 v1.2 Provide unlimited unique counter (HO)
+Package: bitset 2016/05/16 v1.2 Handle bit-vector datatype (HO)
+Package: uniquecounter 2016/05/16 v1.3 Provide unlimited unique counter (HO)
 )
 Package hobsub Info: Skipping package `hobsub' (already loaded).
-Package: letltxmacro 2010/09/02 v1.4 Let assignment for LaTeX macros (HO)
-Package: hopatch 2012/05/28 v1.2 Wrapper for package hooks (HO)
-Package: xcolor-patch 2011/01/30 xcolor patch
-Package: atveryend 2011/06/30 v1.8 Hooks at the very end of document (HO)
+Package: letltxmacro 2016/05/16 v1.5 Let assignment for LaTeX macros (HO)
+Package: hopatch 2016/05/16 v1.3 Wrapper for package hooks (HO)
+Package: xcolor-patch 2016/05/16 xcolor patch
+Package: atveryend 2016/05/16 v1.9 Hooks at the very end of document (HO)
 Package atveryend Info: \enddocument detected (standard20110627).
 Package hobsub Info: Skipping package `atbegshi' (already loaded).
-Package: refcount 2011/10/16 v3.4 Data extraction from label references (HO)
-Package: hycolor 2011/01/30 v1.7 Color options for hyperref/bookmark (HO)
+Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
+Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
 )
-(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+(/usr/local/texlive/2016/texmf-dist/tex/generic/ifxetex/ifxetex.sty
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty
-Package: auxhook 2011/03/04 v1.3 Hooks for auxiliary files (HO)
+(/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/auxhook.sty
+Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
-Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+(/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
 )
 \@linkdim=\dimen106
 \Hy@linkcounter=\count93
 \Hy@pagecounter=\count94
 
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2012/11/06 v6.83m Hyperref: PDFDocEncoding definition (HO)
+(/usr/local/texlive/2016/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2016/05/05 v6.83n Hyperref: PDFDocEncoding definition (HO)
 )
 \Hy@SavedSpaceFactor=\count95
 
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+(/usr/local/texlive/2016/texmf-dist/tex/latex/latexconfig/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
-Package hyperref Info: Hyper figures OFF on input line 4443.
-Package hyperref Info: Link nesting OFF on input line 4448.
-Package hyperref Info: Hyper index ON on input line 4451.
-Package hyperref Info: Plain pages OFF on input line 4458.
-Package hyperref Info: Backreferencing OFF on input line 4463.
+Package hyperref Info: Hyper figures OFF on input line 4446.
+Package hyperref Info: Link nesting OFF on input line 4451.
+Package hyperref Info: Hyper index ON on input line 4454.
+Package hyperref Info: Plain pages OFF on input line 4461.
+Package hyperref Info: Backreferencing OFF on input line 4466.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks ON on input line 4688.
+Package hyperref Info: Bookmarks ON on input line 4691.
 \c@Hy@tempcnt=\count96
 
-(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+(/usr/local/texlive/2016/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip10
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
-LaTeX Info: Redefining \url on input line 5041.
+LaTeX Info: Redefining \url on input line 5044.
 \XeTeXLinkMargin=\dimen107
 \Fld@menulength=\count97
 \Field@Width=\dimen108
 \Fld@charsize=\dimen109
-Package hyperref Info: Hyper figures OFF on input line 6295.
-Package hyperref Info: Link nesting OFF on input line 6300.
-Package hyperref Info: Hyper index ON on input line 6303.
-Package hyperref Info: backreferencing OFF on input line 6310.
-Package hyperref Info: Link coloring OFF on input line 6315.
-Package hyperref Info: Link coloring with OCG OFF on input line 6320.
-Package hyperref Info: PDF/A mode OFF on input line 6325.
-LaTeX Info: Redefining \ref on input line 6365.
-LaTeX Info: Redefining \pageref on input line 6369.
+Package hyperref Info: Hyper figures OFF on input line 6298.
+Package hyperref Info: Link nesting OFF on input line 6303.
+Package hyperref Info: Hyper index ON on input line 6306.
+Package hyperref Info: backreferencing OFF on input line 6313.
+Package hyperref Info: Link coloring OFF on input line 6318.
+Package hyperref Info: Link coloring with OCG OFF on input line 6323.
+Package hyperref Info: PDF/A mode OFF on input line 6328.
+LaTeX Info: Redefining \ref on input line 6368.
+LaTeX Info: Redefining \pageref on input line 6372.
 \Hy@abspage=\count98
 \c@Item=\count99
 \c@Hfootnote=\count100
@@ -182,19 +181,19 @@ LaTeX Info: Redefining \pageref on input line 6369.
 
 Package hyperref Message: Driver (autodetected): hpdftex.
 
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
-File: hpdftex.def 2012/11/06 v6.83m Hyperref driver for pdfTeX
+(/usr/local/texlive/2016/texmf-dist/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2016/05/05 v6.83n Hyperref driver for pdfTeX
 \Fld@listcount=\count101
 \c@bookmark@seq@number=\count102
 
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
-Package: rerunfilecheck 2011/04/15 v1.7 Rerun checks for auxiliary files (HO)
+(/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
 )
 \Hy@SectionHShift=\skip43
 )
-(/usr/share/texlive/texmf-dist/tex/latex/preprint/authblk.sty
+(/usr/local/texlive/2016/texmf-dist/tex/latex/preprint/authblk.sty
 Package: authblk 2001/02/27 1.3 (PWD)
 \affilsep=\skip44
 \@affilsep=\skip45
@@ -202,49 +201,49 @@ Package: authblk 2001/02/27 1.3 (PWD)
 \c@authors=\count104
 \c@affil=\count105
 )
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2016/01/03 v1.0q Standard LaTeX Graphics (DPC,SPQR)
+(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2016/05/09 v1.0r Standard LaTeX Graphics (DPC,SPQR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
-File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/01/02 v1.10 sample graphics configuration
 )
-Package graphics Info: Driver file: pdftex.def on input line 95.
+Package graphics Info: Driver file: pdftex.def on input line 96.
 )
 \Gin@req@height=\dimen110
 \Gin@req@width=\dimen111
 )
-(/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty
+(/usr/local/texlive/2016/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip46
 \bibsep=\skip47
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count106
 )
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2016/03/03 v2.15a AMS math features
+(/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2016/03/10 v2.15b AMS math features
 \@mathmargin=\skip48
 
 For additional information on amsmath, use the `?' option.
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01 AMS text
 
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+(/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks15
 \ex@=\dimen112
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+(/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen113
 )
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
-Package: amsopn 1999/12/14 v2.01 operator names
+(/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2016/03/08 v2.02 operator names
 )
 \inf@bad=\count107
 LaTeX Info: Redefining \frac on input line 199.
@@ -259,8 +258,8 @@ LaTeX Info: Redefining \cdots on input line 518.
 \Mathstrutbox@=\box28
 \strutbox@=\box29
 \big@size=\dimen114
-LaTeX Font Info:    Redeclaring font encoding OML on input line 630.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 631.
+LaTeX Font Info:    Redeclaring font encoding OML on input line 634.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 635.
 \macc@depth=\count112
 \c@MaxMatrixCols=\count113
 \dotsspace@=\muskip11
@@ -281,10 +280,10 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 631.
 \multlinegap=\skip49
 \multlinetaggap=\skip50
 \mathdisplay@stack=\toks19
-LaTeX Info: Redefining \[ on input line 2735.
-LaTeX Info: Redefining \] on input line 2736.
+LaTeX Info: Redefining \[ on input line 2739.
+LaTeX Info: Redefining \] on input line 2740.
 )
-(/usr/share/texlive/texmf-dist/tex/generic/ulem/ulem.sty
+(/usr/local/texlive/2016/texmf-dist/tex/generic/ulem/ulem.sty
 \UL@box=\box30
 \UL@hyphenbox=\box31
 \UL@skip=\skip51
@@ -296,13 +295,13 @@ LaTeX Info: Redefining \] on input line 2736.
 Package: ulem 2012/05/18
 \ULdepth=\dimen123
 )
-(/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
+(/usr/local/texlive/2016/texmf-dist/tex/latex/caption/subcaption.sty
 Package: subcaption 2016/02/20 v1.1-142 Sub-captions (AR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+(/usr/local/texlive/2016/texmf-dist/tex/latex/caption/caption.sty
 Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+(/usr/local/texlive/2016/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2016/02/04 v1.7-139 caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 67.
 \captionmargin=\dimen124
@@ -318,7 +317,8 @@ Package caption Info: hyperref package is loaded.
 )
 \c@subfigure=\count121
 \c@subtable=\count122
-) (./report.aux
+)
+(./report.aux
 
 LaTeX Warning: Label `itm:features-pertinent' multiply defined.
 
@@ -340,12 +340,12 @@ LaTeX Font Info:    ... okay on input line 14.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 14.
 LaTeX Font Info:    ... okay on input line 14.
 LaTeX Font Info:    Try loading font information for OT1+ptm on input line 14.
- (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 \AtBeginShipoutBox=\box33
 
-(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+(/usr/local/texlive/2016/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count123
 \scratchdimen=\dimen131
@@ -360,11 +360,11 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 \everyMPtoPDFconversion=\toks22
 )
 Package hyperref Info: Link coloring OFF on input line 14.
- (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
+(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count129
 )
@@ -377,18 +377,18 @@ LaTeX Info: Redefining \nameref on input line 14.
 \openout3 = `report.out'.
 
 
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
-Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+(/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
-Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
+(/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
 )
 Package grfext Info: Graphics extension search list:
 (grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
 G,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 452.
+(grfext)             \AppendGraphicsExtensions on input line 456.
 
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+(/usr/local/texlive/2016/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
@@ -400,20 +400,19 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 32.
 LaTeX Font Info:    Try loading font information for OT1+pcr on input line 32.
 
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+(/usr/local/texlive/2016/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-LaTeX Font Info:    Font shape `OT1/pcr/bx/n' in size <10> not available
-(Font)              Font shape `OT1/pcr/b/n' tried instead on input line 32.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 34.
 
 
 Package natbib Warning: Citation `elo' on page 1 undefined on input line 64.
 
-[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
+[1
 
-] [2]
+{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+[2]
 Underfull \hbox (badness 1127) in paragraph at lines 134--138
 []\OT1/ptm/m/n/10 The re-sults datasets (Reg-u-larSea-son-Com-pactRe-sults, Reg
 -u-larSea-son-De-taile-dResults, Tour-n-ey-
@@ -437,14 +436,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 452--456
 
  []
 
-<figures/legend.png, id=197, 290.08376pt x 107.40125pt>
+<figures/legend.png, id=196, 290.08376pt x 107.40125pt>
 File: figures/legend.png Graphic file (type png)
 
 <use figures/legend.png>
 Package pdftex.def Info: figures/legend.png used on input line 464.
 (pdftex.def)             Requested size: 198.7425pt x 73.5825pt.
  [8]
-<plots/linear-model/streak-/accuracy.png, id=206, 726.715pt x 399.4925pt>
+<plots/linear-model/streak-/accuracy.png, id=205, 726.715pt x 399.4925pt>
 File: plots/linear-model/streak-/accuracy.png Graphic file (type png)
 
 <use plots/linear-model/streak-/accuracy.png>
@@ -452,7 +451,7 @@ Package pdftex.def Info: plots/linear-model/streak-/accuracy.png used on input
 line 474.
 (pdftex.def)             Requested size: 198.7425pt x 109.25424pt.
 
-<plots/linear-model/streak-h/accuracy.png, id=207, 731.73375pt x 400.49625pt>
+<plots/linear-model/streak-h/accuracy.png, id=206, 731.73375pt x 400.49625pt>
 File: plots/linear-model/streak-h/accuracy.png Graphic file (type png)
 
 <use plots/linear-model/streak-h/accuracy.png>
@@ -464,7 +463,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 473--481
 []$[]$ $[]$ 
  []
 
-<plots/linear-model/streak-r/accuracy.png, id=208, 753.81625pt x 400.49625pt>
+<plots/linear-model/streak-r/accuracy.png, id=207, 753.81625pt x 400.49625pt>
 File: plots/linear-model/streak-r/accuracy.png Graphic file (type png)
 
 <use plots/linear-model/streak-r/accuracy.png>
@@ -472,7 +471,7 @@ Package pdftex.def Info: plots/linear-model/streak-r/accuracy.png used on input
  line 484.
 (pdftex.def)             Requested size: 198.7425pt x 105.58711pt.
 
-<plots/linear-model/streak-hr/accuracy.png, id=209, 729.72626pt x 399.4925pt>
+<plots/linear-model/streak-hr/accuracy.png, id=208, 729.72626pt x 399.4925pt>
 File: plots/linear-model/streak-hr/accuracy.png Graphic file (type png)
 
 <use plots/linear-model/streak-hr/accuracy.png>
@@ -484,7 +483,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 483--491
 []$[]$ $[]$ 
  []
 
-<plots/linear-model/streak-/crossentropy.png, id=210, 735.74875pt x 401.5pt>
+<plots/linear-model/streak-/crossentropy.png, id=209, 735.74875pt x 401.5pt>
 File: plots/linear-model/streak-/crossentropy.png Graphic file (type png)
 
 <use plots/linear-model/streak-/crossentropy.png>
@@ -492,7 +491,7 @@ Package pdftex.def Info: plots/linear-model/streak-/crossentropy.png used on in
 put line 496.
 (pdftex.def)             Requested size: 198.7425pt x 108.45544pt.
 
-<plots/linear-model/streak-h/crossentropy.png, id=211, 733.74126pt x 398.48875p
+<plots/linear-model/streak-h/crossentropy.png, id=210, 733.74126pt x 398.48875p
 t>
 File: plots/linear-model/streak-h/crossentropy.png Graphic file (type png)
  <use plots/linear-model/streak-h/crossentropy.png>
@@ -505,7 +504,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 495--503
  []
 
 
-<plots/linear-model/streak-r/crossentropy.png, id=212, 755.82375pt x 398.48875p
+<plots/linear-model/streak-r/crossentropy.png, id=211, 755.82375pt x 398.48875p
 t>
 File: plots/linear-model/streak-r/crossentropy.png Graphic file (type png)
  <use plots/linear-model/streak-r/crossentropy.png>
@@ -513,7 +512,7 @@ Package pdftex.def Info: plots/linear-model/streak-r/crossentropy.png used on i
 nput line 506.
 (pdftex.def)             Requested size: 198.7425pt x 104.77815pt.
 
-<plots/linear-model/streak-hr/crossentropy.png, id=213, 736.7525pt x 400.49625p
+<plots/linear-model/streak-hr/crossentropy.png, id=212, 736.7525pt x 400.49625p
 t>
 File: plots/linear-model/streak-hr/crossentropy.png Graphic file (type png)
  <use plots/linear-model/streak-hr/crossentropy.png>
@@ -526,7 +525,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 505--513
  []
 
 
-<plots/model1/wteam_onehot/streak-/accuracy.png, id=215, 716.6775pt x 399.4925p
+<plots/model1/wteam_onehot/streak-/accuracy.png, id=214, 716.6775pt x 399.4925p
 t>
 File: plots/model1/wteam_onehot/streak-/accuracy.png Graphic file (type png)
  <use plots/model1/wteam_onehot/streak-/accuracy.png>
@@ -534,7 +533,7 @@ Package pdftex.def Info: plots/model1/wteam_onehot/streak-/accuracy.png used on
  input line 548.
 (pdftex.def)             Requested size: 198.7425pt x 110.77818pt.
 
-<plots/model1/wteam_onehot/streak-h/accuracy.png, id=216, 727.71875pt x 398.488
+<plots/model1/wteam_onehot/streak-h/accuracy.png, id=215, 727.71875pt x 398.488
 75pt>
 File: plots/model1/wteam_onehot/streak-h/accuracy.png Graphic file (type png)
  <use plots/model1/wteam_onehot/streak-h/accuracy.png>
@@ -547,14 +546,14 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 547--555
  []
 
 
-<plots/model1/wteam_onehot/streak-r/accuracy.png, id=217, 732.7375pt x 401.5pt>
+<plots/model1/wteam_onehot/streak-r/accuracy.png, id=216, 732.7375pt x 401.5pt>
 File: plots/model1/wteam_onehot/streak-r/accuracy.png Graphic file (type png)
 <use plots/model1/wteam_onehot/streak-r/accuracy.png>
 Package pdftex.def Info: plots/model1/wteam_onehot/streak-r/accuracy.png used o
 n input line 558.
 (pdftex.def)             Requested size: 198.7425pt x 108.89655pt.
 
-<plots/model1/wteam_onehot/streak-hr/accuracy.png, id=218, 735.74875pt x 401.5p
+<plots/model1/wteam_onehot/streak-hr/accuracy.png, id=217, 735.74875pt x 401.5p
 t>
 File: plots/model1/wteam_onehot/streak-hr/accuracy.png Graphic file (type png)
  <use plots/model1/wteam_onehot/streak-hr/accuracy.png>
@@ -574,7 +573,7 @@ LaTeX Warning: Reference `tbl:test-results-teamid' on page 10 undefined on inpu
 t line 571.
 
 
-<plots/model1/wteam_onehot/streak-/crossentropy.png, id=228, 723.70375pt x 403.
+<plots/model1/wteam_onehot/streak-/crossentropy.png, id=227, 723.70375pt x 403.
 5075pt>
 File: plots/model1/wteam_onehot/streak-/crossentropy.png Graphic file (type png
 )
@@ -583,7 +582,7 @@ Package pdftex.def Info: plots/model1/wteam_onehot/streak-/crossentropy.png use
 d on input line 575.
 (pdftex.def)             Requested size: 198.7425pt x 110.80789pt.
 
-<plots/model1/wteam_onehot/streak-h/crossentropy.png, id=229, 722.7pt x 400.496
+<plots/model1/wteam_onehot/streak-h/crossentropy.png, id=228, 722.7pt x 400.496
 25pt>
 File: plots/model1/wteam_onehot/streak-h/crossentropy.png Graphic file (type pn
 g)
@@ -597,7 +596,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 574--582
  []
 
 
-<plots/model1/wteam_onehot/streak-r/crossentropy.png, id=230, 724.7075pt x 398.
+<plots/model1/wteam_onehot/streak-r/crossentropy.png, id=229, 724.7075pt x 398.
 48875pt>
 File: plots/model1/wteam_onehot/streak-r/crossentropy.png Graphic file (type pn
 g)
@@ -606,7 +605,7 @@ Package pdftex.def Info: plots/model1/wteam_onehot/streak-r/crossentropy.png us
 ed on input line 585.
 (pdftex.def)             Requested size: 198.7425pt x 109.27768pt.
 
-<plots/model1/wteam_onehot/streak-hr/crossentropy.png, id=231, 723.70375pt x 39
+<plots/model1/wteam_onehot/streak-hr/crossentropy.png, id=230, 723.70375pt x 39
 8.48875pt>
 File: plots/model1/wteam_onehot/streak-hr/crossentropy.png Graphic file (type p
 ng)
@@ -625,7 +624,7 @@ k-h/crossentropy.png> <./plots/linear-model/streak-r/crossentropy.png> <./plots
 accuracy.png> <./plots/model1/wteam_onehot/streak-h/accuracy.png> <./plots/mode
 l1/wteam_onehot/streak-r/accuracy.png> <./plots/model1/wteam_onehot/streak-hr/a
 ccuracy.png>]
-<plots/model1/symmetrical/streak-/accuracy.png, id=239, 756.8275pt x 401.5pt>
+<plots/model1/symmetrical/streak-/accuracy.png, id=238, 756.8275pt x 401.5pt>
 File: plots/model1/symmetrical/streak-/accuracy.png Graphic file (type png)
 
 <use plots/model1/symmetrical/streak-/accuracy.png>
@@ -633,7 +632,7 @@ Package pdftex.def Info: plots/model1/symmetrical/streak-/accuracy.png used on
 input line 635.
 (pdftex.def)             Requested size: 198.7425pt x 105.43513pt.
 
-<plots/model1/symmetrical/streak-h/accuracy.png, id=240, 721.69624pt x 397.485p
+<plots/model1/symmetrical/streak-h/accuracy.png, id=239, 721.69624pt x 397.485p
 t>
 File: plots/model1/symmetrical/streak-h/accuracy.png Graphic file (type png)
  <use plots/model1/symmetrical/streak-h/accuracy.png>
@@ -646,7 +645,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 634--642
  []
 
 
-<plots/model1/symmetrical/streak-r/accuracy.png, id=241, 726.715pt x 402.50375p
+<plots/model1/symmetrical/streak-r/accuracy.png, id=240, 726.715pt x 402.50375p
 t>
 File: plots/model1/symmetrical/streak-r/accuracy.png Graphic file (type png)
  <use plots/model1/symmetrical/streak-r/accuracy.png>
@@ -654,7 +653,7 @@ Package pdftex.def Info: plots/model1/symmetrical/streak-r/accuracy.png used on
  input line 645.
 (pdftex.def)             Requested size: 198.7425pt x 110.07777pt.
 
-<plots/model1/symmetrical/streak-hr/accuracy.png, id=242, 731.73375pt x 399.492
+<plots/model1/symmetrical/streak-hr/accuracy.png, id=241, 731.73375pt x 399.492
 5pt>
 File: plots/model1/symmetrical/streak-hr/accuracy.png Graphic file (type png)
  <use plots/model1/symmetrical/streak-hr/accuracy.png>
@@ -672,7 +671,7 @@ Underfull \vbox (badness 1412) has occurred while \output is active []
  [11 <./plots/model1/wteam_onehot/streak-/crossentropy.png> <./plots/model1/wte
 am_onehot/streak-h/crossentropy.png> <./plots/model1/wteam_onehot/streak-r/cros
 sentropy.png> <./plots/model1/wteam_onehot/streak-hr/crossentropy.png>]
-<plots/model1/symmetrical/streak-/crossentropy.png, id=251, 760.8425pt x 400.49
+<plots/model1/symmetrical/streak-/crossentropy.png, id=250, 760.8425pt x 400.49
 625pt>
 File: plots/model1/symmetrical/streak-/crossentropy.png Graphic file (type png)
 
@@ -681,7 +680,7 @@ Package pdftex.def Info: plots/model1/symmetrical/streak-/crossentropy.png used
  on input line 669.
 (pdftex.def)             Requested size: 198.7425pt x 104.61545pt.
 
-<plots/model1/symmetrical/streak-h/crossentropy.png, id=252, 723.70375pt x 398.
+<plots/model1/symmetrical/streak-h/crossentropy.png, id=251, 723.70375pt x 398.
 48875pt>
 File: plots/model1/symmetrical/streak-h/crossentropy.png Graphic file (type png
 )
@@ -695,7 +694,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 668--676
  []
 
 
-<plots/model1/symmetrical/streak-r/crossentropy.png, id=253, 723.70375pt x 400.
+<plots/model1/symmetrical/streak-r/crossentropy.png, id=252, 723.70375pt x 400.
 49625pt>
 File: plots/model1/symmetrical/streak-r/crossentropy.png Graphic file (type png
 )
@@ -704,7 +703,7 @@ Package pdftex.def Info: plots/model1/symmetrical/streak-r/crossentropy.png use
 d on input line 679.
 (pdftex.def)             Requested size: 198.7425pt x 109.98097pt.
 
-<plots/model1/symmetrical/streak-hr/crossentropy.png, id=254, 720.6925pt x 400.
+<plots/model1/symmetrical/streak-hr/crossentropy.png, id=253, 720.6925pt x 400.
 49625pt>
 File: plots/model1/symmetrical/streak-hr/crossentropy.png Graphic file (type pn
 g)
@@ -720,7 +719,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 678--686
 [12 <./plots/model1/symmetrical/streak-/accuracy.png> <./plots/model1/symmetric
 al/streak-h/accuracy.png> <./plots/model1/symmetrical/streak-r/accuracy.png> <.
 /plots/model1/symmetrical/streak-hr/accuracy.png>]
-<plots/model1/pairwise-matchups/streak-/accuracy.png, id=267, 723.70375pt x 403
+<plots/model1/pairwise-matchups/streak-/accuracy.png, id=266, 723.70375pt x 403
 .5075pt>
 File: plots/model1/pairwise-matchups/streak-/accuracy.png Graphic file (type pn
 g)
@@ -729,7 +728,7 @@ Package pdftex.def Info: plots/model1/pairwise-matchups/streak-/accuracy.png us
 ed on input line 743.
 (pdftex.def)             Requested size: 198.7425pt x 110.80789pt.
 
-<plots/model1/pairwise-matchups/streak-h/accuracy.png, id=268, 734.745pt x 401.
+<plots/model1/pairwise-matchups/streak-h/accuracy.png, id=267, 734.745pt x 401.
 5pt>
 File: plots/model1/pairwise-matchups/streak-h/accuracy.png Graphic file (type p
 ng)
@@ -743,7 +742,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 742--750
  []
 
 
-<plots/model1/pairwise-matchups/streak-r/accuracy.png, id=269, 722.7pt x 397.48
+<plots/model1/pairwise-matchups/streak-r/accuracy.png, id=268, 722.7pt x 397.48
 5pt>
 File: plots/model1/pairwise-matchups/streak-r/accuracy.png Graphic file (type p
 ng)
@@ -752,7 +751,7 @@ Package pdftex.def Info: plots/model1/pairwise-matchups/streak-r/accuracy.png u
 sed on input line 753.
 (pdftex.def)             Requested size: 198.7425pt x 109.30568pt.
 
-<plots/model1/pairwise-matchups/streak-hr/accuracy.png, id=270, 729.72626pt x 3
+<plots/model1/pairwise-matchups/streak-hr/accuracy.png, id=269, 729.72626pt x 3
 99.4925pt>
 File: plots/model1/pairwise-matchups/streak-hr/accuracy.png Graphic file (type 
 png)
@@ -768,7 +767,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 752--760
 [13 <./plots/model1/symmetrical/streak-/crossentropy.png> <./plots/model1/symme
 trical/streak-h/crossentropy.png> <./plots/model1/symmetrical/streak-r/crossent
 ropy.png> <./plots/model1/symmetrical/streak-hr/crossentropy.png>]
-<plots/model1/pairwise-matchups/streak-/crossentropy.png, id=281, 731.73375pt x
+<plots/model1/pairwise-matchups/streak-/crossentropy.png, id=280, 731.73375pt x
  399.4925pt>
 File: plots/model1/pairwise-matchups/streak-/crossentropy.png Graphic file (typ
 e png)
@@ -777,7 +776,7 @@ Package pdftex.def Info: plots/model1/pairwise-matchups/streak-/crossentropy.pn
 g used on input line 782.
 (pdftex.def)             Requested size: 198.7425pt x 108.50446pt.
 
-<plots/model1/pairwise-matchups/streak-h/crossentropy.png, id=282, 720.6925pt x
+<plots/model1/pairwise-matchups/streak-h/crossentropy.png, id=281, 720.6925pt x
  403.5075pt>
 File: plots/model1/pairwise-matchups/streak-h/crossentropy.png Graphic file (ty
 pe png)
@@ -791,7 +790,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 781--789
  []
 
 
-<plots/model1/pairwise-matchups/streak-r/crossentropy.png, id=283, 722.7pt x 40
+<plots/model1/pairwise-matchups/streak-r/crossentropy.png, id=282, 722.7pt x 40
 3.5075pt>
 File: plots/model1/pairwise-matchups/streak-r/crossentropy.png Graphic file (ty
 pe png)
@@ -800,7 +799,7 @@ Package pdftex.def Info: plots/model1/pairwise-matchups/streak-r/crossentropy.p
 ng used on input line 792.
 (pdftex.def)             Requested size: 198.7425pt x 110.96182pt.
 
-<plots/model1/pairwise-matchups/streak-hr/crossentropy.png, id=284, 722.7pt x 4
+<plots/model1/pairwise-matchups/streak-hr/crossentropy.png, id=283, 722.7pt x 4
 01.5pt>
 File: plots/model1/pairwise-matchups/streak-hr/crossentropy.png Graphic file (t
 ype png)
@@ -813,7 +812,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 791--799
 []$[]$ $[]$ 
  []
 
-<plots/model1/lifetime/streak-/accuracy.png, id=288, 731.73375pt x 401.5pt>
+<plots/model1/lifetime/streak-/accuracy.png, id=287, 731.73375pt x 401.5pt>
 File: plots/model1/lifetime/streak-/accuracy.png Graphic file (type png)
 
 <use plots/model1/lifetime/streak-/accuracy.png>
@@ -821,7 +820,7 @@ Package pdftex.def Info: plots/model1/lifetime/streak-/accuracy.png used on inp
 ut line 839.
 (pdftex.def)             Requested size: 198.7425pt x 109.04971pt.
 
-<plots/model1/lifetime/streak-h/accuracy.png, id=289, 721.69624pt x 400.49625pt
+<plots/model1/lifetime/streak-h/accuracy.png, id=288, 721.69624pt x 400.49625pt
 >
 File: plots/model1/lifetime/streak-h/accuracy.png Graphic file (type png)
  <use plots/model1/lifetime/streak-h/accuracy.png>
@@ -834,7 +833,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 838--846
  []
 
 
-<plots/model1/lifetime/streak-r/accuracy.png, id=290, 731.73375pt x 397.485pt>
+<plots/model1/lifetime/streak-r/accuracy.png, id=289, 731.73375pt x 397.485pt>
 File: plots/model1/lifetime/streak-r/accuracy.png Graphic file (type png)
 
 <use plots/model1/lifetime/streak-r/accuracy.png>
@@ -842,7 +841,7 @@ Package pdftex.def Info: plots/model1/lifetime/streak-r/accuracy.png used on in
 put line 849.
 (pdftex.def)             Requested size: 198.7425pt x 107.95921pt.
 
-<plots/model1/lifetime/streak-hr/accuracy.png, id=291, 722.7pt x 399.4925pt>
+<plots/model1/lifetime/streak-hr/accuracy.png, id=290, 722.7pt x 399.4925pt>
 File: plots/model1/lifetime/streak-hr/accuracy.png Graphic file (type png)
 
 <use plots/model1/lifetime/streak-hr/accuracy.png>
@@ -860,7 +859,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
  [14 <./plots/model1/pairwise-matchups/streak-/accuracy.png> <./plots/model1/pa
 irwise-matchups/streak-h/accuracy.png> <./plots/model1/pairwise-matchups/streak
 -r/accuracy.png> <./plots/model1/pairwise-matchups/streak-hr/accuracy.png>]
-<plots/model1/lifetime/streak-/crossentropy.png, id=301, 721.69624pt x 399.4925
+<plots/model1/lifetime/streak-/crossentropy.png, id=300, 721.69624pt x 399.4925
 pt>
 File: plots/model1/lifetime/streak-/crossentropy.png Graphic file (type png)
  <use plots/model1/lifetime/streak-/crossentropy.png>
@@ -873,7 +872,7 @@ Underfull \hbox (badness 1199) in paragraph at lines 878--878
  []
 
 
-<plots/model1/lifetime/streak-h/crossentropy.png, id=302, 722.7pt x 400.49625pt
+<plots/model1/lifetime/streak-h/crossentropy.png, id=301, 722.7pt x 400.49625pt
 >
 File: plots/model1/lifetime/streak-h/crossentropy.png Graphic file (type png)
  <use plots/model1/lifetime/streak-h/crossentropy.png>
@@ -886,7 +885,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 876--884
  []
 
 
-<plots/model1/lifetime/streak-r/crossentropy.png, id=303, 719.68875pt x 401.5pt
+<plots/model1/lifetime/streak-r/crossentropy.png, id=302, 719.68875pt x 401.5pt
 >
 File: plots/model1/lifetime/streak-r/crossentropy.png Graphic file (type png)
  <use plots/model1/lifetime/streak-r/crossentropy.png>
@@ -894,7 +893,7 @@ Package pdftex.def Info: plots/model1/lifetime/streak-r/crossentropy.png used o
 n input line 887.
 (pdftex.def)             Requested size: 198.7425pt x 110.87538pt.
 
-<plots/model1/lifetime/streak-hr/crossentropy.png, id=304, 721.69624pt x 399.49
+<plots/model1/lifetime/streak-hr/crossentropy.png, id=303, 721.69624pt x 399.49
 25pt>
 File: plots/model1/lifetime/streak-hr/crossentropy.png Graphic file (type png)
  <use plots/model1/lifetime/streak-hr/crossentropy.png>
@@ -906,7 +905,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 886--894
 []$[]$ $[]$ 
  []
 
-<plots/model2/streak-/accuracy.png, id=309, 730.73pt x 399.4925pt>
+<plots/model2/streak-/accuracy.png, id=308, 730.73pt x 399.4925pt>
 File: plots/model2/streak-/accuracy.png Graphic file (type png)
 
 <use plots/model2/streak-/accuracy.png>
@@ -914,7 +913,7 @@ Package pdftex.def Info: plots/model2/streak-/accuracy.png used on input line 9
 33.
 (pdftex.def)             Requested size: 198.7425pt x 108.65076pt.
 
-<plots/model2/streak-h/accuracy.png, id=310, 722.7pt x 397.485pt>
+<plots/model2/streak-h/accuracy.png, id=309, 722.7pt x 397.485pt>
 File: plots/model2/streak-h/accuracy.png Graphic file (type png)
 
 <use plots/model2/streak-h/accuracy.png>
@@ -926,7 +925,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 932--940
 []$[]$ $[]$ 
  []
 
-<plots/model2/streak-r/accuracy.png, id=311, 720.6925pt x 398.48875pt>
+<plots/model2/streak-r/accuracy.png, id=310, 720.6925pt x 398.48875pt>
 File: plots/model2/streak-r/accuracy.png Graphic file (type png)
 
 <use plots/model2/streak-r/accuracy.png>
@@ -934,7 +933,7 @@ Package pdftex.def Info: plots/model2/streak-r/accuracy.png used on input line
 943.
 (pdftex.def)             Requested size: 198.7425pt x 109.88573pt.
 
-<plots/model2/streak-hr/accuracy.png, id=312, 732.7375pt x 397.485pt>
+<plots/model2/streak-hr/accuracy.png, id=311, 732.7375pt x 397.485pt>
 File: plots/model2/streak-hr/accuracy.png Graphic file (type png)
 
 <use plots/model2/streak-hr/accuracy.png>
@@ -961,7 +960,7 @@ odel1/lifetime/streak-hr/accuracy.png> <./plots/model1/lifetime/streak-/crossen
 tropy.png> <./plots/model1/lifetime/streak-h/crossentropy.png> <./plots/model1/
 lifetime/streak-r/crossentropy.png> <./plots/model1/lifetime/streak-hr/crossent
 ropy.png>]
-<plots/model2/streak-/crossentropy.png, id=327, 719.68875pt x 397.485pt>
+<plots/model2/streak-/crossentropy.png, id=326, 719.68875pt x 397.485pt>
 File: plots/model2/streak-/crossentropy.png Graphic file (type png)
 
 <use plots/model2/streak-/crossentropy.png>
@@ -969,7 +968,7 @@ Package pdftex.def Info: plots/model2/streak-/crossentropy.png used on input li
 ne 966.
 (pdftex.def)             Requested size: 198.7425pt x 109.76662pt.
 
-<plots/model2/streak-h/crossentropy.png, id=328, 722.7pt x 397.485pt>
+<plots/model2/streak-h/crossentropy.png, id=327, 722.7pt x 397.485pt>
 File: plots/model2/streak-h/crossentropy.png Graphic file (type png)
 
 <use plots/model2/streak-h/crossentropy.png>
@@ -981,7 +980,7 @@ Overfull \hbox (1.90002pt too wide) in paragraph at lines 965--973
 []$[]$ $[]$ 
  []
 
-<plots/model2/streak-r/crossentropy.png, id=329, 717.68124pt x 398.48875pt>
+<plots/model2/streak-r/crossentropy.png, id=328, 717.68124pt x 398.48875pt>
 File: plots/model2/streak-r/crossentropy.png Graphic file (type png)
 
 <use plots/model2/streak-r/crossentropy.png>
@@ -989,7 +988,7 @@ Package pdftex.def Info: plots/model2/streak-r/crossentropy.png used on input l
 ine 976.
 (pdftex.def)             Requested size: 198.7425pt x 110.34784pt.
 
-<plots/model2/streak-hr/crossentropy.png, id=330, 723.70375pt x 397.485pt>
+<plots/model2/streak-hr/crossentropy.png, id=329, 723.70375pt x 397.485pt>
 File: plots/model2/streak-hr/crossentropy.png Graphic file (type png)
 
 <use plots/model2/streak-hr/crossentropy.png>
@@ -1013,7 +1012,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [18 <./plots/model2/streak-/crossentropy.png> <./plots/model2/streak-h/crossen
 tropy.png> <./plots/model2/streak-r/crossentropy.png> <./plots/model2/streak-hr
-/crossentropy.png>] <figures/predicted-bracket.jpg, id=348, 943.525pt x 702.625
+/crossentropy.png>] <figures/predicted-bracket.jpg, id=347, 943.525pt x 702.625
 pt>
 File: figures/predicted-bracket.jpg Graphic file (type jpg)
 
@@ -1075,31 +1074,31 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1124.
  ) 
 Here is how much of TeX's memory you used:
- 8389 strings out of 493029
- 132682 string characters out of 6136234
- 230674 words of memory out of 5000000
- 11709 multiletter control sequences out of 15000+600000
- 22597 words of font info for 49 fonts, out of 8000000 for 9000
+ 8386 strings out of 493014
+ 133238 string characters out of 6133351
+ 227687 words of memory out of 5000000
+ 11713 multiletter control sequences out of 15000+600000
+ 22578 words of font info for 49 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  42i,15n,40p,1012b,446s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy1
-0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/u
-tmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on report.pdf (21 pages, 2233101 bytes).
+{/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
+exlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
+xlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
+live/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texli
+ve/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive
+/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2
+016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2016
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2016/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2016/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2016/texmf
+-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2016/texmf-dist/fo
+nts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/
+urw/times/utmr8a.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/urw/times/
+utmri8a.pfb>
+Output written on report.pdf (21 pages, 2215862 bytes).
 PDF statistics:
- 452 PDF objects out of 1000 (max. 8388607)
- 359 compressed objects within 4 object streams
+ 444 PDF objects out of 1000 (max. 8388607)
+ 353 compressed objects within 4 object streams
  89 named destinations out of 1000 (max. 500000)
  475 words of extra memory for PDF output out of 10000 (max. 10000000)
 
